@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useState, useSyncExternalStore } from "react";
 import { ComposeButton } from "@/components/ComposeButton";
 import { links } from "@/lib/content";
 import type { ChecklistItem } from "@/lib/checklist";
 import s from "./ChecklistTool.module.css";
 
 /*
- * The homebuyer's checklist as a tool. Each must-know can be opened, read and ticked; the points
- * under it can be ticked one by one. Progress is kept in this browser only (localStorage), so a
- * visitor can come back to it; nothing is sent anywhere. On a computer the list is on the left and
- * the progress, with the buttons, stays in view in a panel on the right.
+ * The homebuyer's checklist as a tool. Each must-know is one short row that can be ticked; its points open
+ * under it, to be ticked one by one, and its title leads to the full guide. Progress is kept in this browser
+ * only (localStorage), so a visitor can come back to it; nothing is sent anywhere. On a computer the list is
+ * on the left and the progress, with the buttons, stays in view in a panel on the right.
  */
 const KEY = "disha-checklist-v1";
 type State = Record<string, boolean>;
@@ -66,6 +66,21 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
     }
   })();
   const [cleared, setCleared] = useState<State | null>(null);
+  /* Which must-knows have their checks open. All start closed, so the five read as one short list. */
+  const uid = useId();
+  const [open, setOpen] = useState<ReadonlySet<string>>(() => new Set());
+  const flip = (slug: string) =>
+    setOpen((o) => {
+      const next = new Set(o);
+      if (!next.delete(slug)) next.add(slug);
+      return next;
+    });
+  /* A link to /checklist#carpet-area opens that must-know's checks. */
+  useEffect(() => {
+    const hash = decodeURIComponent(window.location.hash.slice(1));
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reads the address bar, which the server cannot
+    if (items.some((c) => c.slug === hash)) setOpen((o) => new Set(o).add(hash));
+  }, [items]);
   useEffect(() => {
     if (!cleared) return;
     const t = window.setTimeout(() => setCleared(null), 10000);
@@ -96,8 +111,65 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
     "Read more: https://www.dishahabitat.com/checklist",
   ].join("\n");
 
+  /*
+   * The list comes first, so the five must-knows are on the first screen of a phone; the progress follows it there,
+   * and on a computer stays in view in the right-hand column.
+   */
   return (
     <div className={s.tool}>
+      <ol className={s.list}>
+        {items.map((c) => {
+          const d = done(c.slug);
+          const n = c.checks?.length ?? 0;
+          const ticked = (c.checks ?? []).filter((_, k) => state[`${c.slug}:${k}`]).length;
+          const isOpen = open.has(c.slug);
+          const panel = `${uid}-${c.slug}`;
+          return (
+            <li key={c.slug} id={c.slug} className={s.item} data-done={d || undefined} data-open={isOpen || undefined}>
+              <label className={s.tick}>
+                <input type="checkbox" checked={d} onChange={() => toggle(c.slug)} />
+                <span className="sr-only">{c.title} understood</span>
+                <Tick />
+              </label>
+              <div className={s.title}>
+                <h2>
+                  <Link href={`/checklist/${c.slug}`}>{c.title}</Link>
+                </h2>
+                <p className={s.summary}>{c.summary}</p>
+              </div>
+              {n > 0 && (
+                <button type="button" className={s.toggle} aria-expanded={isOpen} aria-controls={panel} onClick={() => flip(c.slug)}>
+                  <span>
+                    {ticked} of {n} checks
+                  </span>
+                  <span className="sr-only"> before you buy: {c.title}</span>
+                  <span className={s.plus} aria-hidden="true" />
+                </button>
+              )}
+              <div id={panel} role="region" aria-label={`${c.title}: before you buy, check`} className={s.panel} inert={!isOpen}>
+                <div className={s.clip}>
+                  {c.checks && (
+                    <fieldset className={s.checks}>
+                      <legend>Before you buy, check</legend>
+                      {c.checks.map((q, k) => (
+                        <label key={q} className={s.check}>
+                          <input type="checkbox" checked={Boolean(state[`${c.slug}:${k}`])} onChange={() => toggleCheck(c.slug, k, c.checks!.length)} />
+                          <Tick />
+                          <span>{q}</span>
+                        </label>
+                      ))}
+                    </fieldset>
+                  )}
+                  <Link href={`/checklist/${c.slug}`} className={`text-link ${s.more}`}>
+                    Read the guide<span className="sr-only">: {c.title}</span>
+                  </Link>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+
       <div className={`band-navy ${s.progress}`} data-tone="dark">
         <p className={s.count} aria-live="polite">
           <strong>{count}</strong>
@@ -161,45 +233,6 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
           {!saves && <p>This browser isn’t saving your ticks (a private window can do this). Use “Send to myself” to keep a copy.</p>}
         </div>
       </div>
-
-      <ol className={s.list}>
-        {items.map((c, i) => {
-          const d = done(c.slug);
-          return (
-            <li key={c.slug} className={s.item} data-done={d || undefined}>
-              <div className={s.head}>
-                <label className={s.tick}>
-                  <input type="checkbox" checked={d} onChange={() => toggle(c.slug)} />
-                  <span className="sr-only">{c.title} understood</span>
-                  <Tick />
-                </label>
-                <div className={s.title}>
-                  <p className={s.step}>Must-know {i + 1}</p>
-                  <h2>
-                    <Link href={`/checklist/${c.slug}`}>{c.title}</Link>
-                  </h2>
-                  <p className={s.summary}>{c.summary}</p>
-                </div>
-              </div>
-              {c.checks && (
-                <fieldset className={s.checks}>
-                  <legend>Before you buy, check</legend>
-                  {c.checks.map((q, k) => (
-                    <label key={q} className={s.check}>
-                      <input type="checkbox" checked={Boolean(state[`${c.slug}:${k}`])} onChange={() => toggleCheck(c.slug, k, c.checks!.length)} />
-                      <Tick />
-                      <span>{q}</span>
-                    </label>
-                  ))}
-                </fieldset>
-              )}
-              <Link href={`/checklist/${c.slug}`} className={`text-link ${s.more}`}>
-                Read the guide<span className="sr-only">: {c.title}</span>
-              </Link>
-            </li>
-          );
-        })}
-      </ol>
 
       <p className={s.printNote}>From the homebuyer’s checklist at dishahabitat.com/checklist. Ticked points are marked.</p>
     </div>

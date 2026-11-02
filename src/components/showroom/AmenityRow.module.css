@@ -3,8 +3,20 @@
  * the right edge, so the row reads as one to scroll. Three and a part to a screen on a computer.
  */
 .section {
-  padding-block: clamp(56px, 8vw, 112px) clamp(48px, 6vw, 88px);
+  padding-block: clamp(48px, 6vw, 88px) clamp(40px, 4.5vw, 64px);
   background: #fff;
+}
+
+/* Under the row: every amenity on the project page, and the clubhouse roof's film with its music. */
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 28px;
+}
+
+.watch svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* The chips scroll sideways on a phone rather than wrap into a block. */

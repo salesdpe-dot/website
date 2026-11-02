@@ -148,10 +148,10 @@
   color: var(--text-2);
 }
 
-/* The stage stays in view below the header and the bar while the list scrolls past. */
+/* The stage stays in view below the header and the bar while the list scrolls past (in a dialog, below its top). */
 .stage {
   position: sticky;
-  top: calc(var(--header-h) + 48px + 24px);
+  top: var(--stage-top, calc(var(--header-h) + 48px + 24px));
 }
 
 .frame {

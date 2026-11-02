@@ -68,12 +68,14 @@ function useRoll(target: number | null) {
   return { shown, settled };
 }
 
+/* `span`: "half" shares a row at every width (rate and tenure); "pair" shares one from a small tablet up. */
 function Field({
   id,
   label,
   note,
   hint,
   error,
+  span,
   children,
 }: {
   id: string;
@@ -81,10 +83,11 @@ function Field({
   note?: ReactNode;
   hint?: string;
   error?: string;
+  span?: "half" | "pair";
   children: ReactNode;
 }) {
   return (
-    <div className={s.field}>
+    <div className={s.field} data-span={span}>
       <div className={s.labelRow}>
         <label htmlFor={id} className={s.label}>
           {label}
@@ -179,7 +182,10 @@ function MoneyInput({
   );
 }
 
-export function AffordabilityExplorer() {
+/* The notes on the method, shown behind "How the figure is worked out" under the estimate. */
+type Note = { title: string; body: string };
+
+export function AffordabilityExplorer({ notes = [] }: { notes?: readonly Note[] }) {
   const uid = useId();
   const id = (k: string) => `${uid}-${k}`;
   const [v, setV] = useState(EXAMPLE);
@@ -218,6 +224,9 @@ export function AffordabilityExplorer() {
   const roll = useRoll(result ? result.emi : null);
   // A long loan is a long table on a phone: the first five years show, the rest on request.
   const [allYears, setAllYears] = useState(false);
+  /* The income is optional, so its field waits behind a button (and opens by itself if it needs correcting). */
+  const [incomeOpen, setIncomeOpen] = useState(false);
+  const showIncome = incomeOpen || Boolean(errors.monthlyIncome);
   const FIRST = 5;
   const years = result ? (allYears ? result.schedule : result.schedule.slice(0, FIRST)) : [];
   const rolled = roll.shown === null ? "₹ –" : formatINR(Math.round(roll.shown));
@@ -237,6 +246,7 @@ export function AffordabilityExplorer() {
           error={errors.price}
           hint="An example figure, not a Disha Habitat price."
           note={Number.isFinite(input.price) && input.price > 0 ? formatINRShort(input.price) : undefined}
+          span="pair"
         >
           <MoneyInput id={id("price")} value={v.price} onChange={setPrice} error={errors.price} />
           <Range
@@ -255,6 +265,7 @@ export function AffordabilityExplorer() {
           error={errors.downPayment}
           hint="The part of the price you pay from your own funds."
           note={downPct !== null && downPct >= 0 && downPct < 100 ? `${Number(downPct.toFixed(1))}% of price` : undefined}
+          span="pair"
         >
           <MoneyInput id={id("down")} value={v.down} onChange={typeDown} error={errors.downPayment} />
           <div className={s.chips} role="group" aria-label="Set down payment to a share of the price">
@@ -279,7 +290,7 @@ export function AffordabilityExplorer() {
           </div>
         </Field>
 
-        <Field id={id("rate")} label="Interest rate" error={errors.annualRate} hint="Per year, as your bank quotes it">
+        <Field id={id("rate")} label="Interest rate" error={errors.annualRate} hint="Per year, as your bank quotes it" span="half">
           <Box suffix="% p.a." invalid={!!errors.annualRate}>
             <input
               id={id("rate")}
@@ -303,7 +314,7 @@ export function AffordabilityExplorer() {
           />
         </Field>
 
-        <Field id={id("years")} label="Loan length (tenure)" error={errors.years} hint="1 to 30 years">
+        <Field id={id("years")} label="Loan length (tenure)" error={errors.years} hint="1 to 30 years" span="half">
           <Box suffix="years" invalid={!!errors.years}>
             <input
               id={id("years")}
@@ -327,18 +338,39 @@ export function AffordabilityExplorer() {
           />
         </Field>
 
-        <Field
-          id={id("income")}
-          label="Monthly household income (optional)"
-          error={errors.monthlyIncome}
-          hint="Only used to show what share of it the EMI would be."
-        >
-          <MoneyInput id={id("income")} value={v.income} onChange={set("income")} error={errors.monthlyIncome} placeholder="Leave blank to skip" />
-        </Field>
+        <div className={s.extras}>
+          <button
+            type="button"
+            className={s.reveal}
+            aria-expanded={showIncome}
+            aria-controls={id("income-field")}
+            onClick={() => setIncomeOpen(!showIncome)}
+          >
+            Add your income
+            <span className={s.plus} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setV(EXAMPLE);
+              setIncomeOpen(false);
+            }}
+            className={`text-link ${s.more}`}
+          >
+            Reset to the example
+          </button>
+        </div>
 
-        <button type="button" onClick={() => setV(EXAMPLE)} className={`text-link ${s.more}`}>
-          Reset to the example
-        </button>
+        <div id={id("income-field")} className={s.incomeWrap} hidden={!showIncome}>
+          <Field
+            id={id("income")}
+            label="Monthly household income (optional)"
+            error={errors.monthlyIncome}
+            hint="Only used to show what share of it the EMI would be."
+          >
+            <MoneyInput id={id("income")} value={v.income} onChange={set("income")} error={errors.monthlyIncome} placeholder="Leave blank to skip" />
+          </Field>
+        </div>
       </form>
 
       <aside className={s.result} aria-label="Your estimate">
@@ -400,55 +432,75 @@ export function AffordabilityExplorer() {
                 The EMI would be <strong>{(result.emiToIncome * 100).toFixed(1)}%</strong> of the monthly income you entered.
               </p>
             )}
-
-            <Accordion
-              defaultOpen={null}
-              items={[
-                {
-                  title: "Year-by-year breakdown",
-                  body: (
-                    <>
-                      <div className={s.tableWrap} tabIndex={0} role="region" aria-label="Year-by-year breakdown, scrollable">
-                        <table id={id("years-table")} className={s.table}>
-                          <caption className="sr-only">Estimated repayment for each year of the loan</caption>
-                          <thead>
-                            <tr>
-                              <th scope="col">Year</th>
-                              <th scope="col">Principal</th>
-                              <th scope="col">Interest</th>
-                              <th scope="col">Balance</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {years.map((r) => (
-                              <tr key={r.year} style={{ "--n": Math.min(r.year, 12) } as CSSProperties}>
-                                <th scope="row">{r.year}</th>
-                                <td>{formatINR(r.principalPaid)}</td>
-                                <td>{formatINR(r.interestPaid)}</td>
-                                <td>{formatINR(r.balance)}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      {result.schedule.length > FIRST && (
-                        <button
-                          type="button"
-                          className={`text-link ${s.more}`}
-                          aria-expanded={allYears}
-                          aria-controls={id("years-table")}
-                          onClick={() => setAllYears((x) => !x)}
-                        >
-                          {allYears ? `Show the first ${FIRST} years` : `Show all ${result.schedule.length} years`}
-                        </button>
-                      )}
-                    </>
-                  ),
-                },
-              ]}
-            />
           </>
         )}
+
+        {/* The detail, a tap away: the year-by-year table and how the figure is worked out. */}
+        <Accordion
+          defaultOpen={null}
+          items={[
+            {
+              title: "Year-by-year breakdown",
+              body: result ? (
+                <>
+                  <div className={s.tableWrap} tabIndex={0} role="region" aria-label="Year-by-year breakdown, scrollable">
+                    <table id={id("years-table")} className={s.table}>
+                      <caption className="sr-only">Estimated repayment for each year of the loan</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Year</th>
+                          <th scope="col">Principal</th>
+                          <th scope="col">Interest</th>
+                          <th scope="col">Balance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {years.map((r) => (
+                          <tr key={r.year} style={{ "--n": Math.min(r.year, 12) } as CSSProperties}>
+                            <th scope="row">{r.year}</th>
+                            <td>{formatINR(r.principalPaid)}</td>
+                            <td>{formatINR(r.interestPaid)}</td>
+                            <td>{formatINR(r.balance)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {result.schedule.length > FIRST && (
+                    <button
+                      type="button"
+                      className={`text-link ${s.more}`}
+                      aria-expanded={allYears}
+                      aria-controls={id("years-table")}
+                      onClick={() => setAllYears((x) => !x)}
+                    >
+                      {allYears ? `Show the first ${FIRST} years` : `Show all ${result.schedule.length} years`}
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p>Correct the highlighted details to see the breakdown.</p>
+              ),
+            },
+            ...(notes.length > 0
+              ? [
+                  {
+                    title: "How the figure is worked out",
+                    body: (
+                      <div className={s.notes}>
+                        {notes.map((n) => (
+                          <div key={n.title}>
+                            <h4>{n.title}</h4>
+                            <p>{n.body}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ),
+                  },
+                ]
+              : []),
+          ]}
+        />
 
         <Link href={links.bookVisit} className={`btn btn-primary ${s.cta}`}>
           Book a visit

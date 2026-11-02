@@ -3,11 +3,51 @@
   scroll-margin-top: 48px;
 }
 
-/* Overview: the name and year beside the house icon, the intro large, its links. */
-.about {
+/*
+ * Overview: the name and year beside the house icon, the intro large, its links; beside them on a computer (under
+ * them on a phone) the facts the hero has not given, the figures large and the rest as rows.
+ */
+.overview {
+  padding-block: 40px;
+}
+
+@media (min-width: 768px) {
+  .overview {
+    padding-block: 72px;
+  }
+}
+
+.split {
   display: grid;
   gap: 24px;
-  max-width: 68rem;
+}
+
+@media (min-width: 1024px) {
+  .split {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 72px;
+    align-items: start;
+  }
+}
+
+.about {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .about {
+    gap: 20px;
+  }
+}
+
+/* When the rows beside it are opened, the intro stays in view beside them. */
+@media (min-width: 1024px) {
+  .about {
+    position: sticky;
+    top: 136px;
+  }
 }
 
 /* A small heading led by the guideline's house icon in sky blue: the icon as a graphic, the words in navy. */
@@ -29,11 +69,12 @@
 }
 
 .lead {
-  font-size: clamp(1.625rem, 1.15rem + 2vw, 3rem);
-  line-height: 1.2;
+  font-size: clamp(1.375rem, 1.05rem + 1.4vw, 2.375rem);
+  line-height: 1.22;
   font-weight: 500;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   color: var(--ink);
+  text-wrap: pretty;
 }
 
 .links {
@@ -42,88 +83,87 @@
   gap: 8px 28px;
 }
 
-/* Facts: the figures large across the page, then the rest as rows in the right-hand column. */
-.factsSection {
-  padding-bottom: 64px;
+.facts {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
 }
 
 @media (min-width: 768px) {
-  .factsSection {
-    padding-bottom: 96px;
+  .facts {
+    gap: 24px;
   }
 }
 
 .figures {
-  padding-top: 32px;
+  padding-top: 20px;
   border-top: 1px solid var(--line);
 }
 
 .figures :global(dd) {
-  font-size: clamp(1.5rem, 0.9rem + 2.4vw, 3rem);
+  font-size: clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
   white-space: nowrap;
 }
 
-.details {
-  margin-top: 48px;
-}
-
-@media (min-width: 1024px) {
-  .details {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: 80px;
-  }
-
-  .details > :global(dl) {
-    grid-column: 2;
-  }
-}
-
-.details :global(dd) {
+.facts :global(dd) {
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
-/* One photograph from edge to edge, as wide as the screen and nearly as tall, its caption under it. */
-.wide {
-  margin: 0;
-}
+/* On a phone the short facts sit two to a row, each label over its value; one left alone (an address) spans both. */
+@media (max-width: 599px) {
+  .facts :global(dl) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 20px;
+  }
 
-.wideMedia {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  background: var(--surface-2);
-}
+  .facts :global(dl > div) {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 2px;
+    padding-block: 12px;
+  }
 
-@media (min-width: 768px) {
-  .wideMedia {
-    aspect-ratio: auto;
-    height: clamp(480px, 86svh, 920px);
+  .facts :global(dl > div:last-child:nth-child(odd)) {
+    grid-column: 1 / -1;
+  }
+
+  .facts :global(dl dd) {
+    text-align: left;
   }
 }
 
-.wideImg {
-  object-fit: cover;
+/*
+ * The record on navy: the months at poster size in sky blue with what they measure in white beneath; beside them
+ * on a computer (under them on a phone) the milestones and the button that sends the record to family.
+ */
+.record {
+  padding-block: 56px;
 }
 
-.wideCaption {
-  padding: 12px var(--edge) 0;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: var(--text-2);
+@media (min-width: 768px) {
+  .record {
+    padding-block: 64px;
+  }
 }
 
-/* The record on navy: the months at poster size in sky blue, what they measure in white beneath. */
+.recordGrid {
+  display: grid;
+  gap: 36px;
+}
+
+@media (min-width: 1024px) {
+  .recordGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 64px;
+    align-items: end;
+  }
+}
+
 .recordHead {
   display: grid;
   gap: 16px;
-  margin-bottom: 56px;
-}
-
-@media (min-width: 768px) {
-  .recordHead {
-    margin-bottom: 80px;
-  }
 }
 
 .recordTitle {
@@ -138,32 +178,30 @@
 .recordWords {
   display: block;
   max-width: 24ch;
-  font-size: var(--display-title);
-  line-height: var(--display-title-lh);
+  font-size: clamp(1.375rem, 1rem + 1.6vw, 2.5rem);
+  line-height: 1.18;
   color: #fff;
 }
 
 .recordLine {
-  font-size: 1.125rem;
-  line-height: 1.625rem;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
   color: rgb(255 255 255 / 0.8);
 }
 
+.recordBody {
+  min-width: 0;
+}
+
 /*
- * The timeline: three milestones in equal columns, each text under its own dot and left aligned.
+ * The timeline: the milestones in equal columns, each text under its own dot and left aligned, at every size.
  * The line draws itself from dot to dot as the block scrolls in; the dots pop in after it.
- * On a phone it runs down the left instead.
  */
 .marks {
   display: grid;
+  grid-template-columns: repeat(var(--marks, 3), minmax(0, 1fr));
   gap: 0;
   view-timeline: --tl block;
-}
-
-@media (min-width: 640px) {
-  .marks {
-    grid-template-columns: repeat(var(--marks, 3), minmax(0, 1fr));
-  }
 }
 
 .marks li {
@@ -171,27 +209,34 @@
   display: grid;
   align-content: start;
   gap: 4px;
-  padding: 0 0 44px 40px;
+  padding: 36px 16px 0 0;
 }
 
 @media (min-width: 640px) {
   .marks li {
-    padding: 36px 24px 0 0;
+    padding-right: 24px;
   }
 }
 
 .share {
-  margin-top: 8px;
+  margin-top: 16px;
 }
 
 .markLabel {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
   color: rgb(255 255 255 / 0.74);
 }
 
+@media (min-width: 640px) {
+  .markLabel {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
 .markValue {
-  font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem);
+  font-size: clamp(1.125rem, 0.9rem + 0.9vw, 1.75rem);
   line-height: 1.15;
   color: #fff;
 }
@@ -203,7 +248,7 @@
 
 .dot {
   position: absolute;
-  top: 2px;
+  top: 0;
   left: 0;
   width: 18px;
   height: 18px;
@@ -213,13 +258,13 @@
   box-shadow: 0 0 0 2px var(--accent);
 }
 
-/* The rule from this dot to the next, with the months it spans written beside it. */
+/* The rule from this dot to the next, with the months it spans written above it. */
 .seg {
   position: absolute;
-  top: 20px;
-  left: 8px;
-  width: 2px;
-  height: calc(100% - 18px);
+  top: 8px;
+  left: 18px;
+  width: calc(100% - 18px);
+  height: 2px;
 }
 
 .seg::before {
@@ -227,41 +272,19 @@
   position: absolute;
   inset: 0;
   background: var(--accent);
-  transform-origin: top;
+  transform-origin: left;
 }
 
 .gap {
   position: absolute;
-  bottom: 4px;
-  left: 32px;
-  font-size: 0.9375rem;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 600;
   color: var(--accent);
   white-space: nowrap;
-}
-
-@media (min-width: 640px) {
-  .dot {
-    top: 0;
-  }
-
-  .seg {
-    top: 8px;
-    left: 18px;
-    width: calc(100% - 18px);
-    height: 2px;
-  }
-
-  .seg::before {
-    transform-origin: left;
-  }
-
-  .gap {
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
 }
 
 @supports (animation-timeline: view()) {
@@ -272,7 +295,7 @@
     }
 
     .seg::before {
-      animation: grow-y linear both;
+      animation: grow-x linear both;
       animation-timeline: --tl;
     }
 
@@ -302,12 +325,6 @@
     .marks li:nth-child(3) .dot {
       animation-range: cover 32% cover 36%;
     }
-
-    @media (min-width: 640px) {
-      .seg::before {
-        animation-name: grow-x;
-      }
-    }
   }
 }
 
@@ -333,16 +350,6 @@
   }
 }
 
-@keyframes grow-y {
-  from {
-    transform: scaleY(0);
-  }
-
-  to {
-    transform: scaleY(1);
-  }
-}
-
 @keyframes fade {
   from {
     opacity: 0;
@@ -353,49 +360,90 @@
   }
 }
 
-/* Signature spaces: numbered, in as many columns as the page sets (data-cols) so the last row is never one alone. */
+/* The pictures: one row to swipe, each opening the full-screen viewer that steps through them all. */
+.gallerySection {
+  padding-block: 40px;
+}
+
+@media (min-width: 768px) {
+  .gallerySection {
+    padding-block: 64px;
+  }
+}
+
+.gallery {
+  margin-top: 20px;
+}
+
+@media (min-width: 768px) {
+  .gallery {
+    margin-top: 28px;
+  }
+}
+
+/* What is there: rows that open, under the facts, and where the specification comes from. */
+/* The rows' first hairline sits on the facts' last one, so the two read as one list. */
+.extras {
+  margin-top: -17px;
+}
+
+@media (min-width: 768px) {
+  .extras {
+    margin-top: -25px;
+  }
+}
+
+.extrasNote {
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.specGroup + .specGroup {
+  margin-top: 20px;
+}
+
+.specName {
+  margin-bottom: 10px;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Signature spaces, inside their row: numbered, two or three across. */
 .highlights {
   display: grid;
-  gap: 16px;
+  gap: 12px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-@media (min-width: 700px) {
-  .highlights[data-cols="2"],
-  .highlights[data-cols="4"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .highlights[data-cols="3"] {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
+@media (min-width: 600px) {
   .highlights {
-    gap: 20px;
-  }
-
-  .highlights[data-cols="4"] {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 .highlights li {
   display: grid;
-  gap: 8px;
+  gap: 6px;
   align-content: start;
-  padding: 28px 24px 32px;
+  padding: 20px 20px 24px;
   border-radius: var(--radius-card);
   border-top: 4px solid var(--accent);
-  background: #fff;
-  font-size: 1rem;
-  line-height: 1.5rem;
+  background: var(--surface);
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
   color: var(--text);
 }
 
 .num {
   font-family: var(--font-display);
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   line-height: 1;
   font-weight: 600;
   letter-spacing: -0.03em;
@@ -404,31 +452,18 @@
 }
 
 .hName {
-  margin-top: 8px;
+  margin-top: 4px;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 1.875rem;
+  font-size: 1.25rem;
+  line-height: 1.625rem;
   color: var(--ink);
   letter-spacing: -0.02em;
 }
 
 .also {
-  margin-top: 48px;
-}
-
-.alsoTitle {
-  margin-bottom: 16px;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  line-height: 1.625rem;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.also ul {
-  columns: 16rem;
-  column-gap: 48px;
+  columns: 14rem;
+  column-gap: 40px;
   font-size: 0.9375rem;
   line-height: 1.5rem;
   color: var(--text);
@@ -439,7 +474,7 @@
   padding-block: 3px;
 }
 
-/* Specifications: the groups open full width, their items in two columns on a computer. */
+/* Specifications: the items in two columns on a computer. */
 .specItems {
   display: grid;
   gap: 8px;
@@ -447,11 +482,11 @@
   list-style: disc;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 600px) {
   .specItems {
     display: block;
     columns: 2;
-    column-gap: 64px;
+    column-gap: 40px;
   }
 
   .specItems li {
@@ -465,65 +500,143 @@
 }
 
 /*
- * The gallery closes every row (the page sets which case applies): two or four pictures sit in two
- * columns, and a picture that would end a row alone spans it, in three columns on a computer and two on a phone.
+ * Homeowners' words under their small heading: one, or two side by side. The quotation mark is a size smaller
+ * than the design system's own, so a short quotation is not mostly mark.
  */
-@media (min-width: 900px) {
-  .gallery[data-two-up] ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.residents {
+  padding-block: 40px;
+  background: var(--surface);
+}
 
-  .gallery[data-desk-tail] li:last-child {
-    grid-column: 1 / -1;
-    aspect-ratio: 21 / 9;
+@media (min-width: 768px) {
+  .residents {
+    padding-block: 64px;
   }
 }
 
-@media (max-width: 899px) {
-  .gallery[data-phone-tail] li:last-child {
-    grid-column: 1 / -1;
-    aspect-ratio: 16 / 10;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
-  .gallery li {
-    transition: transform 0.6s var(--ease);
-  }
-
-  .gallery li:hover,
-  .gallery li:focus-within {
-    transform: translateY(-4px);
-  }
-}
-
-/* Homeowners' words: one large, or two side by side, under their small heading. */
 .words {
   display: grid;
-  gap: 56px;
-  margin-top: 40px;
+  gap: 40px;
+  margin-top: 24px;
+}
+
+.words figure > span:first-child {
+  font-size: clamp(4rem, 3rem + 3vw, 6rem);
+}
+
+@media (max-width: 767px) {
+  .words blockquote {
+    font-size: 1.25rem;
+    line-height: 1.65rem;
+  }
+}
+
+/* Two homeowners on a phone: side by side in a row to swipe, rather than one under the other. */
+@media (max-width: 899px) {
+  .words[data-count="2"],
+  .words[data-count="3"] {
+    grid-auto-flow: column;
+    grid-auto-columns: 86%;
+    gap: 24px;
+    margin-inline: calc(-1 * var(--edge));
+    padding-inline: var(--edge);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--edge);
+    scrollbar-width: none;
+  }
+
+  .words[data-count="2"] > *,
+  .words[data-count="3"] > * {
+    scroll-snap-align: start;
+  }
 }
 
 @media (min-width: 900px) {
   .words[data-count="2"],
   .words[data-count="3"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 56px;
   }
 }
 
 /*
- * The next community: a photograph from edge to edge with its name, the whole card a link. It stands a
- * full section's space below the buttons above, so it reads as a way on, not part of that invitation.
+ * The way on: the project on sale now on the navy field with its two buttons, and the next community as a
+ * photograph, the whole card a link. Side by side on a computer, the next one a slim card under it on a phone.
  */
-.nextWrap {
-  padding: 0 var(--edge);
-  margin-top: 64px;
+.onward {
+  display: grid;
+  gap: 12px;
+  padding: 32px var(--edge) 40px;
+}
+
+@media (min-width: 900px) {
+  .onward {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 20px;
+    padding-block: 64px;
+  }
+}
+
+.sale {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-content: end;
+  gap: 12px;
+  padding: 24px 20px;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--ink);
+  color: #fff;
 }
 
 @media (min-width: 768px) {
-  .nextWrap {
-    margin-top: 96px;
+  .sale {
+    padding: 40px;
   }
+}
+
+.saleMark {
+  position: absolute;
+  top: -18%;
+  right: -6%;
+  z-index: -1;
+  width: min(48%, 320px);
+  color: rgb(0 177 255 / 0.1);
+  pointer-events: none;
+}
+
+.saleTitle {
+  max-width: 22ch;
+  font-size: clamp(1.5rem, 1.15rem + 1.5vw, 2.5rem);
+  line-height: 1.16;
+  color: #fff;
+}
+
+.saleLine {
+  max-width: 46ch;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: rgb(255 255 255 / 0.86);
+  text-wrap: pretty;
+}
+
+.saleActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.saleActions > :global(.btn) {
+  flex: 1 1 160px;
+  max-width: 240px;
+}
+
+.nextWrap {
+  min-width: 0;
 }
 
 .next {
@@ -532,18 +645,20 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 24px;
-  min-height: clamp(360px, 60svh, 640px);
-  padding: 32px;
+  gap: 16px;
+  height: 100%;
+  min-height: 116px;
+  padding: 20px 24px;
   overflow: hidden;
   border-radius: var(--radius-card);
   background: var(--ink);
   color: #fff;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .next {
-    padding: 48px;
+    min-height: 300px;
+    padding: 32px;
   }
 }
 
@@ -553,48 +668,43 @@
   transition: transform 1.2s var(--ease);
 }
 
-.next:hover .nextImg {
-  transform: scale(1.03);
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .next:hover .nextImg {
+    transform: scale(1.03);
+  }
 }
 
 .nextShade {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(0deg, rgb(0 0 0 / 0.7) 0%, rgb(0 0 0 / 0.2) 50%, rgb(0 0 0 / 0) 70%);
+  background: linear-gradient(0deg, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.3) 55%, rgb(0 0 0 / 0.1) 100%);
 }
 
 .nextText {
   display: grid;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
 }
 
 .nextEyebrow {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   line-height: 1.25rem;
   font-weight: 500;
 }
 
 .nextName {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
+  font-size: clamp(1.625rem, 1.2rem + 1.4vw, 2.5rem);
+  line-height: 1.1;
   overflow-wrap: anywhere;
-}
-
-@media (min-width: 1024px) {
-  .nextName {
-    font-size: 3.125rem;
-    line-height: 3.375rem;
-  }
 }
 
 .nextArrow {
   display: grid;
   flex: none;
   place-items: center;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: #fff;
   color: var(--ink);
@@ -604,4 +714,3 @@
 .next:hover .nextArrow {
   transform: translateX(4px);
 }
-

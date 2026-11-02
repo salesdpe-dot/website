@@ -78,16 +78,107 @@
   }
 }
 
+/* Price and down payment side by side from a small tablet up, rate and tenure side by side at every width. */
 .form {
   display: grid;
-  gap: 36px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 16px;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .form {
+    gap: 28px 24px;
+  }
 }
 
 .field {
+  grid-column: 1 / -1;
   display: grid;
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  min-width: 0;
   /* A field that takes focus lands below the sticky figure on a phone, not under it. */
   scroll-margin-top: 128px;
+}
+
+.field[data-span="half"] {
+  grid-column: auto;
+}
+
+@media (min-width: 600px) {
+  .field[data-span="pair"] {
+    grid-column: auto;
+  }
+}
+
+/* The optional income behind its own button, and the reset beside it. */
+.extras {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.extras .more {
+  margin-top: 0;
+}
+
+.reveal {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.plus {
+  position: relative;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface);
+  transition: background-color 0.3s var(--ease);
+}
+
+.reveal:hover .plus {
+  background: var(--surface-2);
+}
+
+.plus::before,
+.plus::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 11px;
+  height: 1.5px;
+  background: var(--ink);
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s var(--ease);
+}
+
+.plus::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.reveal[aria-expanded="true"] .plus::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.incomeWrap {
+  grid-column: 1 / -1;
+  min-width: 0;
 }
 
 .labelRow {
@@ -294,15 +385,16 @@
 .result {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 24px;
-  padding: 32px 24px;
+  gap: 16px;
+  padding: 28px 20px;
   border-radius: var(--radius-card);
   background: var(--surface);
 }
 
 @media (min-width: 768px) {
   .result {
-    padding: 40px;
+    gap: 20px;
+    padding: 36px;
   }
 }
 
@@ -369,6 +461,42 @@
 .sum > div[data-total] dt {
   color: var(--ink);
   font-weight: 500;
+}
+
+/* On a phone the four figures sit two by two. */
+@media (max-width: 599px) {
+  .sum {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 16px;
+  }
+
+  .sum > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 10px 0;
+  }
+
+  .sum dt {
+    font-size: 0.875rem;
+  }
+
+  .sum dd {
+    text-align: left;
+  }
+}
+
+/* How the figure is worked out: three short notes, each under its own small heading. */
+.notes {
+  display: grid;
+  gap: 14px;
+}
+
+.notes h4 {
+  margin-bottom: 2px;
+  font-weight: 600;
+  color: var(--ink);
 }
 
 .split {

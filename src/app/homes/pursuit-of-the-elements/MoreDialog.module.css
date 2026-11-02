@@ -1,0 +1,121 @@
+/* Full screen on the navy field; the dialog itself scrolls, and the close button stays in its corner. */
+.dialog {
+  /* The room browser's stage sticks this far below the top of the dialog, not below the site header. */
+  --stage-top: 76px;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0 var(--gutter) 40px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 0;
+  background: var(--ink);
+  color: #fff;
+}
+
+.dialog::backdrop {
+  background: rgb(8 32 50 / 0.7);
+}
+
+.dialog :focus-visible {
+  outline-color: #fff;
+}
+
+.bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 24px 0;
+}
+
+@media (min-width: 768px) {
+  .bar {
+    padding-block: 40px 32px;
+  }
+}
+
+.head {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding-right: 56px;
+}
+
+.title {
+  max-width: 26ch;
+  font-size: clamp(1.75rem, 1.1rem + 2vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+.line {
+  max-width: 48rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: rgb(255 255 255 / 0.8);
+}
+
+@media (min-width: 768px) {
+  .line {
+    font-size: 1.0625rem;
+    line-height: 1.625rem;
+  }
+}
+
+.close {
+  position: fixed;
+  top: 16px;
+  right: var(--gutter);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.14);
+  color: #fff;
+  transition: background-color 0.3s var(--ease);
+}
+
+.close:hover {
+  background: rgb(255 255 255 / 0.26);
+}
+
+.body {
+  max-width: var(--page-max);
+  margin: 0 auto;
+}
+
+/* The page behind does not scroll while it is open. */
+:global(html):has(.dialog[open]) {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dialog,
+  .dialog::backdrop {
+    opacity: 0;
+    transition:
+      opacity 0.25s var(--ease),
+      display 0.25s allow-discrete,
+      overlay 0.25s allow-discrete;
+  }
+
+  .dialog[open],
+  .dialog[open]::backdrop {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .dialog[open],
+    .dialog[open]::backdrop {
+      opacity: 0;
+    }
+  }
+}

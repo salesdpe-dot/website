@@ -2,38 +2,28 @@
  * A link to anything on this page (the bar, #rera from the home page) lands 16 px below the header and
  * the bar: the page already pads the header and 24 px, so 40 px more clears the 48 px bar.
  */
-.page :where([id]),
-.anchor {
+.page :where([id]) {
   scroll-margin-top: 40px;
 }
 
-/* A full-screen panel lands at the very top instead, as the home page's do: its words sit at its foot. */
-.page :global(:is(#amenities, #clubhouse, #outdoors, #visit)) {
-  scroll-margin-top: calc(-1 * (var(--header-h) + 24px));
-}
-
-/*
- * On a phone the action bar (ActionDock) takes the foot of the screen below the hero, so the full-screen panels
- * lift their buttons clear of it. It is gone by the visit section, which needs no room for it.
- */
-@media (max-width: 767px) {
-  .page {
-    --dock-h: 60px;
-  }
-
-  .page :global(#visit) {
-    --dock-h: 0px;
-  }
-}
-
-/* A band of the page: generous space above and below, the page's edge at the sides. */
+/* A band of the page, one screen at most: room above and below, the page's edge at the sides. */
 .band {
-  padding: 72px var(--edge);
+  padding: 40px var(--edge);
 }
 
 @media (min-width: 768px) {
   .band {
-    padding-block: 112px;
+    padding-block: 64px;
+  }
+}
+
+.band.tight {
+  padding-block: 32px;
+}
+
+@media (min-width: 768px) {
+  .band.tight {
+    padding-block: 48px;
   }
 }
 
@@ -51,23 +41,18 @@
   min-width: 0;
 }
 
-/* The page's edge, for what sits inside a full-bleed section. */
-.edge {
-  padding-inline: var(--edge);
-}
-
 /* A section's heading: the house icon and a small word, the title large, one line under it. */
 .head {
   display: grid;
   justify-items: start;
-  gap: 14px;
+  gap: 10px;
   max-width: 62rem;
-  margin-bottom: 36px;
+  margin-bottom: 20px;
 }
 
 @media (min-width: 768px) {
   .head {
-    margin-bottom: 52px;
+    margin-bottom: 28px;
   }
 }
 
@@ -92,8 +77,8 @@
 }
 
 .title {
-  max-width: 22ch;
-  font-size: clamp(2.125rem, 1.15rem + 3.1vw, 4rem);
+  max-width: 32ch;
+  font-size: clamp(2rem, 1.1rem + 2.6vw, 3.25rem);
   line-height: 1.06;
   letter-spacing: -0.03em;
   color: var(--ink);
@@ -101,9 +86,16 @@
 
 .lede {
   max-width: 46rem;
-  font-size: 1.125rem;
-  line-height: 1.7rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
   color: var(--text-2);
+}
+
+@media (min-width: 768px) {
+  .lede {
+    font-size: 1.125rem;
+    line-height: 1.7rem;
+  }
 }
 
 /* On navy the word and the title take the brand's sky blue, as on the guideline's colour page. */
@@ -141,91 +133,6 @@
   pointer-events: none;
 }
 
-/* Step inside: the heading, the walk through a home across the whole screen, then a second bedroom and the balcony. */
-.inside {
-  padding-block: 72px;
-}
-
-@media (min-width: 768px) {
-  .inside {
-    padding-block: 112px;
-  }
-}
-
-.walk {
-  position: relative;
-  isolation: isolate;
-  aspect-ratio: 4 / 5;
-  margin: 0;
-  overflow: hidden;
-  background: var(--ink);
-  color: #fff;
-}
-
-@media (min-width: 768px) {
-  .walk {
-    aspect-ratio: auto;
-    height: min(56.25vw, calc(100svh - var(--header-h) - 48px));
-    min-height: 420px;
-  }
-}
-
-.walk::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  z-index: 1;
-  height: 30%;
-  background: linear-gradient(0deg, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0));
-  pointer-events: none;
-}
-
-.walk .note {
-  top: 16px;
-  right: var(--edge);
-}
-
-.walkCaption {
-  position: absolute;
-  bottom: 24px;
-  left: var(--edge);
-  z-index: 2;
-  max-width: calc(100% - 2 * var(--edge) - 56px);
-  font-family: var(--font-display);
-  font-size: clamp(1.125rem, 0.9rem + 0.9vw, 1.625rem);
-  line-height: 1.25;
-  font-weight: 600;
-  text-shadow: 0 1px 12px rgb(0 0 0 / 0.4);
-}
-
-.walk .walkToggle {
-  right: var(--edge);
-  bottom: 22px;
-}
-
-/* The two stills under the film keep to the page's edge, as the heading does. */
-.moments {
-  display: grid;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-@media (min-width: 768px) {
-  .moments {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.moments > .moment {
-  aspect-ratio: 4 / 5;
-}
-
-@media (min-width: 768px) {
-  .moments > .moment {
-    aspect-ratio: 16 / 10;
-  }
-}
-
 /* A still in a rounded frame, its caption on a shade at the foot. */
 .picture {
   position: relative;
@@ -239,51 +146,110 @@
 .pictureCaption {
   position: absolute;
   inset: auto 0 0;
-  padding: 48px 18px 16px;
+  padding: 48px 16px 14px;
   background: var(--scrim-bottom);
-  font-size: 1rem;
+  font-size: 0.9375rem;
   line-height: 1.375rem;
   font-weight: 500;
 }
 
-/* The clubhouse from the street and from above, side by side at the top of the rooms. */
-.pair {
+/*
+ * Step inside: the walk through a home large on the left and the two stills stacked beside it, the whole in what
+ * the screen leaves under the heading; on a phone the film upright and the stills side by side under it.
+ */
+.insideGrid {
   display: grid;
-  gap: 12px;
-  margin-bottom: 72px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.walk {
+  position: relative;
+  isolation: isolate;
+  grid-column: 1 / -1;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--ink);
+  color: #fff;
+}
+
+.moment {
+  aspect-ratio: 1;
 }
 
 @media (min-width: 768px) {
-  .pair {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin-bottom: 112px;
+  .insideGrid {
+    gap: 12px;
+  }
+
+  .walk {
+    aspect-ratio: 16 / 9;
+  }
+
+  .moment {
+    aspect-ratio: 16 / 10;
   }
 }
 
-.pairTile {
-  aspect-ratio: 16 / 10;
-}
+@media (min-width: 1024px) {
+  .insideGrid {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    height: clamp(420px, calc(100svh - 300px), 600px);
+  }
 
-/* Under the tabs, the one quiet link. */
-.aside {
-  margin-top: 32px;
-}
+  .walk {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    aspect-ratio: auto;
+  }
 
-/* The pool: the heading, the day-and-night switch across the screen, then the film and the places beside the pool. */
-.pool {
-  padding-block: 72px;
-}
-
-@media (min-width: 768px) {
-  .pool {
-    padding-block: 112px;
+  .moment {
+    aspect-ratio: auto;
   }
 }
 
+.walk::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  height: 30%;
+  background: linear-gradient(0deg, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0));
+  pointer-events: none;
+}
+
+.walkCaption {
+  position: absolute;
+  bottom: 20px;
+  left: 18px;
+  z-index: 2;
+  max-width: calc(100% - 96px);
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 0.9rem + 0.9vw, 1.625rem);
+  line-height: 1.25;
+  font-weight: 600;
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.4);
+}
+
+@media (min-width: 1024px) {
+  .walkCaption {
+    bottom: 28px;
+    left: 28px;
+  }
+}
+
+.walk .walkToggle {
+  right: 16px;
+  bottom: 18px;
+}
+
+/* In the poolside dialog: the film tall on the left and the places beside the pool two by two. */
 .poolRow {
   display: grid;
   gap: 12px;
-  margin-top: 12px;
 }
 
 .poolFilm {
@@ -309,13 +275,12 @@
   }
 }
 
-/* On a computer: the film tall on the left and the places two by two beside it (fewer places take more room). */
 @media (min-width: 900px) {
   .poolRow {
     grid-template-columns: minmax(0, 4fr) repeat(2, minmax(0, 4fr));
     grid-template-rows: repeat(2, minmax(0, 1fr));
-    height: min(76svh, 680px);
-    min-height: 500px;
+    height: min(72svh, 680px);
+    min-height: 460px;
   }
 
   .poolFilm {
@@ -326,57 +291,196 @@
   .poolPicture {
     aspect-ratio: auto;
   }
+}
 
-  .poolRow:is([data-count="2"], [data-count="3"], [data-count="4"]) > :nth-child(2),
-  .poolRow[data-count="3"] > :nth-child(3) {
-    grid-column: span 2;
-  }
+/* The map beside the commute checker on a computer; above a button that opens it on a phone. */
+.where {
+  display: grid;
+  gap: 16px;
+}
 
-  .poolRow[data-count="2"] > :nth-child(2) {
-    grid-row: 1 / -1;
+@media (min-width: 1024px) {
+  .where {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 32px;
+    align-items: start;
   }
 }
 
-/* The map, resting on this community, above the commute checker; as tall as a card on a computer. */
 .map {
-  margin-bottom: 32px;
+  min-width: 0;
 }
 
 @media (min-width: 900px) {
   .map {
     height: clamp(360px, 56svh, 520px);
-    margin-bottom: 48px;
   }
 }
 
-/* Check us: the RERA numbers and the record on the left, the award certificate on the right. */
+@media (min-width: 1024px) {
+  .map {
+    height: clamp(420px, calc(100svh - 330px), 570px);
+  }
+}
+
+.commute {
+  min-width: 0;
+}
+
+.commuteToggle {
+  width: 100%;
+  min-height: 48px;
+  justify-content: space-between;
+}
+
+.commuteToggle svg {
+  transition: transform 0.3s var(--ease);
+}
+
+.commuteToggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.commuteBody {
+  display: none;
+  margin-top: 16px;
+}
+
+.commuteBody[data-open] {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .commuteToggle {
+    display: none;
+  }
+
+  .commuteBody {
+    display: block;
+    margin-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .commuteToggle svg {
+    transition: none;
+  }
+}
+
+/* Life on the 20 acres, beside each tab's picture: two lines, the figures, the button, the films. */
+.lifeLine {
+  max-width: 34rem;
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  color: rgb(255 255 255 / 0.86);
+  text-wrap: pretty;
+}
+
+@media (min-width: 1024px) {
+  .lifeLine {
+    font-size: 1.125rem;
+    line-height: 1.65rem;
+  }
+}
+
+dl.lifeFigures {
+  width: 100%;
+  row-gap: 12px;
+}
+
+dl.lifeFigures dd {
+  font-size: clamp(1.25rem, 0.9rem + 1.1vw, 2rem);
+}
+
+dl.lifeFigures dt {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+}
+
+@media (min-width: 1024px) {
+  dl.lifeFigures {
+    row-gap: 20px;
+  }
+
+  dl.lifeFigures dt {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+/* Four figures two by two, three on one line. */
+.lifeFigures:has(> :nth-child(4)) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lifeFigures:has(> :nth-child(4)) > :nth-child(odd) {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.lifeFigures:not(:has(> :nth-child(4))) {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 599px) {
+  dl.lifeFigures > * {
+    padding-inline: 12px;
+  }
+
+  .lifeFigures:not(:has(> :nth-child(4))) > :nth-child(3) {
+    padding-left: 12px;
+    border-left: 1px solid rgb(255 255 255 / 0.28);
+  }
+}
+
+.lifeSentence {
+  max-width: 28rem;
+  font-size: clamp(1.375rem, 1rem + 1.3vw, 2rem);
+  line-height: 1.3;
+  color: #fff;
+}
+
+/*
+ * Check us: the RERA numbers, the record and the award side by side on a computer; on a phone stacked, the record
+ * a row to swipe and the award a small certificate beside its words.
+ */
 .check {
   display: grid;
-  gap: 48px;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .check {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 40px;
+  }
+
+  .award {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (min-width: 1024px) {
   .check {
-    grid-template-columns: minmax(0, 1fr) 315px;
-    gap: 96px;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) 280px;
+    gap: 48px;
     align-items: start;
+  }
+
+  .award {
+    grid-column: auto;
   }
 }
 
-.checkText {
-  min-width: 0;
-}
-
-.checkText .head {
-  margin-bottom: 32px;
-}
-
-.rera {
+.rera,
+.record {
   display: grid;
+  align-content: start;
   justify-items: start;
-  gap: 16px;
-  padding-block: 24px;
-  border-block: 1px solid rgb(255 255 255 / 0.18);
+  gap: 14px;
+  min-width: 0;
+  padding-top: 20px;
+  border-top: 1px solid rgb(255 255 255 / 0.18);
 }
 
 /* The small capitals over the RERA numbers and the record. */
@@ -391,7 +495,7 @@
 
 .reraList {
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .reraList li {
@@ -406,7 +510,7 @@
 }
 
 .no {
-  font-size: clamp(1rem, 0.8rem + 0.8vw, 1.375rem);
+  font-size: clamp(1rem, 0.8rem + 0.8vw, 1.25rem);
   line-height: 1.4;
   font-weight: 500;
   letter-spacing: 0.01em;
@@ -417,10 +521,17 @@
 /* How to check the numbers, in a sentence. */
 .howTo {
   max-width: 44ch;
-  font-size: 0.9375rem;
-  line-height: 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.375rem;
   color: rgb(255 255 255 / 0.8);
   text-wrap: pretty;
+}
+
+@media (min-width: 1024px) {
+  .howTo {
+    font-size: 0.9375rem;
+    line-height: 1.5rem;
+  }
 }
 
 .onNavy {
@@ -433,18 +544,9 @@
 }
 
 /* The record: each community handed over, its year and its homes, one line each; the name opens its page. */
-.record {
-  display: grid;
-  justify-items: start;
-  gap: 16px;
-  padding-block: 24px;
-  border-bottom: 1px solid rgb(255 255 255 / 0.18);
-}
-
 .recordList {
   display: grid;
   width: 100%;
-  max-width: 34rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -486,11 +588,46 @@
   color: rgb(255 255 255 / 0.76);
 }
 
+/* On a phone the five communities are cards in a row to swipe. */
+@media (max-width: 767px) {
+  .recordList {
+    grid-auto-flow: column;
+    grid-auto-columns: min(42%, 168px);
+    gap: 8px;
+    width: auto;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+    justify-self: stretch;
+  }
+
+  .recordList::-webkit-scrollbar {
+    display: none;
+  }
+
+  .recordList li,
+  .recordList li:last-child {
+    grid-template-columns: none;
+    align-content: start;
+    gap: 0;
+    padding: 4px 12px 10px;
+    border: 1px solid rgb(255 255 255 / 0.16);
+    border-radius: var(--radius-card);
+    scroll-snap-align: start;
+  }
+
+  .recordName {
+    min-height: 40px;
+  }
+}
 
 .award {
   display: grid;
-  gap: 16px;
-  width: min(100%, 315px);
+  gap: 14px;
   margin: 0;
   font-size: 0.9375rem;
   line-height: 1.5rem;
@@ -511,4 +648,19 @@
   height: auto;
   border-radius: var(--radius-card);
   box-shadow: 0 12px 40px rgb(0 0 0 / 0.35);
+}
+
+/* Below a computer, a small certificate beside its words. */
+@media (max-width: 1023px) {
+  .award {
+    grid-template-columns: 128px minmax(0, 1fr);
+    align-items: center;
+    font-size: 0.875rem;
+    line-height: 1.375rem;
+  }
+
+  .award strong {
+    font-size: 1rem;
+    line-height: 1.375rem;
+  }
 }

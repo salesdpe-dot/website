@@ -138,7 +138,8 @@ const keepInView = (e: FocusEvent) => {
   }
 };
 
-export function VisitBooker() {
+/* `compact` (the project page's visit section) tightens the card and lays the place cards out in less height. */
+export function VisitBooker({ compact = false }: { compact?: boolean }) {
   const [step, setStep] = useState(0);
   // Which way the last move went, so the next step slides in from that side.
   const [dir, setDir] = useState<"fwd" | "back">("fwd");
@@ -290,7 +291,7 @@ export function VisitBooker() {
     : [];
 
   return (
-    <div ref={root} className={s.booker}>
+    <div ref={root} className={s.booker} data-compact={compact || undefined}>
       <div className={s.progress}>
         <p>
           <span className="sr-only">Booking step </span>

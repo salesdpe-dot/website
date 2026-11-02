@@ -1,8 +1,23 @@
-/* The client's sheet laid on the page colour with a wide margin, so it reads as a document; a click opens the viewer. */
+/* A card: the sheet on the left (on top on a phone), the heading and the buttons beside it. */
+.card {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .card {
+    grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
+    gap: 48px;
+    align-items: center;
+  }
+}
+
+/* The client's sheet on the page colour, cropped to a wide frame on a phone; a click opens the viewer. */
 .thumb {
   display: block;
   width: 100%;
-  padding: clamp(16px, 5vw, 72px);
+  overflow: hidden;
+  padding: clamp(10px, 2vw, 20px);
   border-radius: var(--radius-card);
   background: var(--surface);
   cursor: zoom-in;
@@ -15,16 +30,32 @@
   border-radius: 2px;
   box-shadow:
     0 1px 2px rgb(8 32 50 / 0.08),
-    0 12px 36px rgb(8 32 50 / 0.1);
+    0 8px 24px rgb(8 32 50 / 0.1);
   transition: box-shadow 0.4s var(--ease);
+}
+
+@media (max-width: 767px) {
+  .thumbImg {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: 50% 40%;
+  }
 }
 
 @media (hover: hover) {
   .thumb:hover .thumbImg {
     box-shadow:
       0 1px 2px rgb(8 32 50 / 0.1),
-      0 18px 48px rgb(8 32 50 / 0.16);
+      0 14px 36px rgb(8 32 50 / 0.16);
   }
+}
+
+.text {
+  min-width: 0;
+}
+
+.text > div:first-child {
+  margin-bottom: 20px;
 }
 
 .actions {
@@ -32,7 +63,6 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 12px 28px;
-  margin-top: 24px;
 }
 
 /* Solid, so nothing of the page shows through behind the buttons. */

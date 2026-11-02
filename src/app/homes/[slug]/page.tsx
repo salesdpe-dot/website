@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import { ShareButton } from "@/components/ShareButton";
 import {
   Accordion,
-  CtaBand,
   FactList,
   Gallery,
   Quote,
@@ -72,6 +71,9 @@ const figure = (text = ""): Pick<Spec, "value" | "unit"> => {
 const factValue = (facts: { label: string; value: string }[], label: string) =>
   facts.find((f) => f.label === label)?.value;
 
+/* The hero already gives these two as figures, so the facts beside the overview do not repeat them. */
+const IN_HERO = new Set(["Homes", "Project size"]);
+
 /* The facts that are figures ("2,98,840 sq ft") become big numbers; the rest ("2 & 3 BHK", an address) stay as rows. */
 const FIGURES: Record<string, string> = {
   Homes: "Homes",
@@ -102,10 +104,11 @@ const describe = (items: Media[]) => {
 const months = (n: number) => (n === 0 ? "Same month" : `${n} ${n === 1 ? "month" : "months"}`);
 
 /*
- * A community Disha has handed over, laid out as a case study on a tesla.com model page: the photograph
- * and its three figures, what it is in one line and its numbers large, a photograph from edge to edge, the
- * build record on the navy field, the rest of the pictures, the specification, the families who live
- * there in their own words, and the project on sale now.
+ * A community Disha has handed over, laid out as a case study on a tesla.com model page, in about four screens:
+ * the photograph and its three figures; what it is in one line beside the rest of its facts, with what is there
+ * (amenities, specification) in rows that open under them; the build record on the navy field; the pictures in
+ * one row to swipe, each opening full screen; the families who live there in their own words; and the way on, to
+ * the project on sale now or the next community.
  */
 export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
   const { slug } = await props.params;
@@ -117,10 +120,11 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
   const words = homeowners.filter((h) => h.slug === p.slug);
   const mapQuery = encodeURIComponent(p.address ?? `${p.name}, ${p.locality}`);
 
-  /* The figures large; every other fact, the RERA number and the address as rows beside them. */
-  const figures = p.facts.map(asFigure).filter((f): f is BigSpec => f !== null);
+  /* The figures the hero has not shown, large; every other fact, the RERA number and the address as rows. */
+  const facts = p.facts.filter((f) => !IN_HERO.has(f.label));
+  const figures = facts.map(asFigure).filter((f): f is BigSpec => f !== null);
   const details = [
-    ...p.facts.filter((f) => !asFigure(f)),
+    ...facts.filter((f) => !asFigure(f)),
     ...(p.rera ? [{ label: "Karnataka RERA", value: <SlashBreak code={p.rera} /> }] : []),
     ...(p.address ? [{ label: "Address", value: p.address }] : []),
   ];
@@ -141,25 +145,67 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
   const gaps = marks.slice(1).map((m, n) => m.at - marks[n].at);
   const toKeys = monthIndex(p.timeline.handover) - monthIndex(p.timeline.start);
 
-  /*
-   * One photograph runs from edge to edge after the figures: the first photograph the hero has not shown.
-   * The gallery then shows the rest, and only when there are at least two of them. Sets that divide by
-   * three take the mosaic; two or four sit in two columns; otherwise a picture that would end a row alone
-   * spans it (on a phone, in two columns, likewise).
-   */
-  const unseen = p.gallery.filter((m) => m.src !== p.cover.src);
-  const wide = unseen.find((m) => m.kind === "photo");
-  const gallery = unseen.filter((m) => m !== wide);
-  const showGallery = gallery.length >= 2;
-  const n = gallery.length;
-  const mosaic = n % 3 === 0;
-  const twoUp = n === 2 || n === 4;
-  const deskTail = !mosaic && !twoUp && n % 3 === 1;
-  const phoneTail = mosaic ? n % 2 === 0 : n % 2 === 1;
+  /* Every picture the hero has not shown, in one row that scrolls sideways; each opens the full-screen viewer. */
+  const gallery = p.gallery.filter((m) => m.src !== p.cover.src);
+  const showGallery = gallery.length > 0;
 
-  /* Signature spaces: three across, or four or two where three would leave the last one alone in its row. */
-  const spaces = p.highlights?.length ?? 0;
-  const spaceCols = [3, 4, 2].find((c) => spaces % c !== 1) ?? 1;
+  /* What is there, in rows that open under the facts: the signature spaces, the other amenities, the specification. */
+  const extras = [
+    ...(p.highlights
+      ? [
+          {
+            title: `${p.highlights.length} signature spaces`,
+            body: (
+              <ol className={s.highlights}>
+                {p.highlights.map((h, k) => (
+                  <li key={h.name}>
+                    <span className={s.num}>{String(k + 1).padStart(2, "0")}</span>
+                    <h4 className={s.hName}>{h.name}</h4>
+                    <p>{h.text}</p>
+                  </li>
+                ))}
+              </ol>
+            ),
+          },
+        ]
+      : []),
+    ...(p.otherAmenities
+      ? [
+          {
+            title: "Also in the community",
+            body: (
+              <ul className={s.also}>
+                {p.otherAmenities.map((a) => (
+                  <li key={a}>{a}</li>
+                ))}
+              </ul>
+            ),
+          },
+        ]
+      : []),
+    ...(p.specifications
+      ? [
+          {
+            title: "Specification",
+            body: (
+              <>
+                {p.specifications.map((sp) => (
+                  <div key={sp.group} className={s.specGroup}>
+                    <h4 className={s.specName}>{sp.group}</h4>
+                    <ul className={s.specItems}>
+                      {sp.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+                <p className={s.extrasNote}>Selected items from the published specification.</p>
+              </>
+            ),
+          },
+        ]
+      : []),
+  ];
 
   const nav = [
     { id: "overview", label: "Overview" },
@@ -199,181 +245,114 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
         cta={{ label: "Book a visit", href: links.bookVisit }}
       />
 
-      <Section id="overview" labelledBy="about-title" className={s.anchor}>
-        <div className={s.about}>
-          <h2 id="about-title" className={s.kicker}>
-            <HomeMark className={s.kickerMark} />
-            {p.name}, {p.handoverYear}
-          </h2>
-          <p className={`display ${s.lead}`}>{p.intro}</p>
-          <div className={s.links}>
-            {p.website && (
+      {/* What it is in one line, and beside it every fact the hero has not given. */}
+      <Section id="overview" labelledBy="about-title" className={`${s.anchor} ${s.overview}`}>
+        <div className={s.split}>
+          <div className={s.about}>
+            <h2 id="about-title" className={s.kicker}>
+              <HomeMark className={s.kickerMark} />
+              {p.name}, {p.handoverYear}
+            </h2>
+            <p className={`display ${s.lead}`}>{p.intro}</p>
+            <div className={s.links}>
+              {p.website && (
+                <a
+                  className="text-link"
+                  href={p.website.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {p.website.label}
+                  <ArrowRight />
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
+              )}
               <a
                 className="text-link"
-                href={p.website.href}
+                href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {p.website.label}
+                Find it on Google Maps
                 <ArrowRight />
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
+            </div>
+          </div>
+          <div id="facts" className={`${s.anchor} ${s.facts}`} role="group" aria-labelledby="facts-title">
+            <h3 id="facts-title" className="sr-only">
+              {p.shortName} in figures
+            </h3>
+            {figures.length > 0 && <SpecRow items={figures} tone="light" className={`${s.figures} reveal`} />}
+            {details.length > 0 && (
+              <div className="reveal">
+                <FactList facts={details} />
+              </div>
             )}
-            <a
-              className="text-link"
-              href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Find it on Google Maps
-              <ArrowRight />
-              <span className="sr-only">(opens in a new tab)</span>
-            </a>
+            {extras.length > 0 && (
+              <div className={s.extras}>
+                <Accordion items={extras} defaultOpen={null} />
+              </div>
+            )}
           </div>
         </div>
       </Section>
 
-      <Section id="facts" space="none" labelledBy="facts-title" className={`${s.anchor} ${s.factsSection}`}>
-        <h2 id="facts-title" className="sr-only">
-          {p.shortName} in figures
-        </h2>
-        <SpecRow items={figures} tone="light" className={`${s.figures} reveal`} />
-        {details.length > 0 && (
-          <div className={`${s.details} reveal`}>
-            <FactList facts={details} />
+      <Section id="timeline" tone="navy" labelledBy="timeline-title" className={`${s.anchor} ${s.record}`}>
+        <div className={s.recordGrid}>
+          <div className={s.recordHead}>
+            <h2 id="timeline-title" className={s.recordTitle}>
+              <span className={`mega sky ${s.recordFigure}`}>{p.timeline.months} months</span>
+              <span className={`display ${s.recordWords}`}>from ground-breaking to the occupancy certificate.</span>
+            </h2>
+            {toKeys > 0 && !keysFirst && (
+              <p className={s.recordLine}>
+                Keys handed over {toKeys} months after work began, in {p.timeline.handover}.
+              </p>
+            )}
           </div>
-        )}
-      </Section>
-
-      {wide && (
-        <figure className={s.wide}>
-          <div className={s.wideMedia}>
-            <Image src={wide.src} alt={wide.alt} fill sizes="100vw" quality={78} className={s.wideImg} />
-          </div>
-          <figcaption className={s.wideCaption}>{wide.caption}</figcaption>
-        </figure>
-      )}
-
-      <Section id="timeline" tone="navy" labelledBy="timeline-title" className={s.anchor}>
-        <div className={s.recordHead}>
-          <h2 id="timeline-title" className={s.recordTitle}>
-            <span className={`mega sky ${s.recordFigure}`}>{p.timeline.months} months</span>
-            <span className={`display ${s.recordWords}`}>from ground-breaking to the occupancy certificate.</span>
-          </h2>
-          {toKeys > 0 && !keysFirst && (
-            <p className={s.recordLine}>
-              Keys handed over {toKeys} months after work began, in {p.timeline.handover}.
-            </p>
-          )}
-        </div>
-        <ol className={s.marks} style={{ "--marks": marks.length } as CSSProperties}>
-          {marks.map((m, k) => (
-            <li key={m.k}>
-              <span className={s.track} aria-hidden="true">
-                <span className={s.dot} />
-                {k < gaps.length && (
-                  <span className={s.seg}>
-                    <span className={s.gap}>{months(gaps[k])}</span>
+          <div className={s.recordBody}>
+            <ol className={s.marks} style={{ "--marks": marks.length } as CSSProperties}>
+              {marks.map((m, k) => (
+                <li key={m.k}>
+                  <span className={s.track} aria-hidden="true">
+                    <span className={s.dot} />
+                    {k < gaps.length && (
+                      <span className={s.seg}>
+                        <span className={s.gap}>{months(gaps[k])}</span>
+                      </span>
+                    )}
                   </span>
-                )}
-              </span>
-              <span className={s.markLabel}>{m.k}</span>
-              <span className={`display ${s.markValue}`}>{m.v}</span>
-            </li>
-          ))}
-        </ol>
-        <p className={s.share}>
-          <ShareButton
-            text={`${p.name}, ${p.locality}: ${factValue(p.facts, "Homes")} homes, ${p.timeline.months} months from the start of work to the occupancy certificate. By Disha Habitat.`}
-            hash="timeline"
-          >
-            Send this record to family
-          </ShareButton>
-        </p>
+                  <span className={s.markLabel}>{m.k}</span>
+                  <span className={`display ${s.markValue}`}>{m.v}</span>
+                </li>
+              ))}
+            </ol>
+            <p className={s.share}>
+              <ShareButton
+                text={`${p.name}, ${p.locality}: ${factValue(p.facts, "Homes")} homes, ${p.timeline.months} months from the start of work to the occupancy certificate. By Disha Habitat.`}
+                hash="timeline"
+              >
+                Send this record to family
+              </ShareButton>
+            </p>
+          </div>
+        </div>
       </Section>
 
       {showGallery && (
-        <Section
-          id="gallery"
-          labelledBy="gallery-title"
-          className={s.anchor}
-        >
+        <Section id="gallery" labelledBy="gallery-title" className={`${s.anchor} ${s.gallerySection}`}>
           <div className="reveal">
-            <SectionHead
-              id="gallery-title"
-              size="large"
-              title={`Inside ${p.shortName}.`}
-              line={`${describe(gallery)}.`}
-            />
+            <SectionHead id="gallery-title" title={`Inside ${p.shortName}.`} line={`${describe(gallery)}.`} />
           </div>
-          <div
-            className={s.gallery}
-            data-two-up={twoUp || undefined}
-            data-desk-tail={deskTail || undefined}
-            data-phone-tail={phoneTail || undefined}
-          >
-            <Gallery items={gallery} layout={mosaic ? "mosaic" : "grid"} />
+          <div className={s.gallery}>
+            <Gallery items={gallery} layout="row" label={`Pictures of ${p.shortName}`} />
           </div>
-        </Section>
-      )}
-
-      {p.highlights && (
-        <Section tone="surface" labelledBy="highlights-title">
-          <div className="reveal">
-            <SectionHead
-              id="highlights-title"
-              size="large"
-              title={`${p.highlights.length} signature spaces.`}
-            />
-          </div>
-          <ol className={`${s.highlights} reveal-stagger`} data-cols={spaceCols}>
-            {p.highlights.map((h, k) => (
-              <li key={h.name}>
-                <span className={s.num}>{String(k + 1).padStart(2, "0")}</span>
-                <h3 className={s.hName}>{h.name}</h3>
-                <p>{h.text}</p>
-              </li>
-            ))}
-          </ol>
-          {p.otherAmenities && (
-            <div className={s.also}>
-              <h3 className={s.alsoTitle}>Also in the community</h3>
-              <ul>
-                {p.otherAmenities.map((a) => (
-                  <li key={a}>{a}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </Section>
-      )}
-
-      {p.specifications && (
-        <Section split labelledBy="specs-title">
-          <div className="reveal">
-            <SectionHead
-              id="specs-title"
-              title="Specifications."
-              line="Selected items from the published specification."
-            />
-          </div>
-          <Accordion
-            items={p.specifications.map((sp) => ({
-              title: sp.group,
-              body: (
-                <ul className={s.specItems}>
-                  {sp.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              ),
-            }))}
-          />
         </Section>
       )}
 
       {words.length > 0 && (
-        <Section id="residents" tone="surface" labelledBy="words-title" className={s.anchor}>
+        <Section id="residents" labelledBy="words-title" className={`${s.anchor} ${s.residents}`}>
           <h2 id="words-title" className={s.kicker}>
             <HomeMark className={s.kickerMark} />
             {words.length > 1 ? "Homeowners" : "A homeowner"} at {p.shortName}, on what home means
@@ -386,49 +365,50 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
         </Section>
       )}
 
-      <CtaBand
-        title={`${elements.shortName} is selling now.`}
-        line={`20 acres in Gunjur, from the team that handed over ${p.shortName} in ${p.handoverYear}: 2, 3 & 4 BHK apartments and 4 & 5 BHK villas.`}
-        image={elements.cover}
-        note="Artist’s impression"
-        actions={[
-          { label: "Book a visit", href: links.bookVisit },
-          { label: `See ${elements.shortName}`, href: elements.href },
-        ]}
-      />
-
-      <nav aria-label="Next community" className={s.nextWrap}>
-        <ViewTransition
-          name={`community-${next.slug}`}
-          share="morph"
-          default="none"
-        >
-          <Link
-            href={`/homes/${next.slug}`}
-            className={s.next}
-            data-tone="dark"
-          >
-            <Image
-              src={next.cover.src}
-              alt=""
-              fill
-              sizes="100vw"
-              quality={78}
-              className={s.nextImg}
-            />
-            <span className={s.nextShade} aria-hidden="true" />
-            <span className={s.nextText}>
-              <span className={s.nextEyebrow}>
-                Next community · {next.locality}
+      {/*
+       * The way on, in one band: these homes are all sold, so the project on sale now with its two buttons, and
+       * beside it the next community as a photograph, the whole card a link.
+       */}
+      <section className={s.onward} aria-label="Where next">
+        <div className={s.sale} data-tone="dark">
+          <HomeMark className={s.saleMark} />
+          <h2 className={`display ${s.saleTitle}`}>{elements.shortName} is selling now.</h2>
+          <p className={s.saleLine}>
+            20 acres in Gunjur, from the team that handed over {p.shortName} in {p.handoverYear}: 2, 3 &amp; 4 BHK
+            apartments and 4 &amp; 5 BHK villas.
+          </p>
+          <div className={s.saleActions}>
+            <Link className="btn btn-primary" href={links.bookVisit}>
+              Book a visit
+            </Link>
+            <Link className="btn btn-ghost" href={elements.href}>
+              See {elements.shortName}
+            </Link>
+          </div>
+        </div>
+        <nav aria-label="Next community" className={s.nextWrap}>
+          <ViewTransition name={`community-${next.slug}`} share="morph" default="none">
+            <Link href={`/homes/${next.slug}`} className={s.next} data-tone="dark">
+              <Image
+                src={next.cover.src}
+                alt=""
+                fill
+                sizes="(min-width: 900px) 40vw, 100vw"
+                quality={78}
+                className={s.nextImg}
+              />
+              <span className={s.nextShade} aria-hidden="true" />
+              <span className={s.nextText}>
+                <span className={s.nextEyebrow}>Next community · {next.locality}</span>
+                <span className={`display ${s.nextName}`}>{next.shortName}</span>
               </span>
-              <span className={`display ${s.nextName}`}>{next.shortName}</span>
-            </span>
-            <span className={s.nextArrow} aria-hidden="true">
-              <ArrowRight />
-            </span>
-          </Link>
-        </ViewTransition>
-      </nav>
+              <span className={s.nextArrow} aria-hidden="true">
+                <ArrowRight />
+              </span>
+            </Link>
+          </ViewTransition>
+        </nav>
+      </section>
     </>
   );
 }

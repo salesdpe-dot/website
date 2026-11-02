@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Accordion, Breadcrumbs, PageIntro, Section, SectionHead } from "@/components/ds";
+import { Breadcrumbs, PageIntro, Section } from "@/components/ds";
 import { AffordabilityExplorer } from "@/components/AffordabilityExplorer";
 import { pageMeta } from "@/lib/launch";
 
@@ -30,14 +30,11 @@ export default function PlanPage() {
       <PageIntro
         above={<Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "EMI calculator" }]} />}
         title="Work out your EMI."
-        line="Home price, down payment, interest rate and tenure. The monthly EMI, the total interest and the total repayment change as you type."
+        line="The monthly EMI, the total interest and the total repayment change as you type."
       />
+      {/* The method, what is left out and what the tool is not: under the estimate, behind "How the figure is worked out". */}
       <Section label="EMI calculator" space="tight">
-        <AffordabilityExplorer />
-      </Section>
-      <Section tone="surface" split labelledBy="notes-title">
-        <SectionHead id="notes-title" size="large" title="How the figure is worked out." />
-        <Accordion items={notes} defaultOpen={null} />
+        <AffordabilityExplorer notes={notes} />
       </Section>
     </>
   );

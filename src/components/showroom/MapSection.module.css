@@ -1,58 +1,25 @@
-/* On white: the list on the left and the map on the right, sharing the page's edges. */
+/*
+ * On white: the heading across the top; then on a computer the list and the chosen community's card on the
+ * left and the map on the right, as tall as the two together. On a phone the map comes straight after the
+ * heading, then the names in a row to swipe, then the card: about one screen in all.
+ */
 .section {
-  padding: 72px var(--edge);
+  padding: 48px var(--edge) 56px;
   background: #fff;
 }
 
 @media (min-width: 768px) {
   .section {
-    padding-block: 112px;
+    padding-block: clamp(56px, 6vw, 88px);
   }
 }
 
-.inner {
-  display: grid;
-  gap: 32px;
-}
-
-/* Below a computer's width the map comes straight after the heading, before the list, so it is seen first. */
-@media (max-width: 899px) {
-  .inner {
-    gap: 24px;
-  }
-
-  .side {
-    display: contents;
-  }
-
-  .map {
-    order: 1;
-  }
-
-  .list,
-  .side > :global(.text-link) {
-    order: 2;
-  }
-
-  .side > :global(.text-link) {
-    justify-self: start;
-  }
-}
-
-@media (min-width: 900px) {
-  .inner {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: 48px;
-    align-items: stretch;
-  }
-}
-
-.side {
+.head {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 24px;
-  min-width: 0;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 48px;
 }
 
 .title {
@@ -63,22 +30,63 @@
 }
 
 .line {
-  max-width: 40ch;
-  margin-top: 12px;
-  font-size: 1.0625rem;
-  line-height: 1.5rem;
+  max-width: 44ch;
+  font-size: 1rem;
+  line-height: 1.4rem;
   color: var(--text-2);
+  text-wrap: pretty;
 }
 
 @media (min-width: 1024px) {
   .line {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+    font-size: 1.125rem;
+    line-height: 1.625rem;
   }
 }
 
+.inner {
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+@media (min-width: 900px) {
+  .inner {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "list map"
+      "card map";
+    gap: 20px 48px;
+    margin-top: 32px;
+  }
+
+  .map {
+    grid-area: map;
+  }
+
+  .list {
+    grid-area: list;
+  }
+
+  .card {
+    grid-area: card;
+  }
+}
+
+.map {
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  .map {
+    min-height: 520px;
+  }
+}
+
+/* The list: one row per community, its name and what it is; the chosen one underlined in sky blue. */
 .list {
-  width: 100%;
+  min-width: 0;
   border-top: 1px solid var(--line);
 }
 
@@ -94,14 +102,9 @@
   border-bottom: 1px solid var(--line);
   text-align: left;
   color: var(--text-2);
-  transition: color 0.3s var(--ease);
-}
-
-/* On a phone the details always sit under the name, so every row has the same shape. */
-@media (max-width: 599px) {
-  .item {
-    flex-direction: column;
-  }
+  transition:
+    color 0.3s var(--ease),
+    background-color 0.3s var(--ease);
 }
 
 .item:hover,
@@ -128,13 +131,211 @@
   line-height: 1.25rem;
 }
 
-.map {
-  min-width: 0;
-  min-height: 360px;
+/* On a phone the names are a row of chips that scrolls sideways, the chosen one in navy; the card says the rest. */
+@media (max-width: 899px) {
+  .list {
+    position: relative;
+    display: flex;
+    gap: 8px;
+    margin-inline: calc(-1 * var(--edge));
+    padding: 2px var(--edge);
+    overflow-x: auto;
+    border-top: 0;
+    scrollbar-width: none;
+    scroll-padding-inline: var(--edge);
+  }
+
+  .list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .list > li {
+    flex: none;
+  }
+
+  .item {
+    align-items: center;
+    width: auto;
+    min-height: 44px;
+    padding: 0 18px;
+    border-bottom: 0;
+    border-radius: 999px;
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
+  .name {
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
+    color: inherit;
+  }
+
+  .item[aria-pressed="true"] {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .item[aria-pressed="true"] .name {
+    text-decoration: none;
+  }
+
+  .meta {
+    display: none;
+  }
+}
+
+@media (hover: hover) and (max-width: 899px) {
+  .item:not([aria-pressed="true"]):hover {
+    background: var(--surface-2);
+  }
+}
+
+/*
+ * The card for the community chosen: its photograph from edge to edge with the words over a navy shade at the
+ * foot, or, for the one on sale, the words on the navy field under the house icon. The whole card is the link.
+ */
+.card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: end;
+  align-items: end;
+  gap: 12px 16px;
+  aspect-ratio: 16 / 9;
+  padding: 18px 20px;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--ink);
+  color: #fff;
+  isolation: isolate;
 }
 
 @media (min-width: 900px) {
-  .map {
-    min-height: 520px;
+  .card {
+    aspect-ratio: auto;
+    min-height: 240px;
+    padding: 24px 28px;
   }
+}
+
+.card[data-photo]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(0deg, rgb(8 32 50 / 0.86) 0%, rgb(8 32 50 / 0.5) 34%, rgb(8 32 50 / 0) 64%);
+  pointer-events: none;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.photo {
+  z-index: -2;
+  object-fit: cover;
+  object-position: var(--pos-m, 50% 50%);
+  opacity: 0;
+  transition:
+    opacity 0.5s var(--ease),
+    transform 1.2s var(--ease);
+}
+
+@media (min-width: 768px) {
+  .photo {
+    object-position: var(--pos, 50% 50%);
+  }
+}
+
+.photo[data-on] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo {
+    transition: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .card:hover .photo[data-on] {
+    transform: scale(1.03);
+  }
+}
+
+/* The one on sale: the house icon large and faint, cropped by the card's corner. */
+.mark {
+  position: absolute;
+  top: -12%;
+  right: -6%;
+  z-index: -1;
+  width: 52%;
+  color: rgb(0 177 255 / 0.12);
+  pointer-events: none;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.9);
+}
+
+/* "Now selling": the sky-blue tag with navy text, as on the homes page. */
+.card:not([data-photo]) .eyebrow {
+  margin-bottom: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--on-accent);
+  letter-spacing: 0.04em;
+}
+
+.cardName {
+  font-size: clamp(1.5rem, 1.15rem + 1.1vw, 2.125rem);
+  line-height: 1.12;
+  color: #fff;
+}
+
+.cardMeta {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(255 255 255 / 0.9);
+  text-wrap: pretty;
+}
+
+.go {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.go svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s var(--ease);
+}
+
+.card:hover .go svg,
+.card:focus-visible .go svg {
+  transform: translateX(4px);
 }

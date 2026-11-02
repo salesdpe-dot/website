@@ -9,31 +9,34 @@ import s from "./EnquirySection.module.css";
 /*
  * The visit section of the project page: Guna's invitation, then the same four-step booker as /contact (where,
  * when, who, then send it on WhatsApp or by email, with a calendar file for a visit), and beside it the call for
- * buyers abroad and the quieter ways to reach the sales team.
+ * buyers abroad and the quieter ways to reach the sales team. Kept to about a screen: the heading beside its line
+ * on a computer, and the booker in its compact form.
  */
 export function EnquirySection() {
   const guna = homemakers[0];
   return (
-    <Section id="enquire" tone="surface" labelledBy="enquire-title">
+    <Section id="enquire" tone="surface" space="tight" labelledBy="enquire-title">
       <div className={s.intro}>
         <h2 id="enquire-title" className={`display ${s.title}`}>
           Book a site visit.
         </h2>
-        <p className={s.line}>
-          At the site in Gunjur, or over coffee at our office on Whitefield Main Road: choose where, then a day and a time.
-          The sales team confirms it with you.
-        </p>
-        <p className={s.byline}>
-          <Image src={guna.portrait} alt="" width={96} height={96} sizes="48px" className={s.face} />
-          <span>
-            {guna.name}
-            <small>{guna.role}</small>
-          </span>
-        </p>
+        <div className={s.introText}>
+          <p className={s.line}>
+            At the site in Gunjur, or over coffee at our office on Whitefield Main Road: choose where, then a day and a time.
+            The sales team confirms it with you.
+          </p>
+          <p className={s.byline}>
+            <Image src={guna.portrait} alt="" width={96} height={96} sizes="48px" className={s.face} />
+            <span>
+              {guna.name}
+              <small>{guna.role}</small>
+            </span>
+          </p>
+        </div>
       </div>
       <div className={s.grid}>
         <div className={s.booker}>
-          <VisitBooker />
+          <VisitBooker compact />
         </div>
         <aside className={s.side} aria-label="Other ways to reach the sales team">
           <section className={s.abroad} aria-labelledby="abroad-title">

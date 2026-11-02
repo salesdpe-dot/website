@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Accordion, CtaBand, Feature, Gallery, Section, SectionHead } from "@/components/ds";
+import { Accordion, CtaBand, Gallery, Section, SectionHead } from "@/components/ds";
 import { PhotoHero } from "@/components/ds";
 import { ArrowRight } from "@/components/showroom/Icons";
 import { HomeMark } from "@/components/showroom/Logo";
@@ -18,14 +18,6 @@ export const metadata: Metadata = pageMeta({
   description: `How two homebuyers became builders: Disha Habitat since 2014, five communities and ${formatIndian(homesHandedOver)} homes handed over in East Bengaluru.`,
   path: "/story",
 });
-
-/* Condensed from the founders’ published profiles (site.ts); they should approve the wording. */
-const voices: Record<string, string> = {
-  "Gunaranjan J":
-    "Fifteen years in software: ERP, SAP, data warehousing, consulting for businesses in the USA. A practising horticulturist, which you will see in every Disha garden.",
-  "K Raja Sekhar":
-    "Built mobile-tower infrastructure for Airtel, Vodafone, Idea and Reliance, then a long stretch with HCL Technologies. He explains a structure plainly until the maths is clear.",
-};
 
 const promises = [
   ["Explain everything.", "No question is too small. If something needs explaining, we sit down and explain it."],
@@ -47,22 +39,21 @@ const family = dishaFamily.slice(0, 6).map((f) => ({
 const homesOf = (p: (typeof projects)[number]) => p.facts.find((f) => f.label === "Homes")?.value;
 const year = (date: string) => date.split(" ")[1];
 
+/*
+ * The story in seven short bands, each about a screen or less: who we are (the poem beside how we began), the
+ * founders (their full profiles a tap away), the five communities with the square feet built, the promises, the
+ * family, the award, and the invitation.
+ */
 export default function StoryPage() {
   const windsor = projects.find((p) => p.slug === "disha-windsor-gardens")!;
   const first = projectsByHandover[0];
   const last = projectsByHandover.at(-1)!;
-  const delivered = stats.find((st) => st.label === "Sq ft delivered")!;
-  const making = stats.find((st) => st.label === "Sq ft in the making")!;
   /*
-   * The published "This is us" figures, with the homes counted from the communities. "1,000+ happy families" and
-   * "20,000+ site visits" are left out: beside 1,102 homes the first reads as a different count, and neither can be checked.
+   * The square feet from the published "This is us" figures. The communities and homes are already in the hero, and
+   * "1,000+ happy families" and "20,000+ site visits" are left out: beside 1,102 homes the first reads as a different
+   * count, and neither can be checked.
    */
-  const figures = [
-    stats.find((st) => st.label === "Communities created")!,
-    { value: homesHandedOver, suffix: "", label: "Homes handed over" },
-    delivered,
-    making,
-  ];
+  const figures = [stats.find((st) => st.label === "Sq ft delivered")!, stats.find((st) => st.label === "Sq ft in the making")!];
 
   return (
     <>
@@ -84,163 +75,122 @@ export default function StoryPage() {
         actions={[{ label: "Book a visit", href: links.bookVisit }]}
       />
 
-      {/* The company's own poem, set as the guideline sets its headlines: sky blue on navy, with the house icon under it. */}
-      <Section tone="navy" label="Our poem">
-        <p className={`mega ${s.poem}`}>
-          {poem.opening.map((l) => (
-            <span key={l} className={s.line}>
-              {l}
-            </span>
-          ))}
-          <span className={`${s.line} ${s.dots}`} aria-hidden="true">
-            …
-          </span>
-          <span className={s.line}>{poem.closing}</span>
-        </p>
-        <HomeMark className={s.poemMark} />
+      {/* The company's own poem, sky blue on navy as the guideline sets its headlines, beside how we began. */}
+      <Section tone="navy" space="tight" labelledBy="begin-title">
+        <div className={s.opening}>
+          <div>
+            <p className={`mega ${s.poem}`}>
+              {poem.opening.map((l) => (
+                <span key={l} className={s.line}>
+                  {l}
+                </span>
+              ))}
+              <span className={`${s.line} ${s.dots}`} aria-hidden="true">
+                …
+              </span>
+              <span className={s.line}>{poem.closing}</span>
+            </p>
+            <HomeMark className={s.poemMark} />
+          </div>
+          <div className={s.begin}>
+            <h2 id="begin-title" className={`display ${s.beginTitle}`}>
+              We were homebuyers first.
+            </h2>
+            <p className={s.statement}>We asked the questions every buyer asks.</p>
+            <p>
+              Then we became investors, and then developers and builders. We learnt each of those from the place of not knowing, and every
+              stumble taught us what it takes to keep a promise. That is why every home we plan starts from the buyer’s side of the table.
+            </p>
+          </div>
+        </div>
       </Section>
 
-      <Section split labelledBy="begin-title">
-        <div className="reveal">
-          <SectionHead id="begin-title" size="large" title="We were homebuyers first." />
-        </div>
-        <div className={`${s.prose} ${s.big}`}>
-          <p>We asked the questions every buyer asks.</p>
-          <p>
-            We became homebuyers first, then investors, and then developers and builders. We learnt each of those from the place of
-            not knowing, and every stumble taught us what it takes to keep a promise.
-          </p>
-          <p>That is why every home we plan starts from the buyer’s side of the table.</p>
-        </div>
-      </Section>
-
-      <Section tone="surface" labelledBy="founders-title" id="homemakers">
-        <div className="reveal">
-          <SectionHead
-            id="founders-title"
-            size="large"
-            title="Software and telecom towers, then homes."
-            line={`Gunaranjan J and K Raja Sekhar, founders and directors of Disha Habitat since ${company.founded}.`}
-          />
-        </div>
+      <Section tone="surface" space="tight" labelledBy="founders-title" id="homemakers">
+        <SectionHead id="founders-title" title="Software and telecom towers, then homes." />
         <div className={s.founders}>
           {homemakers.map((h) => (
             <article key={h.name} className={s.founder}>
-              <div className={`${s.portrait} reveal`}>
-                <Image src={h.portrait} alt={`Portrait of ${h.name}`} fill sizes="(min-width: 900px) 40vw, 100vw" className={s.portraitImg} />
+              <div className={s.portrait}>
+                <Image src={h.portrait} alt={`Portrait of ${h.name}`} fill sizes="128px" className={s.portraitImg} />
               </div>
-              <p className="eyebrow">{h.role}</p>
-              <h3 className={`display ${s.name}`}>{h.name}</h3>
+              <div className={s.who}>
+                <p className="eyebrow">{h.role}</p>
+                <h3 className={`display ${s.name}`}>{h.name}</h3>
+              </div>
               <p className={`display ${s.signature}`}>{h.signature}</p>
-              <p className={s.bio}>{voices[h.name]}</p>
-              <Accordion
-                defaultOpen={null}
-                items={[
-                  {
-                    title: `More about ${h.short}`,
-                    body: (
-                      <div className={s.prose}>
-                        {homemakerProfiles[h.name].map((t) => (
-                          <p key={t}>{t}</p>
-                        ))}
-                      </div>
-                    ),
-                  },
-                ]}
-              />
+              <div className={s.bio}>
+                <Accordion
+                  defaultOpen={null}
+                  items={[
+                    {
+                      title: `Read more about ${h.short}`,
+                      body: (
+                        <div className={s.prose}>
+                          {homemakerProfiles[h.name].map((t) => (
+                            <p key={t}>{t}</p>
+                          ))}
+                        </div>
+                      ),
+                    },
+                  ]}
+                />
+              </div>
             </article>
           ))}
         </div>
       </Section>
 
-      <Section labelledBy="five-title">
-        <div className="reveal">
-          <SectionHead
-            id="five-title"
-            size="large"
-            title={`Five communities, ${year(first.timeline.start)} to ${last.handoverYear}.`}
-            line="Our first four sold out by word of mouth: our homebuyers told their friends."
-            link={{ label: "See all our homes", href: links.homes }}
-          />
-        </div>
-        <div className={s.track}>
-          <svg className={`draw ${s.rail}`} viewBox="0 0 2 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <path d="M1 0V100" pathLength="1" fill="none" stroke="currentColor" strokeWidth="2" />
-          </svg>
-          <ol className={`${s.list} reveal-stagger`}>
-            {projectsByHandover.map((p) => (
-              <li key={p.slug}>
-                <Link href={`/homes/${p.slug}`} className={s.row}>
-                  <span className={s.thumb}>
-                    <Image src={p.cover.src} alt="" fill sizes="160px" quality={75} className={s.thumbImg} />
-                  </span>
-                  <span className={s.rowText}>
-                    <span className={s.rowYear}>{p.handoverYear}</span>
-                    <span className={`display ${s.rowName}`}>{p.shortName}</span>
-                    <span className={s.rowMeta}>
-                      {p.timeline.start} to {p.timeline.completion}
-                    </span>
-                  </span>
-                  <span className={s.rowFigures}>
-                    <span>
-                      <strong>{homesOf(p)}</strong> homes
-                    </span>
-                    <span>
-                      <strong>{p.timeline.months}</strong> months
-                    </span>
-                  </span>
-                  <ArrowRight />
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </Section>
-
-      <Section space="tight" labelledBy="first-title">
-        <div className={s.pair}>
-          <Feature image={windsor.cover} ratio="wide">
-            <p className="eyebrow">
-              {year(windsor.timeline.start)} · Our first community
-            </p>
-            <h2 id="first-title" className={`display ${s.h2}`}>
-              Ninety-two homes among the palms.
-            </h2>
-            <p>
-              {windsor.name}, on Panathur–Varthur Road: {homesOf(windsor)} homes on 1.25 acres, among coconut palms. We broke ground in{" "}
-              {windsor.timeline.start}, and the occupancy certificate came in {windsor.timeline.completion}.
-            </p>
-            <Link href={`/homes/${windsor.slug}`} className="text-link">
-              See {windsor.shortName}
-              <ArrowRight />
-            </Link>
-          </Feature>
-        </div>
-      </Section>
-
-      <Section tone="navy" labelledBy="numbers-title">
-        <div className="reveal">
-          <SectionHead
-            id="numbers-title"
-            size="large"
-            title={`${formatIndian(delivered.value)}${delivered.suffix} sq ft built. ${formatIndian(making.value)}${making.suffix} in the making.`}
-            line="Our homebuyers have been our brand ambassadors from the start, and the community grows with every project."
-          />
-        </div>
+      <Section space="tight" labelledBy="five-title">
+        <SectionHead
+          id="five-title"
+          title={`Five communities, ${year(first.timeline.start)} to ${last.handoverYear}.`}
+          line={`We began with ${windsor.name}, on Panathur–Varthur Road: ${homesOf(windsor)} homes on 1.25 acres among coconut palms. Our first four sold out by word of mouth.`}
+        />
         <Stats items={figures} />
+        <ol className={s.track} aria-label="Our communities, in the order they were handed over">
+          {projectsByHandover.map((p) => (
+            <li key={p.slug}>
+              <Link href={`/homes/${p.slug}`} className={s.card}>
+                <span className={s.thumb}>
+                  <Image src={p.cover.src} alt="" fill sizes="(min-width: 900px) 18vw, 64vw" quality={75} className={s.thumbImg} />
+                  {p.cover.kind === "render" && <span className={s.tag}>Artist’s impression</span>}
+                </span>
+                <span className={s.cardYear}>
+                  {p.handoverYear}
+                  {p.slug === windsor.slug && " · Our first"}
+                </span>
+                <span className={`display ${s.cardName}`}>
+                  {p.shortName}
+                  <ArrowRight />
+                </span>
+                <span className={s.cardMeta}>
+                  {p.timeline.start} to {p.timeline.completion}
+                </span>
+                <span className={s.cardFigures}>
+                  <span>
+                    <strong>{homesOf(p)}</strong> homes
+                  </span>
+                  <span>
+                    <strong>{p.timeline.months}</strong> months
+                  </span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ol>
       </Section>
 
-      <Section labelledBy="promise-title">
-        <div className="reveal">
-          <SectionHead id="promise-title" size="large" title="Three promises we made ourselves." />
-        </div>
+      <Section tone="surface" space="tight" labelledBy="promise-title">
+        <SectionHead id="promise-title" title="Three promises we made ourselves." />
         <ol className={s.promises}>
           {promises.map(([t, d], i) => (
             <li key={t}>
-              <span className={s.num} aria-hidden="true">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className={`display ${s.promise}`}>{t}</h3>
+              <h3 className={`display ${s.promise}`}>
+                <span className={s.num} aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                {t}
+              </h3>
               <p>{d}</p>
             </li>
           ))}
@@ -254,27 +204,30 @@ export default function StoryPage() {
         </blockquote>
       </Section>
 
-      <Section tone="surface" labelledBy="family-title">
-        <div className="reveal">
-          <SectionHead
-            id="family-title"
-            size="large"
-            title="One big family."
-            line="Homeowners at home, and the site and office teams who built their homes."
-          />
-        </div>
+      <Section space="tight" labelledBy="family-title">
+        <SectionHead id="family-title" title="One big family." line="Homeowners at home, and the site and office teams who built their homes." />
         <div className={s.gal}>
-          <Gallery items={family} layout="grid" />
+          <Gallery items={family} layout="row" label="The Disha family" />
         </div>
       </Section>
 
-      <Section labelledBy="events-title">
+      <Section tone="surface" space="tight" labelledBy="events-title">
         <div className={s.event}>
-          <div className={s.eventText}>
+          <div className={s.certificate} data-tone="dark">
+            <Image
+              src={award.image}
+              width={315}
+              height={227}
+              alt="ET Business Awards 2025 Certificate of Excellence for Disha Pursuit of the Elements, Innovation Real Estate Project of the Year"
+            />
+          </div>
+          <div className={s.eventHead}>
             <p className="eyebrow">{award.title}</p>
             <h2 id="events-title" className={`display ${s.h2}`}>
               Innovation Real Estate Project of the Year.
             </h2>
+          </div>
+          <div className={s.eventText}>
             <p>
               A {award.honour} for {award.project}, residential category. We have also presented or supported concerts in Bengaluru by{" "}
               {artists.slice(0, -1).join(", ")} and {artists.at(-1)}.
@@ -284,14 +237,6 @@ export default function StoryPage() {
               <ArrowRight />
               <span className="sr-only">(opens YouTube in a new tab)</span>
             </a>
-          </div>
-          <div className={`${s.certificate} reveal`} data-tone="dark">
-            <Image
-              src={award.image}
-              width={315}
-              height={227}
-              alt="ET Business Awards 2025 Certificate of Excellence for Disha Pursuit of the Elements, Innovation Real Estate Project of the Year"
-            />
           </div>
         </div>
       </Section>

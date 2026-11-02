@@ -3,10 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { type CSSProperties, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { WatchFilm } from "@/components/brand/WatchFilm";
 import { RailArrows, RailHead, useRail } from "@/components/home/Rail";
 import r from "@/components/home/Rail.module.css";
 import { LoopFilm } from "@/components/media/LoopFilm";
-import { type AmenityTag, amenities, amenitiesHead, amenityTags } from "@/lib/content";
+import { type AmenityTag, amenities, amenitiesHead, amenityTags, shorts } from "@/lib/content";
 import { filmsPaused } from "@/lib/film";
 import { focusPoint } from "@/lib/focus";
 import { MOTION_OK, useMedia } from "@/lib/useMedia";
@@ -17,6 +18,9 @@ const SIZES = "(min-width: 1024px) 30vw, (min-width: 600px) 45vw, 80vw";
 
 type Filter = "All" | AmenityTag;
 const filters: Filter[] = ["All", ...amenityTags];
+
+/* The client's own film of the clubhouse roof at dusk, with its music, one tap from the row. */
+const film = shorts.find((f) => f.src.endsWith("/short-4"));
 
 /* A hyphenated word stays whole, so "Temperature-controlled" never breaks at its hyphen. */
 const keepWhole = (name: string) =>
@@ -142,9 +146,17 @@ export function AmenityRow() {
       </ul>
 
       <div className={r.foot}>
-        <Link className="text-link" href={amenitiesHead.link.href}>
-          {amenitiesHead.link.label} <ArrowRight />
-        </Link>
+        <div className={s.links}>
+          <Link className="text-link" href={amenitiesHead.link.href}>
+            {amenitiesHead.link.label} <ArrowRight />
+          </Link>
+          {film && (
+            <WatchFilm short={film} className={`text-link ${s.watch}`}>
+              <PlayIcon />
+              Watch the film<span className="sr-only">: {film.title}</span>
+            </WatchFilm>
+          )}
+        </div>
         <p className={r.note}>Artist’s impressions</p>
       </div>
     </section>

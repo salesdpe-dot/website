@@ -159,7 +159,6 @@ name, with an upright `-card` crop where the film has a card cut.
 | `images/pursuit-of-the-elements/clubhouse-globe.webp` | 1920×1080 | `brand assets/Copy of Drop off_shot ani_Revised.JPEG` | `lib/elements.ts` |
 | `images/pursuit-of-the-elements/clubhouse-top.webp` | 1920×1080 | `assets 2/Final updated_HD/Image TIFF and JPEG/TIFF/Clubhouse_Top shot ani_Revised.TIFF` | `lib/elements.ts` |
 | `images/pursuit-of-the-elements/clubhouse.webp` | 1440×750 | dishapursuitoftheelements.com (October 2026) | `app/homes/pursuit-of-the-elements/page.tsx`, `components/home/ClubhousePanel.tsx`, `lib/content.ts` |
-| `images/pursuit-of-the-elements/coffee-cup.webp` | 1920×1080 | `assets 2/Final updated_HD/Image TIFF and JPEG/JPEG/Coffee Cup_Closeup_Revised.JPEG` | `lib/content.ts` |
 | `images/pursuit-of-the-elements/courts.webp` | 1920×1080 | `assets 2/Extra images for presentation /Courts view.JPEG` | `lib/elements.ts` |
 | `images/pursuit-of-the-elements/dance.webp` | 2500×1406 | `brand assets/Clubhouse internal/DANCE Studio.png` | `lib/elements.ts` |
 | `images/pursuit-of-the-elements/driveway.webp` | 1920×1080 | `assets 2/Final updated_HD/Image TIFF and JPEG/JPEG/Driveway_Revised_02.JPEG` | `app/homes/pursuit-of-the-elements/page.tsx`, `lib/elements.ts` |

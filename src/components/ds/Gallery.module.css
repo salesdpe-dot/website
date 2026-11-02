@@ -44,6 +44,48 @@
   scroll-snap-align: start;
 }
 
+/* The strip: a row to swipe on a phone, then every picture in one line of equal squares. */
+.grid[data-layout="strip"] {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: min(72vw, 300px);
+  gap: 8px;
+  margin-inline: calc(-1 * var(--gutter));
+  padding-inline: var(--gutter);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+
+.grid[data-layout="strip"]::-webkit-scrollbar {
+  display: none;
+}
+
+.grid[data-layout="strip"] .tile {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+  .grid[data-layout="strip"] {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(var(--n, 6), minmax(0, 1fr));
+    gap: 12px;
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow: visible;
+  }
+
+  .grid[data-layout="strip"] .tile {
+    aspect-ratio: 1;
+  }
+}
+
+.grid[data-layout="strip"] ~ .toggle {
+  margin-top: 20px;
+}
+
 /* The row's arrows, for a mouse; a finger or a trackpad scrolls the row itself. */
 .nudge {
   display: none;

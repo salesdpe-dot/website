@@ -1,0 +1,148 @@
+/* Brought into view from a link, the heading and the tabs clear the header and the bar. */
+.root {
+  --life-h: clamp(440px, calc(100svh - 340px), 560px);
+  scroll-margin-top: 40px;
+}
+
+/* The heading, and the tabs beside it on a computer (under it on a phone). */
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 40px;
+  margin-bottom: 18px;
+}
+
+@media (min-width: 1024px) {
+  .top {
+    margin-bottom: 28px;
+  }
+}
+
+.top > div:first-child {
+  margin-bottom: 0;
+}
+
+/* The tabs: a segmented control on the navy field, the one on show in white; a row to swipe on a narrow phone. */
+.list {
+  display: flex;
+  gap: 4px;
+  max-width: 100%;
+  padding: 4px;
+  overflow-x: auto;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.08);
+  scrollbar-width: none;
+}
+
+.list::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  flex: none;
+  min-height: 40px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  color: rgb(255 255 255 / 0.8);
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background-color 0.33s var(--ease),
+    color 0.33s var(--ease);
+}
+
+/* On a phone the four share the width, so all of them show without a swipe. */
+@media (max-width: 599px) {
+  .list {
+    width: 100%;
+  }
+
+  .tab {
+    flex: 1 1 auto;
+    padding-inline: 9px;
+    font-size: 0.875rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .tab {
+    min-height: 44px;
+  }
+}
+
+.tab[aria-selected="true"] {
+  background: #fff;
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .tab:hover:not([aria-selected="true"]) {
+    color: #fff;
+    background: rgb(255 255 255 / 0.08);
+  }
+}
+
+.tab:focus-visible {
+  outline-color: #fff;
+  outline-offset: -2px;
+}
+
+/* A panel: the picture or film on the left, the words on the right, one height for every tab; stacked on a phone. */
+.panel {
+  display: grid;
+  gap: 14px;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 48px;
+    height: var(--life-h);
+  }
+}
+
+.visual {
+  min-width: 0;
+  min-height: 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (min-width: 1024px) {
+  .text {
+    gap: 24px;
+  }
+}
+
+/* A tab coming on show fades up. */
+@media (prefers-reduced-motion: no-preference) {
+  .panel:not([hidden]) > * {
+    animation: arrive 0.45s var(--ease) both;
+  }
+
+  .panel:not([hidden]) > .text {
+    animation-delay: 60ms;
+  }
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}

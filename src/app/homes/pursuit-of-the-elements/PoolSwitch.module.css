@@ -122,3 +122,54 @@
     left: var(--edge);
   }
 }
+
+/* In a tab: a rounded frame of the tab's height on a computer, a wide frame on a phone. */
+.pool[data-fill] {
+  height: 100%;
+}
+
+.pool[data-fill] .stage {
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-card);
+}
+
+@media (min-width: 1024px) {
+  .pool[data-fill] .stage {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+}
+
+.pool[data-fill] .note {
+  top: 12px;
+  right: 12px;
+}
+
+.pool[data-fill] .caption,
+.pool[data-fill] .switch {
+  bottom: 12px;
+}
+
+.pool[data-fill] .caption {
+  bottom: 22px;
+  left: 16px;
+  max-width: calc(100% - 220px);
+}
+
+.pool[data-fill] .switch {
+  right: 12px;
+  left: auto;
+}
+
+@media (max-width: 479px) {
+  .pool[data-fill] .option {
+    min-width: 72px;
+    padding-inline: 14px;
+  }
+
+  .pool[data-fill] .caption {
+    max-width: calc(100% - 190px);
+  }
+}

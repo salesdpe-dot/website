@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { type Spec, SpecRow } from "@/components/brand/SpecRow";
 import { ComposeButton } from "@/components/ComposeButton";
 import { ShareButton } from "@/components/ShareButton";
@@ -33,9 +33,10 @@ export type Family = {
  * The tower families and the villas as tabs, the way tesla.com switches between a model's versions: the picture or
  * film large on the left, other views of it in small frames below, and the name, its figures and the two buttons on
  * the right. Only the panel on show is laid out, so a hidden one fetches nothing, and only the view on show plays.
- * `place` names the project in the words "Send to family" sends with a tab's link.
+ * `place` names the project in the words "Send to family" sends with a tab's link; `aside` (the EMI link) sits
+ * beside "Send to family" under the buttons.
  */
-export function HomesTabs({ families, place }: { families: Family[]; place: string }) {
+export function HomesTabs({ families, place, aside }: { families: Family[]; place: string; aside?: ReactNode }) {
   const [active, setActive] = useState(0);
   const [view, setView] = useState(0);
   const pick = (i: number) => {
@@ -122,9 +123,10 @@ export function HomesTabs({ families, place }: { families: Family[]; place: stri
                   Ask for prices
                 </ComposeButton>
               </div>
-              <p className={s.share}>
+              <div className={s.foot}>
                 <ShareButton text={`${f.name}, ${place}. ${f.line}`} hash={f.hash} />
-              </p>
+                {aside}
+              </div>
             </div>
           </div>
         );

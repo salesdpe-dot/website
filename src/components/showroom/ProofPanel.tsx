@@ -9,14 +9,15 @@ import s from "./ProofPanel.module.css";
 /*
  * The brand band, as the guideline's own Color Palette page: a navy field, "come home" huge in sky blue, the house
  * icon on its own as a graphic. Under it, how to check the record, then the record as three equal figures (homes
- * handed over, communities, the residents' rating), and the ET award on a line of its own with its certificate.
+ * handed over, communities, the residents' rating), and the ET award with its certificate: beside "come home" on
+ * a wide screen, so the whole band fits one screen; under the figures otherwise.
  */
 export function ProofPanel() {
   return (
     <section id="record" className={s.band} data-tone="dark" aria-labelledby="brand-title">
       <HomeMark className={s.watermark} />
       <div className={s.inner}>
-        <div className="reveal">
+        <div className={`${s.brand} reveal`}>
           <HomeMark className={s.mark} />
           <h2 id="brand-title" className={s.tagline}>
             {brand.tagline}

@@ -1,37 +1,67 @@
-.body {
-  display: grid;
-  gap: 16px;
-  color: var(--text);
-  font-size: 1.0625rem;
-  line-height: 1.75rem;
+.updated {
+  font-size: 0.875rem;
+  color: var(--text-2);
 }
 
-/* Each heading in Montserrat over a short sky-blue rule, so the page scans as its seven answers. */
-.body h2 {
-  margin-top: 32px;
-  padding-top: 16px;
+/* "In short" and "In full", each in Montserrat over a short sky-blue rule. */
+.h2 {
+  margin: 24px 0 12px;
+  padding-top: 12px;
   border-top: 3px solid var(--accent);
-  width: 100%;
-  font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.375rem;
   line-height: 1.25;
-  font-weight: 600;
-  letter-spacing: -0.02em;
   color: var(--ink);
 }
 
-.body h2:first-child {
-  margin-top: 0;
+@media (min-width: 768px) {
+  .h2 {
+    font-size: 1.5rem;
+  }
 }
 
-.body ul {
+/* Beside "In short" on a computer, level with its heading. */
+@media (min-width: 1024px) {
+  .full {
+    margin-top: 44px;
+  }
+}
+
+/* The short version: five lines, each with a sky-blue dot. */
+.short {
   display: grid;
-  gap: 12px;
-  margin: 0;
-  padding-left: 20px;
-  list-style: disc;
+  gap: 10px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.625rem;
 }
 
+@media (min-width: 768px) {
+  .short {
+    font-size: 1.0625rem;
+    line-height: 1.75rem;
+  }
+}
+
+.short li {
+  position: relative;
+  padding-left: 22px;
+}
+
+.short li::before {
+  content: "";
+  position: absolute;
+  top: 0.7em;
+  left: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.short a,
 .body a:not(:global(.text-link)) {
   color: var(--ink);
   text-decoration: underline;
@@ -39,8 +69,27 @@
   text-underline-offset: 4px;
 }
 
+.short a:hover,
 .body a:hover {
   text-decoration-color: var(--ink);
+}
+
+/* Each part in full, inside its row. */
+.body {
+  display: grid;
+  gap: 12px;
+  max-width: var(--measure);
+  font-size: 1rem;
+  line-height: 1.625rem;
+  color: var(--text);
+}
+
+.body ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  list-style: disc;
 }
 
 .body code {
@@ -59,9 +108,4 @@
   background: none;
   font-family: inherit;
   font-size: inherit;
-}
-
-.updated {
-  font-size: 0.875rem;
-  color: var(--text-2);
 }

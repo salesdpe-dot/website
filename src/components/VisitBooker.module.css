@@ -360,3 +360,50 @@
     grid-column: 2;
   }
 }
+
+/*
+ * Compact, for the project page's visit section: less padding, no reserved height for a short step, a smaller
+ * question, and on a phone each place's icon at the card's right instead of on a line of its own.
+ */
+.booker[data-compact] {
+  gap: 20px;
+  padding: 20px 16px;
+}
+
+@media (min-width: 768px) {
+  .booker[data-compact] {
+    padding: 28px 32px;
+  }
+}
+
+.booker[data-compact] .step {
+  min-height: 0;
+}
+
+.booker[data-compact] .q {
+  margin-bottom: 14px;
+  font-size: 1.375rem;
+  line-height: 1.75rem;
+}
+
+.booker[data-compact] .nav {
+  padding-top: 16px;
+}
+
+@media (max-width: 767px) {
+  .booker[data-compact] fieldset label {
+    padding-block: 12px;
+    padding-right: 48px;
+  }
+
+  .booker[data-compact] fieldset label > span:has(> svg) {
+    position: absolute;
+    top: 13px;
+    right: 14px;
+    margin: 0;
+  }
+
+  .booker[data-compact] input[type="radio"] {
+    top: 12px;
+  }
+}

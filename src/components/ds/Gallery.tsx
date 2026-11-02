@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { type CSSProperties, useCallback, useEffect, useId, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, CloseIcon } from "@/components/showroom/Icons";
 import type { Media } from "@/lib/projects";
 import s from "./Gallery.module.css";
@@ -12,8 +12,9 @@ const kindLabel = { render: "Artist’s impression", plan: "Plan", photo: null }
 
 type Props = {
   items: readonly GalleryItem[];
-  /* "row" is one line of pictures that scrolls sideways, each with its caption under a soft shade. */
-  layout?: "mosaic" | "grid" | "row";
+  /* "row" is one line of pictures that scrolls sideways, each with its caption under a soft shade. "strip" is the
+     first `limit` pictures in one line across a computer screen, and a row to swipe on a phone. */
+  layout?: "mosaic" | "grid" | "row" | "strip";
   /* Buttons over the pictures that show one group at a time (each item names its `group`); the first shows first. */
   groups?: readonly string[];
   /* What the list of pictures is, for screen readers. */
@@ -103,7 +104,9 @@ export function Gallery({ items: all, layout = "mosaic", groups, label, limit }:
   const sizes = (i: number) =>
     layout === "row"
       ? "(min-width: 900px) 380px, 78vw"
-      : i >= cut
+      : layout === "strip" && i < cut
+        ? "(min-width: 768px) 17vw, 72vw"
+        : i >= cut
         ? "(min-width: 900px) 25vw, (min-width: 600px) 33vw, 50vw"
         : i === 0 && layout === "mosaic"
           ? "(min-width: 900px) 66vw, 100vw"
@@ -159,6 +162,7 @@ export function Gallery({ items: all, layout = "mosaic", groups, label, limit }:
           data-fade={switched || undefined}
           data-grouped={groups || rest.length ? "" : undefined}
           aria-label={label}
+          style={layout === "strip" ? ({ "--n": cut } as CSSProperties) : undefined}
           onScroll={layout === "row" ? measure : undefined}
         >
           {lead.map((item, i) => tile(item, i))}

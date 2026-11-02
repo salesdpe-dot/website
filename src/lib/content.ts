@@ -92,7 +92,7 @@ const still = (name: string, width: number, height: number, alt: string, positio
 
 /*
  * The hero: four slides, each a film, a name, one line and two buttons, as tesla.com's (which changes every ten
- * seconds). The figures are further down the page, in the towers row and the clubhouse.
+ * seconds). The figures are further down the page, in the towers row and the brand band.
  */
 export type Slide = {
   id: string;
@@ -398,84 +398,6 @@ export const amenities: Amenity[] = [
   },
 ];
 
-/* The clubhouse, full screen: its film, four figures, and the names of the rooms inside. */
-export const clubhouse = {
-  eyebrow: "Pursuit of the Elements",
-  title: "The Clubhouse",
-  line: "Behind the Elements globe roundabout, its pool lit on the roof after dark.",
-  film: film("club-night", ["720", "p"]),
-  poster: still("club-night", 1920, 1080, "the clubhouse at night from above, its rooftop pool lit, the villas behind"),
-  specs: [
-    { value: "1,35,000+", unit: "sq ft", label: "Clubhouse" },
-    { value: "Rooftop", label: "Temperature-controlled pool and kids’ pool" },
-    { value: "Triple", unit: "height", label: "Lobby under a skylight" },
-    { value: "3rd", unit: "floor", label: "Rooftop terrace café" },
-  ] satisfies Figure[],
-  rooms: [
-    "Reception",
-    "Business lounge & café",
-    "Co-working business centre",
-    "Conference room",
-    "Library",
-    "Mini theatre",
-    "Music room",
-    "Dance studio",
-    "Classroom",
-    "Gymnasium",
-    "Indoor badminton",
-    "Table tennis",
-    "Indoor games",
-    "Banquet hall",
-    "Guest rooms",
-    "Senior citizens’ lounge",
-    "Yoga deck",
-    "Pool bar",
-  ],
-  primary: { label: "See the clubhouse", href: clubhouseHref } satisfies Cta,
-};
-
-/* The five elements, one tab each: the place on the 20 acres that stands for it, with a film or a still. */
-export type ElementTab = { name: string; place: string; line: string; image: Img; film?: Film };
-
-export const fiveElements: { title: string; line: string; tabs: ElementTab[] } = {
-  title: "Five elements",
-  line: "Space, fire, air, water and earth. Each one has a place on the 20\u00a0acres.",
-  tabs: [
-    {
-      name: "Space",
-      place: "Central arena",
-      line: "The open ground between the towers, from above.",
-      image: still("aerial-arena", 2560, 1440, "the central arena from above, between the towers", "50% 50%", "42% 50%"),
-    },
-    {
-      name: "Fire",
-      place: "Camping zone",
-      line: "A sunken fire pit, picnic tents around it.",
-      image: still("camping", 1920, 1080, "a fire pit in the camping zone, tents beyond", "60% 50%", "48% 50%"),
-    },
-    {
-      name: "Air",
-      place: "Yoga deck",
-      line: "On the clubhouse’s first floor, open to the sky, a meditation mural on its wall.",
-      image: still("room-yoga", 1920, 1080, "the open-air yoga deck, mats laid out under a meditation mural"),
-      film: film("room-yoga", ["720"]),
-    },
-    {
-      name: "Water",
-      place: "Elements plaza",
-      line: "Stepped pools and fountains under the palms, the Elements globe beside them.",
-      image: still("out-elements", 1920, 1080, "the Elements plaza, its stepped pools and fountains among palms beside the globe"),
-      film: film("out-elements", ["720", "p"]),
-    },
-    {
-      name: "Earth",
-      place: "The mound",
-      line: "A grass hill with a round opening that frames the towers.",
-      image: still("mound-opening", 1920, 1080, "a tower seen through a round opening in a grassy mound", "50% 50%", "38% 50%"),
-    },
-  ],
-};
-
 /* The brand band, straight from the guideline: navy, a huge sky "come home", and the record in figures. */
 export const brand = {
   tagline: "come home",
@@ -506,7 +428,7 @@ export const brand = {
 
 /*
  * The client's four official walkthrough edits, with music: "<name>-1080.mp4" and "<name>-720.mp4", poster
- * "<name>.webp". Nothing loads until one is opened (WatchFilm). The home page's clubhouse panel opens "The roof
+ * "<name>.webp". Nothing loads until one is opened (WatchFilm). The home page's amenity row opens "The roof
  * at dusk", the pool at night.
  */
 export type ShortFilm = { src: string; poster: Img; title: string; line: string; seconds: number };
@@ -544,16 +466,7 @@ export const shorts: ShortFilm[] = [
   ),
 ];
 
-/*
- * The handed-over communities' row: real photographs, never renders. It follows the map, which has already named
- * and placed them, so this heading speaks of how they look now, and each card gives its year and its homes.
- */
-export const handedOverHead = {
-  title: "Lived in today",
-  line: "The five handed over between 2015 and 2025, in photographs, not renders.",
-} as const;
-
-/* The map's heading. */
+/* The map's heading. Under the map, each community handed over is shown in a photograph, never a render. */
 export const mapHead = {
   title: "Six communities on one map",
   line: "Pursuit of the Elements in Gunjur, selling now, and the five handed over since 2015.",

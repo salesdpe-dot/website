@@ -10,12 +10,13 @@ import s from "./PoolSwitch.module.css";
 /*
  * The rooftop pool by day and at night, full width, with a switch over the picture (tesla.com's colour picker,
  * in two settings). Both pictures are stacked and cross-fade, so the switch is instant once the first has loaded.
+ * With `fill` it is a rounded frame that takes the height of whatever holds it, as in a tab.
  */
-export function PoolSwitch({ views }: { views: { label: string; picture: Picture }[] }) {
+export function PoolSwitch({ views, fill = false }: { views: { label: string; picture: Picture }[]; fill?: boolean }) {
   const [active, setActive] = useState(0);
   const cur = views[active]!;
   return (
-    <div className={s.pool}>
+    <div className={s.pool} data-fill={fill || undefined}>
       <div role="tabpanel" id="pool-panel" aria-labelledby={`pool-tab-${active}`} className={s.stage}>
         {views.map((v, i) => (
           <Image
@@ -24,7 +25,7 @@ export function PoolSwitch({ views }: { views: { label: string; picture: Picture
             alt={i === active ? v.picture.alt : ""}
             aria-hidden={i !== active || undefined}
             fill
-            sizes="100vw"
+            sizes={fill ? "(min-width: 1024px) 60vw, 100vw" : "100vw"}
             quality={78}
             className={s.img}
             data-on={i === active || undefined}

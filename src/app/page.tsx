@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import { ClubhousePanel } from "@/components/home/ClubhousePanel";
-import { CommunityRow } from "@/components/home/CommunityRow";
-import { ElementsSwitcher } from "@/components/home/ElementsSwitcher";
 import { ModelRow } from "@/components/home/ModelRow";
 import { AmenityRow } from "@/components/showroom/AmenityRow";
 import { ClosingCta } from "@/components/showroom/ClosingCta";
@@ -23,10 +20,10 @@ export const metadata: Metadata = {
 };
 
 /*
- * As tesla.com's home page, with more of everything: the hero's four films; the homes as tesla.com's row of
- * models; then the proof while the visitor is still deciding (the brand band with the record, the six communities
- * on one map, and the five handed over as they look now); the amenities, filtered; the clubhouse and the five
- * elements, a full screen each; and the closing step over the community at night.
+ * As tesla.com's home page: the hero's four films; the homes as tesla.com's row of models; then the proof while
+ * the visitor is still deciding (the brand band with the record, and the six communities on one map, each
+ * handed-over one shown in a photograph as it is today); the amenities, filtered; and the closing step over the
+ * community at night. The clubhouse and the five elements have their full pages on the project page.
  * The page ends on that film, so it is marked to meet the footer edge to edge (SiteFooter.module.css).
  */
 export default function Home() {
@@ -39,12 +36,17 @@ export default function Home() {
       <MapSection
         title={mapHead.title}
         line={mapHead.line}
-        items={communities.map(({ slug, name, place, eyebrow }) => ({ slug, name, place, eyebrow }))}
+        items={communities.map(({ slug, name, place, eyebrow, line, image, render }) => ({
+          slug,
+          name,
+          place,
+          eyebrow,
+          line,
+          /* Only a photograph: the one on sale has renders only, so its card carries words instead. */
+          photo: render ? undefined : image,
+        }))}
       />
-      <CommunityRow />
       <AmenityRow />
-      <ClubhousePanel />
-      <ElementsSwitcher />
       <ClosingCta />
     </div>
   );

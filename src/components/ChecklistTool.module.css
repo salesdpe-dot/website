@@ -1,9 +1,9 @@
 /* Progress on the navy field: the count in sky blue at poster size, the bar under it, then the buttons. */
 .progress {
   display: grid;
-  gap: 12px;
-  margin-bottom: 24px;
-  padding: 24px;
+  gap: 10px;
+  margin-top: 24px;
+  padding: 20px;
   border-radius: var(--radius-card);
 }
 
@@ -22,7 +22,7 @@
     grid-row: 1;
     position: sticky;
     top: calc(var(--header-h) + 32px);
-    margin-bottom: 0;
+    margin-top: 0;
     padding: 32px;
   }
 
@@ -54,15 +54,17 @@
 
 .count strong {
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 2.8rem + 2vw, 4.5rem);
+  font-size: clamp(2.75rem, 2rem + 2.4vw, 4.5rem);
   line-height: 1;
   font-weight: 500;
   color: var(--accent);
   letter-spacing: -0.04em;
 }
 
-.count span {
-  max-width: 12rem;
+@media (min-width: 1024px) {
+  .count span {
+    max-width: 12rem;
+  }
 }
 
 .bar {
@@ -172,36 +174,47 @@
 }
 
 .list {
+  margin: 0;
+  padding: 0;
   border-top: 1px solid var(--line);
+  list-style: none;
 }
 
+/* One row for each must-know: the tick, the title and its line, and the button that opens its checks. */
 .item {
   display: grid;
-  gap: 16px;
-  padding: 32px 0;
+  grid-template-columns: 36px minmax(0, 1fr);
+  column-gap: 14px;
+  padding: 12px 0 8px;
   border-bottom: 1px solid var(--line);
+  scroll-margin-top: calc(var(--header-h) + 16px);
 }
 
-.head {
-  display: flex;
-  gap: 16px;
+@media (min-width: 600px) {
+  .item {
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    align-items: center;
+    padding: 18px 0;
+  }
+
+  .item .toggle {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+.tick {
+  align-self: start;
 }
 
 .title {
   min-width: 0;
 }
 
-.step {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-2);
-}
-
 .title h2 {
-  margin-top: 2px;
   font-family: var(--font-display);
-  font-size: clamp(1.625rem, 1.3rem + 1vw, 2.25rem);
-  line-height: 1.15;
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  line-height: 1.25;
   font-weight: 600;
   color: var(--ink);
   letter-spacing: -0.02em;
@@ -217,12 +230,102 @@
 }
 
 .summary {
-  margin-top: 4px;
+  margin-top: 2px;
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
   color: var(--text-2);
 }
 
+/* "0 of 2 checks", with a plus that turns into a minus when the checks are open. */
+.toggle {
+  grid-column: 2;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.plus {
+  position: relative;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface);
+  transition: background-color 0.3s var(--ease);
+}
+
+.toggle:hover .plus {
+  background: var(--surface-2);
+}
+
+.plus::before,
+.plus::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 1.5px;
+  background: var(--ink);
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s var(--ease);
+}
+
+.plus::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.item[data-open] .plus::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+/* The checks open under the row by growing from no height; closed, they are inert and out of the tab order. */
+.panel {
+  grid-column: 2 / -1;
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+}
+
+.item[data-open] .panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .panel {
+    transition:
+      grid-template-rows 0.3s var(--ease),
+      visibility 0s linear 0.3s;
+  }
+
+  .item[data-open] .panel {
+    transition-delay: 0s;
+  }
+}
+
+.clip {
+  display: grid;
+  min-height: 0;
+  /* Room for a focus ring on something inside, which the clip would otherwise cut off. */
+  margin: -4px;
+  padding: 4px;
+  overflow: hidden;
+}
+
 .checks {
-  margin: 0 0 0 52px;
+  margin: 8px 0 0;
   padding: 0;
   border: 0;
   display: grid;
@@ -241,7 +344,6 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  margin-left: 52px;
   justify-self: start;
 }
 
@@ -365,8 +467,15 @@ input:focus-visible + .box {
   .actions,
   .notes,
   .more,
+  .toggle,
   .ready {
     display: none;
+  }
+
+  /* On paper every must-know shows its checks. */
+  .panel {
+    grid-template-rows: 1fr;
+    visibility: visible;
   }
 
   .printNote {
@@ -391,7 +500,6 @@ input:focus-visible + .box {
 
   .count,
   .points,
-  .step,
   .summary,
   .title h2,
   .item[data-done] .title h2,

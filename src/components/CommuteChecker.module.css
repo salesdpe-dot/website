@@ -1,9 +1,10 @@
 .checker {
   display: grid;
-  gap: 32px;
+  gap: 24px;
 }
 
-@media (min-width: 1024px) {
+/* Side by side only where its holder is wide; in a column beside the map, one above the other. */
+@container (min-width: 900px) {
   .checker {
     grid-template-columns: 5fr 6fr;
     gap: 64px;
@@ -14,22 +15,22 @@
 /* The common routes, then what's around the site. */
 .side {
   display: grid;
-  gap: 28px;
+  gap: 20px;
   align-content: start;
 }
 
 .panel {
   display: grid;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
-  padding: 32px 24px;
+  padding: 24px 20px;
   border-radius: var(--radius-card);
-  background: var(--surface);
+  background: #fff;
 }
 
 @media (min-width: 768px) {
   .panel {
-    padding: 40px;
+    padding: 28px;
   }
 }
 
@@ -89,16 +90,16 @@
   margin-top: 8px;
 }
 
-@media (min-width: 640px) {
+@container (min-width: 440px) {
   .links {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 32px;
+    column-gap: 28px;
   }
 }
 
 .link {
   display: flex;
-  min-height: 48px;
+  min-height: 44px;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -126,18 +127,19 @@
   }
 }
 
-/* The panel is grey, so the field sits on it in white. */
+/* The panel is white on the grey section, so the field sits on it in the section's grey. */
 .panel .input {
-  background: #fff;
+  background: var(--surface);
 }
 
-/* Room kept for the checker before it loads, so nothing below it moves. */
+/* Room kept for the checker before it loads, so nothing below it moves; its width decides its layout. */
 .slot {
-  min-height: 650px;
+  container-type: inline-size;
+  min-height: 640px;
 }
 
 @media (min-width: 1024px) {
   .slot {
-    min-height: 320px;
+    min-height: 560px;
   }
 }

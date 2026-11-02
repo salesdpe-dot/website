@@ -4,8 +4,7 @@ import { ViewTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { SpecRow } from "@/components/brand/SpecRow";
-import { Breadcrumbs, CtaBand, PageIntro, Section, SectionHead } from "@/components/ds";
-import { ArrowRight } from "@/components/showroom/Icons";
+import { Breadcrumbs, PageIntro, Section, SectionHead } from "@/components/ds";
 import { focusPoint } from "@/lib/focus";
 import { links } from "@/lib/content";
 import { elements } from "@/lib/elements";
@@ -31,7 +30,10 @@ const longest = Math.max(...projectsByHandover.map((p) => p.timeline.months));
 /* "7, up to 29 floors" → "7". */
 const towers = fact([...elements.facts], "Towers").split(",")[0];
 
-/* The index of Disha's homes: the one selling now, the five lived in today, and how long each took to build. */
+/*
+ * The index of Disha's homes: the one selling now, then the five lived in today with how long each took to build.
+ * The footer that follows carries the sales line and its two buttons, so the page needs no band of its own for them.
+ */
 export default function HomesPage() {
   return (
     <>
@@ -93,13 +95,18 @@ export default function HomesPage() {
         <p className={s.note}>Artist’s impression</p>
       </section>
 
-      <Section labelledBy="built-title">
+      {/*
+       * The five lived in, newest first, each with its build record folded in: the months from ground-breaking to
+       * the occupancy certificate as a sky bar (its length against the longest build) and the two dates. Five
+       * across on a computer; on a phone a compact list, a photograph beside each.
+       */}
+      <Section labelledBy="built-title" className={s.built}>
         <div className="reveal">
           <SectionHead
             id="built-title"
-            size="large"
             title="Five communities, lived in today."
             line={`From ${fact(first.facts, "Homes")} homes among coconut palms in ${first.handoverYear} to ${fact(latest.facts, "Homes")} homes with sundecks in ${latest.handoverYear}.`}
+            link={{ label: "Compare them side by side", href: "/compare" }}
           />
         </div>
         <ul className={`${s.grid} reveal-stagger`}>
@@ -112,7 +119,7 @@ export default function HomesPage() {
                       src={p.cover.src}
                       alt={p.cover.alt}
                       fill
-                      sizes="(min-width: 1024px) 50vw, (min-width: 640px) 50vw, 100vw"
+                      sizes="(min-width: 1200px) 20vw, (min-width: 900px) 33vw, 120px"
                       quality={75}
                       className={s.img}
                     />
@@ -129,12 +136,17 @@ export default function HomesPage() {
                     <span>
                       <strong>{num(fact(p.facts, "Project size"))}</strong> acres
                     </span>
-                    <span>
-                      <strong>{p.timeline.months}</strong> months to build
-                    </span>
                   </span>
-                  <span className={`text-link ${s.more}`} aria-hidden="true">
-                    See {p.shortName} <ArrowRight />
+                  <span className={s.build} style={{ "--w": p.timeline.months / longest } as CSSProperties}>
+                    <span className={s.barTrack} aria-hidden="true">
+                      <span className={s.barFill} />
+                    </span>
+                    <span className={s.barValue}>
+                      <strong>{p.timeline.months}</strong> months, start to OC
+                    </span>
+                    <span className={s.barDates}>
+                      {p.timeline.start} to {p.timeline.completion}
+                    </span>
                   </span>
                 </span>
               </Link>
@@ -142,46 +154,6 @@ export default function HomesPage() {
           ))}
         </ul>
       </Section>
-
-      {/* The record as a chart: one sky bar per community, its length the months from ground-breaking to OC. */}
-      <Section tone="navy" labelledBy="record-title">
-        <div className={s.recordHead}>
-          <SectionHead
-            id="record-title"
-            size="large"
-            title="Ground-breaking to occupancy certificate."
-            line="Months from the first day on site to the OC, for every community we have handed over."
-            link={{ label: "Compare them side by side", href: "/compare" }}
-          />
-        </div>
-        <ol className={s.bars}>
-          {projectsByHandover.map((p) => (
-            <li key={p.slug} className={s.bar} style={{ "--w": p.timeline.months / longest } as CSSProperties}>
-              <Link href={`/homes/${p.slug}`} className={s.barName}>
-                {p.shortName}
-              </Link>
-              <span className={s.barTrack} aria-hidden="true">
-                <span className={s.barFill} />
-              </span>
-              <span className={s.barValue}>
-                <strong>{p.timeline.months}</strong> months
-              </span>
-              <span className={s.barDates}>
-                {p.timeline.start} to {p.timeline.completion}
-              </span>
-            </li>
-          ))}
-        </ol>
-      </Section>
-
-      <CtaBand
-        title="Five lived in. The sixth on site in Gunjur."
-        line={`Book a visit and walk the site of ${elements.shortName} with the sales team.`}
-        actions={[
-          { label: "Book a visit", href: links.bookVisit },
-          { label: `See ${elements.shortName}`, href: elements.href },
-        ]}
-      />
     </>
   );
 }

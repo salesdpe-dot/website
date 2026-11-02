@@ -27,12 +27,15 @@ export function FilmCard({ short, tone = "light" }: { short: Short; tone?: "ligh
   );
 }
 
-/* The films for one section, side by side on a computer. */
-export function FilmCards({ shorts, tone }: { shorts: readonly Short[]; tone?: "light" | "dark" }) {
+/*
+ * The films for one section, side by side on a computer. `compact` stacks them in a narrow column on a computer and
+ * makes them a row to swipe on a phone, for the words beside a tab's picture.
+ */
+export function FilmCards({ shorts, tone, compact = false }: { shorts: readonly Short[]; tone?: "light" | "dark"; compact?: boolean }) {
   return (
-    <ul className={s.cards} data-count={shorts.length}>
+    <ul className={s.cards} data-count={shorts.length} data-compact={compact || undefined}>
       {shorts.map((f) => (
-        <li key={f.src} className="reveal">
+        <li key={f.src} className={compact ? undefined : "reveal"}>
           <FilmCard short={f} tone={tone} />
         </li>
       ))}

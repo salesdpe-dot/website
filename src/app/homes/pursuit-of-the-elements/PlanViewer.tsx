@@ -1,22 +1,23 @@
 "use client";
 
 import Image from "next/image";
-import { type CSSProperties, type PointerEvent, useEffect, useRef, useState } from "react";
+import { type CSSProperties, type PointerEvent, type ReactNode, useEffect, useRef, useState } from "react";
 import { ArrowRight, CloseIcon } from "@/components/showroom/Icons";
 import g from "@/components/ds/Gallery.module.css";
 import s from "./PlanViewer.module.css";
 
-type Props = { src: string; alt: string; width: number; height: number };
+/* `children` is the heading, set beside the plan. */
+type Props = { src: string; alt: string; width: number; height: number; children?: ReactNode };
 
 const MIN = 1;
 const MAX = 5;
 
 /*
- * The master plan, with a full-screen viewer for reading its legend: pinch on a phone, the wheel or
- * the + and − buttons on a computer, and drag (or scroll) to move around. The full file loads only
- * when the viewer opens.
+ * The master plan as a card: the sheet small beside its heading, and a full-screen viewer for reading its legend:
+ * pinch on a phone, the wheel or the + and − buttons on a computer, and drag (or scroll) to move around. The full
+ * file loads only when the viewer opens.
  */
-export function PlanViewer({ src, alt, width, height }: Props) {
+export function PlanViewer({ src, alt, width, height, children }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const zoom = useRef(MIN);
@@ -72,27 +73,23 @@ export function PlanViewer({ src, alt, width, height }: Props) {
 
   return (
     <>
-      <button type="button" className={s.thumb} onClick={show} aria-haspopup="dialog">
-        <Image
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
-          sizes="(min-width: 1440px) 1344px, calc(100vw - 32px)"
-          quality={82}
-          loading="lazy"
-          className={s.thumbImg}
-        />
-        <span className="sr-only">Open the master plan full size</span>
-      </button>
-      <div className={s.actions}>
-        <button type="button" className="btn btn-soft" onClick={show} aria-haspopup="dialog">
-          Open full size
+      <div className={s.card}>
+        <button type="button" className={s.thumb} onClick={show} aria-haspopup="dialog">
+          <Image src={src} alt={alt} width={width} height={height} sizes="(min-width: 768px) 520px, 100vw" quality={82} loading="lazy" className={s.thumbImg} />
+          <span className="sr-only">Open the master plan full size</span>
         </button>
-        <a className="text-link" href={src} target="_blank" rel="noopener noreferrer">
-          Open in a new tab <ArrowRight />
-          <span className="sr-only">(opens in a new tab)</span>
-        </a>
+        <div className={s.text}>
+          {children}
+          <div className={s.actions}>
+            <button type="button" className="btn btn-dark" onClick={show} aria-haspopup="dialog">
+              Open the master plan
+            </button>
+            <a className="text-link" href={src} target="_blank" rel="noopener noreferrer">
+              Open in a new tab <ArrowRight />
+              <span className="sr-only">(opens in a new tab)</span>
+            </a>
+          </div>
+        </div>
       </div>
 
       <dialog

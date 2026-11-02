@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Accordion, Breadcrumbs, CtaBand, PageIntro, Section, SectionHead } from "@/components/ds";
+import { Accordion, Breadcrumbs, CtaBand, PageIntro, Section } from "@/components/ds";
 import { ChecklistTool } from "@/components/ChecklistTool";
 import { checklist } from "@/lib/checklist";
 import { links } from "@/lib/content";
 import { elements } from "@/lib/elements";
 import { pageMeta } from "@/lib/launch";
+import s from "./page.module.css";
 
 export const metadata: Metadata = pageMeta({
   title: "The checklist: five things to check before you buy",
@@ -22,7 +23,7 @@ const words = [
   ["Khata", "A property’s entry in the city’s tax register. It is not proof of ownership on its own."],
   ["EMI", "Equated monthly instalment: the fixed monthly payment on a home loan, covering interest and part of the loan."],
   ["STP", "Sewage treatment plant: it treats a community’s waste water on site so the water can be reused."],
-].map(([title, body]) => ({ title, body }));
+] as const;
 
 export default function ChecklistPage() {
   return (
@@ -30,14 +31,32 @@ export default function ChecklistPage() {
       <PageIntro
         above={<Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Checklist" }]} />}
         title="Five things to check before you buy."
-        line="Khata, occupancy certificate, carpet area, deviation and the sewage treatment plant: what each one is, and what to ask about it before you sign."
+        line="What each one is, and what to ask about it before you sign."
       />
       <Section label="The must-knows" space="tight">
         <ChecklistTool items={checklist} />
-      </Section>
-      <Section tone="surface" split labelledBy="words-title">
-        <SectionHead id="words-title" size="large" title="Words you’ll hear." line="BHK to STP, in a sentence or two each." />
-        <Accordion items={words} defaultOpen={null} />
+        {/* The words buyers meet, BHK to STP, one tap away under the list. */}
+        <div className={s.words}>
+          <Accordion
+            defaultOpen={null}
+            items={[
+              {
+                id: "words",
+                title: "Words you’ll hear: BHK to STP",
+                body: (
+                  <dl className={s.glossary}>
+                    {words.map(([term, meaning]) => (
+                      <div key={term}>
+                        <dt>{term}</dt>
+                        <dd>{meaning}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                ),
+              },
+            ]}
+          />
+        </div>
       </Section>
       <CtaBand
         title="Ask us about any document."
