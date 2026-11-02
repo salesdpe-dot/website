@@ -1,0 +1,127 @@
+/* The navy field fills the screen under the header; the footer stays below the fold. */
+.page {
+  position: relative;
+  min-height: calc(100svh - var(--header-h));
+  padding: 56px var(--edge) 72px;
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding-block: 72px 96px;
+  }
+}
+
+.inner {
+  max-width: var(--page-max);
+  margin-inline: auto;
+}
+
+/* 4, the house icon as the zero, 4: the digits settle in one after another. */
+.code {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.06em;
+  font-size: clamp(7rem, 4rem + 16vw, 16rem);
+  line-height: 0.8;
+}
+
+.zero {
+  width: 1.15em;
+  height: auto;
+  margin-bottom: 0.02em;
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .code > * {
+    animation: settle 0.9s var(--ease) both;
+  }
+
+  .code > :nth-child(2) {
+    animation-delay: 0.12s;
+  }
+
+  .code > :nth-child(3) {
+    animation-delay: 0.24s;
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+}
+
+.title {
+  margin-top: 40px;
+  font-size: var(--display-large);
+  line-height: var(--display-large-lh);
+  color: #fff;
+}
+
+.line {
+  max-width: 34rem;
+  margin-top: 16px;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: rgb(255 255 255 / 0.84);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.links > :global(.btn) {
+  min-width: 180px;
+  min-height: 48px;
+}
+
+@media (max-width: 599px) {
+  .links {
+    flex-direction: column;
+  }
+
+  .links > :global(.btn) {
+    width: 100%;
+  }
+}
+
+/* Every community, as a quiet row of names under the buttons. */
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+  gap: 0 24px;
+  margin-top: 56px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ink-line);
+}
+
+.list a {
+  display: grid;
+  min-height: 44px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--ink-line);
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.list a:hover .name {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.meta {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: rgb(255 255 255 / 0.7);
+}

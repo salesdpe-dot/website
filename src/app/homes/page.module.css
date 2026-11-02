@@ -1,0 +1,370 @@
+/*
+ * The project on sale: the picture from edge to edge, at most the height of the screen. The name and its line
+ * at the top over a soft shade, the figures and buttons at the foot, the render's label in the corner.
+ */
+.now {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: clamp(600px, 92svh, 960px);
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
+}
+
+.nowMedia {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.nowImg {
+  object-fit: cover;
+  object-position: var(--pos-m);
+}
+
+@media (min-width: 768px) {
+  .nowImg {
+    object-position: var(--pos);
+  }
+}
+
+.nowShade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.5) 0, rgb(0 0 0 / 0.2) 28%, rgb(0 0 0 / 0) 44%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.72) 0, rgb(0 0 0 / 0.5) 26%, rgb(0 0 0 / 0) 52%);
+  pointer-events: none;
+}
+
+.nowCopy {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: clamp(48px, 9svh, 96px) var(--edge) 0;
+  text-align: center;
+}
+
+/* "Now selling": the sky-blue tag with navy text, the one place the accent sits on a photograph. */
+.nowTag {
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  text-shadow: none;
+}
+
+.nowName {
+  font-size: var(--display-mega);
+  line-height: var(--display-mega-lh);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.nowLine {
+  max-width: 36rem;
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+}
+
+.nowFoot {
+  display: grid;
+  gap: 28px;
+  width: 100%;
+  max-width: calc(var(--page-max) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding: 0 var(--edge) clamp(40px, 7svh, 72px);
+}
+
+@media (min-width: 1024px) {
+  .nowFoot {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 64px;
+  }
+}
+
+.nowActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.nowActions > :global(.btn) {
+  flex: 1 1 160px;
+  min-height: 48px;
+  padding-inline: 28px;
+}
+
+@media (min-width: 1024px) {
+  .nowActions > :global(.btn) {
+    flex: 0 0 auto;
+    min-width: 180px;
+  }
+}
+
+.note {
+  position: absolute;
+  right: var(--edge);
+  top: 16px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: rgb(0 0 0 / 0.5);
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+/* Five cards: the two newest large and side by side, the three before them in a row of three. */
+.grid {
+  display: grid;
+  gap: 48px 24px;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 56px 24px;
+  }
+
+  .grid > li {
+    grid-column: span 2;
+  }
+
+  .grid > li:nth-child(-n + 2) {
+    grid-column: span 3;
+  }
+
+  .grid > li:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+}
+
+.card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+  height: 100%;
+  color: inherit;
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+}
+
+@media (min-width: 1024px) {
+  .grid > li:nth-child(-n + 2) .media {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+.img {
+  object-fit: cover;
+}
+
+/* The handover year, on a navy chip in the corner of the photograph. */
+.year {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+}
+
+.body {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  justify-items: start;
+}
+
+.name {
+  font-size: clamp(1.625rem, 1.3rem + 1vw, 2.25rem);
+  line-height: 1.12;
+  color: var(--ink);
+}
+
+.place {
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  color: var(--text-2);
+}
+
+/* Three small figures, each number in Montserrat, divided by hairlines. */
+.figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 0;
+  margin-top: 16px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.figures > span {
+  display: grid;
+  padding-inline: 16px;
+  border-left: 1px solid var(--line);
+}
+
+.figures > span:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.figures strong {
+  font-family: var(--font-display);
+  font-size: 1.625rem;
+  line-height: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.more {
+  margin-top: 16px;
+}
+
+/* The record: the heading, then one row per community, its sky bar as long as its build. */
+.recordHead {
+  margin-bottom: 16px;
+}
+
+.bars {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "name value"
+    "track track"
+    "dates dates";
+  gap: 6px 16px;
+  align-items: baseline;
+  padding-block: 20px;
+  border-top: 1px solid var(--ink-line);
+}
+
+@media (min-width: 900px) {
+  .bar {
+    grid-template-columns: 16rem minmax(0, 1fr) 9rem;
+    grid-template-areas:
+      "name track value"
+      ". dates .";
+    gap: 4px 32px;
+    align-items: center;
+  }
+}
+
+.barName {
+  grid-area: name;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.barName:hover {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+/* A thumb-sized target on a touchscreen, without moving the name. */
+@media (pointer: coarse) {
+  .barName {
+    padding-block: 8px;
+    margin-block: -8px;
+  }
+}
+
+.barTrack {
+  grid-area: track;
+  display: block;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--ink-2);
+  overflow: hidden;
+}
+
+.barFill {
+  display: block;
+  width: calc(var(--w) * 100%);
+  height: 100%;
+  border-radius: 6px;
+  background: var(--accent);
+  transform-origin: left;
+}
+
+.barValue {
+  grid-area: value;
+  justify-self: end;
+  font-size: 0.875rem;
+  color: rgb(255 255 255 / 0.8);
+}
+
+.barValue strong {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+.barDates {
+  grid-area: dates;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(255 255 255 / 0.7);
+}
+
+/* The bars grow from the left as they scroll in; with reduced motion they are simply there. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .barFill {
+      animation: grow linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 45%;
+    }
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}

@@ -1,0 +1,435 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+.tile {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  min-width: 0;
+}
+
+/* The row: one line of pictures that scrolls sideways and snaps, running out to the screen's edge. */
+.wrap {
+  position: relative;
+}
+
+.grid[data-layout="row"] {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: min(78vw, 380px);
+  gap: 12px;
+  margin-inline: calc(-1 * var(--gutter));
+  padding: 6px var(--gutter) 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+
+.grid[data-layout="row"]::-webkit-scrollbar {
+  display: none;
+}
+
+.grid[data-layout="row"] .tile {
+  scroll-snap-align: start;
+}
+
+/* The row's arrows, for a mouse; a finger or a trackpad scrolls the row itself. */
+.nudge {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nudge {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--ink);
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.16);
+    transform: translateY(-50%);
+    transition:
+      opacity 0.33s var(--ease),
+      transform 0.33s var(--ease);
+  }
+
+  .nudge[data-dir="back"] {
+    left: -22px;
+  }
+
+  .nudge[data-dir="on"] {
+    right: -22px;
+  }
+
+  .nudge[hidden] {
+    display: none;
+  }
+
+  .nudge:hover {
+    transform: translateY(-50%) scale(1.06);
+  }
+}
+
+/* The group buttons: a segmented control, the group on show raised in white. */
+.groups {
+  display: inline-flex;
+  max-width: 100%;
+  gap: 4px;
+  margin-bottom: 20px;
+  padding: 4px;
+  overflow-x: auto;
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  scrollbar-width: none;
+}
+
+.group {
+  flex: none;
+  min-height: 36px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: var(--text-2);
+  transition:
+    background-color 0.33s var(--ease),
+    color 0.33s var(--ease),
+    box-shadow 0.33s var(--ease);
+}
+
+@media (min-width: 480px) {
+  .group {
+    padding-inline: 18px;
+  }
+}
+
+/* On the narrowest phones the four buttons share the width rather than scroll. */
+@media (max-width: 374px) {
+  .groups {
+    display: grid;
+    grid-auto-columns: auto;
+    grid-auto-flow: column;
+    width: 100%;
+    gap: 2px;
+  }
+
+  .group {
+    padding-inline: 4px;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .group {
+    min-height: 44px;
+  }
+}
+
+.group[aria-pressed="true"] {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+}
+
+@media (hover: hover) {
+  .group:hover {
+    color: var(--ink);
+  }
+}
+
+/* A new group's pictures fade in. */
+@media (prefers-reduced-motion: no-preference) {
+  .grid[data-fade] {
+    animation: show 0.45s var(--ease) both;
+  }
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* The first picture leads: the full width on a phone, two columns and two rows on a computer. */
+.grid[data-layout="mosaic"] .tile:first-child {
+  grid-column: 1 / -1;
+  aspect-ratio: 16 / 10;
+}
+
+@media (min-width: 900px) {
+  .grid[data-layout="mosaic"] .tile:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+}
+
+/*
+ * A grouped mosaic (its count changes with the group) closes its last row: a picture left alone spans
+ * the row, and the last of a pair spans two columns.
+ */
+.grid[data-grouped][data-layout="mosaic"] .tile:last-child:nth-child(even):not(:first-child) {
+  grid-column: 1 / -1;
+  aspect-ratio: 16 / 10;
+}
+
+@media (min-width: 900px) {
+  .grid[data-grouped][data-layout="mosaic"] .tile:last-child:nth-child(even):not(:first-child) {
+    grid-column: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .grid[data-grouped][data-layout="mosaic"] .tile:last-child:nth-child(3n + 4):not(:first-child) {
+    grid-column: 1 / -1;
+    aspect-ratio: 21 / 9;
+  }
+
+  .grid[data-grouped][data-layout="mosaic"] .tile:last-child:nth-child(3n + 5):not(:first-child) {
+    grid-column: span 2;
+    aspect-ratio: auto;
+  }
+}
+
+.trigger {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  text-align: left;
+}
+
+.img {
+  object-fit: cover;
+}
+
+.plan {
+  object-fit: contain;
+  padding: 12px;
+  background: #fff;
+}
+
+.tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.6);
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+/* The caption shows on hover or keyboard focus, over a soft shade at the foot of the picture. */
+.caption {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 40px 14px 12px;
+  background: linear-gradient(0deg, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0));
+  color: #fff;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.35s var(--ease),
+    transform 0.35s var(--ease);
+}
+
+.trigger:hover .caption,
+.trigger:focus-visible .caption {
+  opacity: 1;
+  transform: none;
+}
+
+/* On a touchscreen, and in a row, captions always show. */
+@media (hover: none) {
+  .caption {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.grid[data-layout="row"] .caption {
+  opacity: 1;
+  transform: none;
+}
+
+.viewer {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgb(29 29 27 / 0.96);
+  color: #fff;
+}
+
+.viewer::backdrop {
+  background: rgb(0 0 0 / 0.7);
+}
+
+.viewer :focus-visible {
+  outline-color: #fff;
+}
+
+.frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px var(--gutter);
+}
+
+.count {
+  font-size: 0.875rem;
+  color: rgb(255 255 255 / 0.7);
+  font-variant-numeric: tabular-nums;
+}
+
+.round {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.12);
+  color: #fff;
+  transition: background-color 0.3s var(--ease);
+}
+
+.round:hover {
+  background: rgb(255 255 255 / 0.24);
+}
+
+.figure {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1400px;
+  padding: 0 var(--gutter);
+}
+
+@media (min-width: 900px) {
+  .figure {
+    padding: 0 88px;
+  }
+}
+
+.stage {
+  position: relative;
+  touch-action: pan-y pinch-zoom;
+  flex: 1;
+  min-height: 0;
+}
+
+.full {
+  object-fit: contain;
+}
+
+.figcaption {
+  padding: 16px 0 20px;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.figcaption span {
+  color: rgb(255 255 255 / 0.6);
+}
+
+.arrows {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding-bottom: 24px;
+}
+
+@media (min-width: 900px) {
+  .arrows {
+    position: absolute;
+    inset: 50% 24px auto;
+    justify-content: space-between;
+    padding: 0;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .arrows .round {
+    pointer-events: auto;
+  }
+}
+
+/* The page behind the open viewer does not scroll. */
+:global(html):has(.viewer[open]) {
+  overflow: hidden;
+}
+
+/* The viewer fades in over 250 ms while the picture settles from 98%, and leaves the same way. */
+@media (prefers-reduced-motion: no-preference) {
+  .viewer,
+  .viewer::backdrop {
+    opacity: 0;
+    transition:
+      opacity 0.25s var(--ease),
+      display 0.25s allow-discrete,
+      overlay 0.25s allow-discrete;
+  }
+
+  .viewer[open],
+  .viewer[open]::backdrop {
+    opacity: 1;
+  }
+
+  .frame {
+    transform: scale(0.98);
+    transition: transform 0.25s var(--ease);
+  }
+
+  .viewer[open] .frame {
+    transform: none;
+  }
+
+  @starting-style {
+    .viewer[open],
+    .viewer[open]::backdrop {
+      opacity: 0;
+    }
+
+    .viewer[open] .frame {
+      transform: scale(0.98);
+    }
+  }
+}

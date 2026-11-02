@@ -1,0 +1,362 @@
+.booker {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 28px;
+  overflow-x: clip;
+  min-width: 0;
+  padding: 24px 20px;
+  border-radius: var(--radius-card);
+  background: #fff;
+}
+
+@media (min-width: 768px) {
+  .booker {
+    padding: 40px;
+  }
+}
+
+.progress {
+  display: grid;
+  gap: 10px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.progress strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.bar {
+  height: 2px;
+  background: var(--surface-2);
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
+}
+
+.step {
+  min-height: 18rem;
+}
+
+/* Each step slides in from the side it is heading towards: 250 ms, instant for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .step[data-dir="fwd"] {
+    animation: in-fwd 0.25s var(--ease) both;
+  }
+
+  .step[data-dir="back"] {
+    animation: in-back 0.25s var(--ease) both;
+  }
+
+  /* The chosen card gets a sky-blue ring that grows in around its ink one. */
+  .booker label[data-checked]::after,
+  .booker .day[aria-pressed="true"]::after {
+    animation: ring 0.3s var(--ease) both;
+  }
+
+  /* On the last step the buttons wait for the tick to finish drawing. */
+  .send,
+  .send ~ .fine {
+    animation: fade 0.4s var(--ease) 0.7s both;
+  }
+}
+
+@keyframes in-fwd {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+@keyframes in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+
+@keyframes ring {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.booker label[data-checked]::after,
+.booker .day[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 2px solid var(--accent);
+  border-radius: calc(var(--radius-card) + 4px);
+  pointer-events: none;
+}
+
+.tick {
+  margin-bottom: 16px;
+}
+
+.q {
+  margin-bottom: 20px;
+  padding: 0;
+  font-size: 1.5625rem;
+  line-height: 1.9375rem;
+  color: var(--ink);
+  outline: none;
+}
+
+.sub {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.when {
+  display: grid;
+  gap: 28px;
+}
+
+.group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 8px;
+}
+
+.day {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-height: 76px;
+  padding: 10px 4px;
+  border: 0;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--text-2);
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  transition:
+    box-shadow 0.2s var(--ease),
+    background-color 0.2s var(--ease);
+}
+
+.day:hover {
+  background: var(--surface-2);
+}
+
+.day strong {
+  font-size: 1.375rem;
+  line-height: 1.625rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.day[aria-pressed="true"] {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+.pair {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 600px) {
+  .pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.people {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  margin-top: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.people > div {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.people button {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.25rem;
+}
+
+.people span {
+  min-width: 36px;
+  text-align: center;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.lead {
+  max-width: 34rem;
+  margin: -8px 0 20px;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: var(--text-2);
+}
+
+.summary {
+  margin: 0;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.summary > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px 16px;
+}
+
+.summary > div + div {
+  border-top: 1px solid var(--surface-2);
+}
+
+.summary dt {
+  color: var(--text-2);
+}
+
+.summary dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.send {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.send .btn {
+  min-height: 48px;
+}
+
+@media (max-width: 479px) {
+  .send .btn {
+    flex: 1 1 100%;
+  }
+}
+
+.fine {
+  margin-top: 16px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.fine :global(.text-link) {
+  font-size: inherit;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--surface-2);
+}
+
+.nav :global(.btn) {
+  min-width: 140px;
+  min-height: 48px;
+}
+
+.back {
+  min-height: 44px;
+  border: 0;
+  background: none;
+  font-family: inherit;
+}
+
+.back:disabled {
+  visibility: hidden;
+}
+
+/* The whole card is the label, so it is all tappable; the dot is just made easier to see. */
+.booker input[type="radio"] {
+  top: 16px;
+  left: 14px;
+  width: 22px;
+  height: 22px;
+}
+
+.booker label:has(input:focus-visible) {
+  outline-width: 3px;
+}
+
+.fine :global(.text-link) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.callNote {
+  margin-top: 16px;
+}
+
+.days:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.days + p {
+  margin-top: 12px;
+}
+
+/* A field a phone keyboard would cover is scrolled to sit clear of it. */
+.booker input {
+  scroll-margin-block: 96px;
+}
+
+/* The phone's help line sits under its input, so the name and phone inputs stay level. */
+.phoneHelp {
+  margin-top: -8px;
+}
+
+@media (min-width: 600px) {
+  .phoneHelp {
+    grid-column: 2;
+  }
+}

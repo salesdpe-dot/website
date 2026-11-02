@@ -1,0 +1,417 @@
+/* Progress on the navy field: the count in sky blue at poster size, the bar under it, then the buttons. */
+.progress {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 24px;
+  border-radius: var(--radius-card);
+}
+
+/* On a computer: the list on the left at a reading width, the progress and buttons in a panel that stays in view on the right. */
+@media screen and (min-width: 1024px) {
+  .tool {
+    display: grid;
+    grid-template-columns: minmax(0, 48rem) minmax(18rem, 22rem);
+    justify-content: space-between;
+    align-items: start;
+    column-gap: 64px;
+  }
+
+  .progress {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: calc(var(--header-h) + 32px);
+    margin-bottom: 0;
+    padding: 32px;
+  }
+
+  .list {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .progress .actions {
+    display: grid;
+    justify-items: stretch;
+  }
+
+  .progress .actions :global(.text-link) {
+    justify-self: start;
+    padding-inline: 0;
+  }
+}
+
+.count {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  color: rgb(255 255 255 / 0.86);
+}
+
+.count strong {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 2.8rem + 2vw, 4.5rem);
+  line-height: 1;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: -0.04em;
+}
+
+.count span {
+  max-width: 12rem;
+}
+
+.bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--ink-2);
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  transition: transform 0.6s var(--ease);
+}
+
+/* Once all five are understood, a calm line and the one action. It opens in place and fades in. */
+.ready {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.5s var(--ease),
+    opacity 0.6s var(--ease),
+    visibility 0s linear 0.6s;
+}
+
+.ready[data-show] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.readyInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  min-height: 0;
+  /* Room for a focus ring on the button, which the clip would otherwise cut off. */
+  margin: -4px;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.readyInner p {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  line-height: 1.875rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.points {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  color: rgb(255 255 255 / 0.74);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 4px;
+}
+
+.actions :global(.btn) {
+  min-height: 44px;
+}
+
+.actions :global(.text-link) {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: 0;
+  padding: 0 8px;
+  font: inherit;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.actions button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.notes {
+  min-height: 0;
+  font-size: 0.875rem;
+  color: rgb(255 255 255 / 0.8);
+}
+
+.notes button {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.list {
+  border-top: 1px solid var(--line);
+}
+
+.item {
+  display: grid;
+  gap: 16px;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.head {
+  display: flex;
+  gap: 16px;
+}
+
+.title {
+  min-width: 0;
+}
+
+.step {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.title h2 {
+  margin-top: 2px;
+  font-family: var(--font-display);
+  font-size: clamp(1.625rem, 1.3rem + 1vw, 2.25rem);
+  line-height: 1.15;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.title h2 a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.item[data-done] .title h2 {
+  color: var(--text-2);
+}
+
+.summary {
+  margin-top: 4px;
+  color: var(--text-2);
+}
+
+.checks {
+  margin: 0 0 0 52px;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.checks legend {
+  margin-bottom: 4px;
+  padding: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-left: 52px;
+  justify-self: start;
+}
+
+/* One tick style for the must-know and each point: a round box, ink when filled. */
+.tick,
+.check {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.tick {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The circle stays 36 px; the area that takes a tap is 44 px. */
+.tick::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+}
+
+.check {
+  align-items: flex-start;
+  min-height: 44px;
+  padding: 10px 0;
+  line-height: 1.5rem;
+  color: var(--text);
+}
+
+.tick input,
+.check input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.box {
+  position: relative;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--text-2);
+  transition: background-color 0.2s var(--ease);
+}
+
+.box svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* A sky-blue stroke that draws itself in. */
+.box path {
+  stroke: var(--accent);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+  transition:
+    stroke-dashoffset 0.28s var(--ease) 0.06s,
+    opacity 0.01s linear 0.06s;
+}
+
+input:checked + .box,
+input:checked ~ .box {
+  background: var(--ink);
+  box-shadow: none;
+}
+
+input:checked + .box path,
+input:checked ~ .box path {
+  stroke-dashoffset: 0;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  input:checked + .box,
+  input:checked ~ .box {
+    animation: pop 0.18s var(--ease);
+  }
+}
+
+@keyframes pop {
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+input:focus-visible ~ .box,
+input:focus-visible + .box {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.check input:checked ~ span:last-child {
+  color: var(--text-2);
+  text-decoration: line-through;
+}
+
+.printNote {
+  display: none;
+  margin-top: 16px;
+  font-size: 0.875rem;
+}
+
+@media print {
+  .actions,
+  .notes,
+  .more,
+  .ready {
+    display: none;
+  }
+
+  .printNote {
+    display: block;
+  }
+
+  /* Black on white, and ticks that show without background colours. */
+  .progress {
+    padding: 0 0 16px;
+    background: #fff;
+    color: #000;
+  }
+
+  .count strong {
+    color: #000;
+  }
+
+  .item {
+    break-inside: avoid;
+    padding: 16px 0;
+  }
+
+  .count,
+  .points,
+  .step,
+  .summary,
+  .title h2,
+  .item[data-done] .title h2,
+  .check,
+  .check input:checked ~ span:last-child {
+    color: #000;
+  }
+
+  .bar {
+    display: none;
+  }
+
+  .box,
+  input:checked + .box,
+  input:checked ~ .box {
+    background: #fff;
+    box-shadow: inset 0 0 0 1.5px #000;
+  }
+
+  .box path {
+    stroke: #000;
+  }
+}

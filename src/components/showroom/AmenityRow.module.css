@@ -1,0 +1,187 @@
+/*
+ * The amenity row: a heading with its controls, the filter chips, then cards in a 4:5 portrait frame that run off
+ * the right edge, so the row reads as one to scroll. Three and a part to a screen on a computer.
+ */
+.section {
+  padding-block: clamp(56px, 8vw, 112px) clamp(48px, 6vw, 88px);
+  background: #fff;
+}
+
+/* The chips scroll sideways on a phone rather than wrap into a block. */
+.chips {
+  display: flex;
+  gap: 8px;
+  margin-top: 28px;
+  padding: 2px var(--edge);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: var(--ink);
+  transition:
+    background-color 0.3s var(--ease),
+    color 0.3s var(--ease);
+}
+
+.count {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+  transition: color 0.3s var(--ease);
+}
+
+@media (hover: hover) {
+  .chip:hover {
+    background: var(--surface-2);
+  }
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  color: #fff;
+}
+
+.chip[aria-pressed="true"] .count {
+  color: var(--accent);
+}
+
+.row {
+  margin-top: 24px;
+}
+
+.item {
+  width: min(80vw, 340px);
+}
+
+@media (min-width: 600px) {
+  .item {
+    width: clamp(260px, 42vw, 380px);
+  }
+}
+
+/* On a computer three cards and part of a fourth, so the row always shows there is more. */
+@media (min-width: 1024px) {
+  .item {
+    width: clamp(300px, calc((100vw - var(--edge) - 60px) / 3.35), 440px);
+  }
+}
+
+/*
+ * Filtering: the cards on screen fade out together, then the new set is dealt in from the right, 50 ms apart.
+ * Without motion the row simply changes.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .row[data-dealt] > .item {
+    animation: deal 0.55s var(--ease) both;
+    animation-delay: calc(var(--i, 0) * 50ms);
+  }
+
+  .row[data-leaving] > .item {
+    animation: leave 0.18s var(--ease) both;
+  }
+}
+
+@keyframes leave {
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes deal {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.card {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  isolation: isolate;
+}
+
+/* A soft shade at the foot of each card holds the caption. */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(0deg, rgb(8 32 50 / 0.78) 0%, rgb(8 32 50 / 0.36) 28%, rgb(8 32 50 / 0) 48%);
+  pointer-events: none;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.still {
+  object-fit: cover;
+  object-position: var(--pos, 50% 50%);
+  transition: transform 7s cubic-bezier(0.2, 0.6, 0.3, 1);
+}
+
+/* A card without a film still moves a little while it is the one in play. */
+.card[data-active] .still {
+  transform: scale(1.07);
+}
+
+.caption {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  left: 20px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #fff;
+}
+
+.place {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.88;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 1.1rem + 0.7vw, 1.75rem);
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.whole {
+  white-space: nowrap;
+}

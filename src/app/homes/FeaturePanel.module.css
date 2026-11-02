@@ -1,0 +1,188 @@
+/* A screen-high panel; everything it says sits at the foot, so the picture's top half stays clear. */
+.panel {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: max(600px, 100vh);
+  min-height: max(600px, 100svh);
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
+}
+
+.media {
+  z-index: -2;
+  object-fit: cover;
+  object-position: var(--pos-m);
+}
+
+@media (min-width: 768px) {
+  .media {
+    object-position: var(--pos);
+  }
+}
+
+/* The film sits over the picture, under the shade. */
+.film {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+/* A light band behind the header at the top, and a deep navy rise behind the words at the foot. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.5) 0, rgb(0 0 0 / 0.22) 120px, rgb(0 0 0 / 0) 220px),
+    linear-gradient(0deg, rgb(8 32 50 / 0.94) 0%, rgb(8 32 50 / 0.84) 40%, rgb(8 32 50 / 0.5) 62%, rgb(8 32 50 / 0) 80%);
+}
+
+@media (min-width: 1024px) {
+  .scrim {
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.5) 0, rgb(0 0 0 / 0.22) 120px, rgb(0 0 0 / 0) 220px),
+      linear-gradient(0deg, rgb(8 32 50 / 0.9) 0%, rgb(8 32 50 / 0.7) 22%, rgb(8 32 50 / 0.25) 42%, rgb(8 32 50 / 0) 56%);
+  }
+}
+
+.note {
+  position: absolute;
+  top: calc(var(--header-h) + 64px);
+  right: var(--edge);
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.55);
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+.foot {
+  position: relative;
+  display: grid;
+  gap: 28px;
+  padding: 0 var(--edge) calc(clamp(32px, 6svh, 64px) + var(--consent-h, 0px));
+  text-shadow: 0 1px 14px rgb(0 0 0 / 0.35);
+}
+
+.copy {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  max-width: 52rem;
+}
+
+/* Sky blue on the navy shade, as in the guideline. */
+.eyebrow {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.title {
+  max-width: 16ch;
+  font-size: clamp(2.125rem, 1.15rem + 4.3vw, 5rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.line {
+  max-width: 36rem;
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  font-weight: 500;
+  color: rgb(255 255 255 / 0.92);
+  text-wrap: pretty;
+}
+
+/* The figures and the buttons, under a hairline; side by side on a computer. */
+.base {
+  display: grid;
+  gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgb(255 255 255 / 0.24);
+}
+
+@media (min-width: 1024px) {
+  .base {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 48px;
+  }
+}
+
+/* The figures take their own widths on one line, so a long one ("1,35,000+ sq ft") never wraps its unit. */
+.base .figures {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 20px;
+}
+
+.base .figures > * {
+  padding-right: clamp(20px, 3vw, 40px);
+}
+
+.base .figures dd {
+  white-space: nowrap;
+}
+
+.base .figures > :last-child {
+  padding-right: 0;
+}
+
+/* On a phone, two by two in equal columns. */
+@media (max-width: 599px) {
+  .base .figures {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .base .figures > * {
+    padding-right: 12px;
+  }
+
+  .base .figures dd {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 379px) {
+  .base .figures dd {
+    font-size: 1.3125rem;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+}
+
+.actions :where(a, button):not(:global(.btn)) {
+  min-height: 44px;
+  color: #fff;
+  text-decoration-color: rgb(255 255 255 / 0.55);
+}
+
+.actions :where(a, button):not(:global(.btn)):hover {
+  text-decoration-color: #fff;
+}
+
+.actions :global(.btn) {
+  text-shadow: none;
+}
+
+/* The films' pause button, just above the words on the right. */
+.foot .toggle {
+  top: -60px;
+  right: var(--edge);
+  bottom: auto;
+}

@@ -1,0 +1,253 @@
+/* A calm sheet: centred on a computer, rising from the bottom on a phone. */
+.dialog {
+  width: min(100vw, 34rem);
+  max-width: 100vw;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  overflow: visible;
+}
+
+.dialog:focus-visible {
+  outline: none;
+}
+
+.dialog::backdrop {
+  background: rgb(8 32 50 / 0.5);
+}
+
+/* A phone gets a sheet that slides up (280 ms); a computer, a dialog that fades and scales in. */
+@media (prefers-reduced-motion: no-preference) {
+  .dialog[open] {
+    animation: pop 0.28s var(--ease) both;
+  }
+
+  .dialog[open]::backdrop {
+    animation: fade 0.28s var(--ease) both;
+  }
+
+  @media (max-width: 599px) {
+    .dialog[open] {
+      animation-name: sheet;
+    }
+  }
+
+  .done > * {
+    animation: fade 0.4s var(--ease) 0.6s both;
+  }
+
+  .done > svg {
+    animation: none;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes sheet {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.done {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  padding-block: 8px;
+}
+
+.doneTitle {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  line-height: 1.875rem;
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.doneLine {
+  color: var(--text-2);
+}
+
+.sheet {
+  display: grid;
+  gap: 20px;
+  max-height: 92svh;
+  overflow-y: auto;
+  padding: 24px var(--gutter) 28px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+@media (min-width: 600px) {
+  .sheet {
+    padding: 32px;
+  }
+}
+
+@media (max-width: 599px) {
+  .dialog {
+    margin: auto 0 0;
+  }
+
+  .sheet {
+    border-radius: 12px 12px 0 0;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  margin-top: 6px;
+  font-size: 1.5625rem;
+  line-height: 1.9375rem;
+  color: var(--ink);
+}
+
+.close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: -8px -10px 0 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+}
+
+.close:hover {
+  background: var(--surface);
+}
+
+.close svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Two equal choices; the picked one is white on grey, ringed in ink. */
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.tab {
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-2);
+  font: inherit;
+  font-weight: 500;
+}
+
+.tab[aria-pressed="true"] {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+
+.fields {
+  display: grid;
+  gap: 16px;
+}
+
+.pair {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 600px) {
+  .pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.preview {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.previewLabel {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  color: var(--text-2);
+}
+
+.previewText {
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.send {
+  width: 100%;
+  min-height: 48px;
+}
+
+.fine {
+  margin-top: -8px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  margin-top: -12px;
+}
+
+.links > * {
+  min-height: 44px;
+  border: 0;
+  background: none;
+  font-family: inherit;
+}
+
+/* The phone's help line sits under its input; the field beside it stays level with the phone input. */
+.phoneHelp {
+  margin-top: -8px;
+}
+
+@media (min-width: 600px) {
+  .pair > :nth-child(3) {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .phoneHelp {
+    grid-column: 1;
+  }
+}

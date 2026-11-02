@@ -1,0 +1,108 @@
+.list {
+  border-top: 1px solid var(--line);
+}
+
+.item {
+  border-bottom: 1px solid var(--line);
+}
+
+.heading {
+  margin: 0;
+  font: inherit;
+}
+
+.summary {
+  width: 100%;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 64px;
+  padding: 16px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.summary:focus-visible {
+  outline-offset: -2px;
+}
+
+.title {
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* A plus drawn in two strokes; open, it turns a quarter and the bar hides, leaving a minus. */
+.icon {
+  position: relative;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface);
+  transition: background-color 0.3s var(--ease);
+}
+
+.icon::before,
+.icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 1.5px;
+  background: var(--ink);
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s var(--ease);
+}
+
+.icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* Open: the upright bar turns a quarter onto the flat one, leaving a minus. */
+.item[data-open] .icon::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.summary:hover .icon {
+  background: var(--surface-2);
+}
+
+/* The panel grows from 0 to its natural height; the clip hides the content while it does. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.3s var(--ease),
+    visibility 0s linear 0.3s;
+}
+
+.item[data-open] .panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.clip {
+  min-height: 0;
+  /* Room for a focus ring on something inside, which the clip would otherwise cut off. */
+  margin: -4px;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.body {
+  padding: 0 0 24px;
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  color: var(--text);
+}

@@ -1,0 +1,119 @@
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.pair {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 600px) {
+  .pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.submit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: 4px;
+}
+
+.submit .btn {
+  min-width: 180px;
+  min-height: 48px;
+}
+
+@media (max-width: 479px) {
+  .submit .btn {
+    flex: 1 1 100%;
+  }
+}
+
+.submit p {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.done {
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+  outline: none;
+}
+
+.doneTitle {
+  font-size: 1.75rem;
+  line-height: 2.125rem;
+  color: var(--ink);
+}
+
+.doneLine {
+  color: var(--text-2);
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+}
+
+.message {
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.doneActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.doneActions .btn {
+  min-height: 48px;
+  min-width: 180px;
+}
+
+/* The message and buttons wait for the tick to finish drawing. */
+@media (prefers-reduced-motion: no-preference) {
+  .message,
+  .doneActions {
+    animation: fade 0.4s var(--ease) 0.7s both;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.again {
+  min-height: 44px;
+  border: 0;
+  background: none;
+  font-family: inherit;
+}
+
+/* The phone's help line sits under its input; the field beside it stays level with the phone input. */
+.phoneHelp {
+  margin-top: -8px;
+}
+
+@media (min-width: 600px) {
+  .pair > :nth-child(3) {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .phoneHelp {
+    grid-column: 1;
+  }
+}

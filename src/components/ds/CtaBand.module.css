@@ -1,0 +1,122 @@
+/* The sky-blue block, edge to edge, with the navy of the guideline's lock-up on it. */
+.section {
+  padding: 64px var(--edge);
+  background: var(--accent);
+  color: var(--ink);
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-block: 112px;
+  }
+}
+
+.inner {
+  display: grid;
+  gap: 40px;
+  max-width: var(--page-max);
+  margin-inline: auto;
+}
+
+@media (min-width: 1024px) {
+  .section[data-has-image] .inner {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    align-items: center;
+    gap: 80px;
+  }
+}
+
+.copy {
+  display: grid;
+  justify-items: start;
+  min-width: 0;
+}
+
+/* The tagline, as on the guideline's sky block: lower case, navy, a little smaller than the headline. */
+.sign {
+  margin-bottom: 16px;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .sign {
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+  }
+}
+
+.title {
+  max-width: 18ch;
+  font-size: clamp(2.25rem, 1.3rem + 3.6vw, 4.5rem);
+  line-height: 1.04;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+.line {
+  max-width: 38rem;
+  margin-top: 20px;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: var(--ink);
+}
+
+/* Side by side; on a phone they take the full width, one above the other. */
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  margin-top: 32px;
+}
+
+.buttons > a {
+  flex: 1 1 200px;
+  min-height: 48px;
+}
+
+@media (min-width: 600px) {
+  .buttons {
+    width: auto;
+  }
+
+  .buttons > a {
+    flex: 0 0 auto;
+    min-width: 200px;
+    padding-inline: 28px;
+  }
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--ink);
+}
+
+.img {
+  object-fit: cover;
+  object-position: var(--pos);
+}
+
+.note {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: rgb(0 0 0 / 0.6);
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+/* Nothing to click on paper. */
+@media print {
+  .section {
+    display: none;
+  }
+}

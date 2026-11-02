@@ -1,0 +1,5 @@
+.wrap {
+  max-width: calc(var(--page-max) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding: 48px var(--edge) 96px;
+}

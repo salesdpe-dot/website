@@ -1,0 +1,205 @@
+/*
+ * The clubhouse panel: a full screen of film, the name huge at the top left, the figures and the rooms across the
+ * foot over a navy shade, the buttons at the lower right.
+ */
+.panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 48px;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: calc(var(--header-h) + clamp(24px, 6svh, 64px)) var(--edge) calc(clamp(36px, 6svh, 56px) + var(--consent-h, 0px));
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
+  isolation: isolate;
+  scroll-snap-align: start;
+  scroll-margin-top: calc(-1 * (var(--header-h) + 24px));
+}
+
+.panel > :first-child {
+  z-index: -2;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 58% 48% at 0% 6%, rgb(8 32 50 / 0.7), rgb(8 32 50 / 0)),
+    linear-gradient(180deg, rgb(8 32 50 / 0.66) 0%, rgb(8 32 50 / 0.34) 24%, rgb(8 32 50 / 0) 42%),
+    linear-gradient(0deg, rgb(8 32 50 / 0.9) 0%, rgb(8 32 50 / 0.72) 30%, rgb(8 32 50 / 0.2) 56%, rgb(8 32 50 / 0) 66%);
+  pointer-events: none;
+}
+
+/* On a phone the words cover most of the film, so the shade covers most of it too. */
+@media (max-width: 767px) {
+  .shade {
+    background: linear-gradient(0deg, rgb(8 32 50 / 0.94) 0%, rgb(8 32 50 / 0.82) 58%, rgb(8 32 50 / 0.4) 82%, rgb(8 32 50 / 0.62) 100%);
+  }
+}
+
+.top {
+  max-width: 44rem;
+  text-shadow: 0 1px 16px rgb(0 0 0 / 0.3);
+}
+
+.eyebrow {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin-top: 10px;
+  font-size: clamp(3rem, 1.6rem + 5.6vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  color: #fff;
+}
+
+.line {
+  max-width: 34ch;
+  margin-top: 16px;
+  font-size: 1.125rem;
+  line-height: 1.6rem;
+}
+
+@media (min-width: 1024px) {
+  .line {
+    font-size: 1.375rem;
+    line-height: 2rem;
+  }
+}
+
+.foot {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* The first figure is the widest ("1,35,000+ sq ft"), so its column is too; no figure breaks across lines. */
+.specs {
+  max-width: 1180px;
+}
+
+.specs dd {
+  white-space: nowrap;
+}
+
+@media (min-width: 900px) {
+  .specs {
+    grid-template-columns: 1.5fr 1.1fr 1.1fr 1fr;
+  }
+}
+
+@media (max-width: 599px) {
+  .specs dd {
+    font-size: 1.5rem;
+  }
+}
+
+.bottom {
+  display: grid;
+  gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgb(255 255 255 / 0.24);
+}
+
+@media (min-width: 1024px) {
+  .bottom {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 48px;
+  }
+}
+
+/* The rooms, as a spec sheet lists them: short names in columns, each marked with a sky-blue point. */
+.rooms {
+  columns: 2;
+  column-gap: 20px;
+  max-width: 64rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8125rem;
+  line-height: 1.5rem;
+  color: rgb(255 255 255 / 0.88);
+}
+
+@media (min-width: 768px) {
+  .rooms {
+    columns: 3;
+    font-size: 0.875rem;
+    line-height: 1.625rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .rooms {
+    columns: 4;
+    font-size: 0.9375rem;
+    line-height: 1.75rem;
+  }
+}
+
+.rooms li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  break-inside: avoid;
+}
+
+.rooms li::before {
+  content: "";
+  flex: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  translate: 0 -2px;
+}
+
+.ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .ctas {
+    flex-direction: row;
+  }
+
+  .ctas > :global(.btn) {
+    min-width: 200px;
+  }
+}
+
+.watch svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* The film's pause button, top right, clear of the buttons; the impression label in the lower corner. */
+.panel .toggle {
+  top: calc(var(--header-h) + 16px);
+  right: var(--edge);
+  bottom: auto;
+}
+
+.note {
+  position: absolute;
+  right: 12px;
+  bottom: calc(10px + var(--consent-h, 0px));
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgb(0 0 0 / 0.4);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  color: #fff;
+}

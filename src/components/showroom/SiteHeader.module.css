@@ -1,0 +1,611 @@
+/*
+ * Fixed at the top: clear over the hero, then near-opaque white with a hairline and a 14 px blur once the
+ * page has scrolled a little, so no body text ghosts through behind the logo or the menu. The veil is
+ * a layer of its own, so the full-screen menus inside keep their place.
+ */
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 20;
+  color: #fff;
+  transition: color 0.3s var(--ease);
+}
+
+/*
+ * The header stays put while pages cross-fade (see the view-transition rules in globals.css). The name
+ * is given only during a transition: a named element is a backdrop root, which would stop the veil
+ * below from blurring the page behind it.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global(html:active-view-transition) .header {
+    view-transition-name: site-header;
+  }
+}
+
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: -2;
+  height: var(--header-h);
+  border-bottom: 1px solid var(--line);
+  background: rgb(255 255 255 / 0.96);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+  pointer-events: none;
+}
+
+.header[data-scrolled]::before {
+  opacity: 1;
+}
+
+.header[data-solid] {
+  color: var(--ink);
+}
+
+/* On a page that opens on white, the header holds its place at the top of the page and stays there. */
+.header[data-surface="page"] {
+  position: sticky;
+  top: 0;
+  background: #fff;
+}
+
+.header[data-surface="page"]::before {
+  background: #fff;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* The page being shown: its word keeps the underline that hover draws. */
+.navItem[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/*
+ * The bar measures itself in rem: the full nav shows only when 68.75rem (1,100 px at normal text size)
+ * fits, so a reader with larger text gets the Menu button instead of words running into each other.
+ */
+.bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: var(--header-h);
+  padding-inline: var(--edge);
+  container: bar / inline-size;
+}
+
+/* The bar's contents stay above the white Homes panel that opens behind them. */
+.brand,
+.navItem,
+.actions {
+  position: relative;
+  z-index: 1;
+}
+
+.brand {
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  border-radius: var(--radius);
+}
+
+/* The guideline's stacked logo, as tall as the 56 px bar allows so "HABITAT" stays legible. */
+.logo {
+  width: auto;
+  height: 44px;
+}
+
+/* On a computer the bar is 64 px, and the logo grows with it so "HABITAT" reads. */
+@media (min-width: 1024px) {
+  .logo {
+    height: 52px;
+  }
+}
+
+/* The guideline's two lock-ups: in colour on white, and all white over a photograph. */
+.logo path {
+  transition: fill 0.3s var(--ease);
+}
+
+.header[data-tone="dark"] .logo {
+  --logo-mark: currentColor;
+}
+
+.nav {
+  display: none;
+  grid-column: 2;
+}
+
+.navList {
+  display: flex;
+  gap: 4px;
+}
+
+.navItem {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 16px;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  transition: background-color 0.33s var(--ease);
+}
+
+/* The underline grows from the left on hover and focus. */
+.navItem::after {
+  content: "";
+  position: absolute;
+  inset: auto 16px 3px;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease);
+}
+
+.navItem:hover::after,
+.navItem:focus-visible::after,
+.navItem[aria-expanded="true"]::after {
+  transform: scaleX(1);
+}
+
+/* A small chevron on Homes tells the visitor it opens something. */
+.navChevron {
+  width: 16px;
+  height: 16px;
+  margin-left: 2px;
+  margin-right: -6px;
+  transition: transform 0.3s var(--ease);
+}
+
+.navItem[aria-expanded="true"] .navChevron {
+  transform: rotate(180deg);
+}
+
+.navItem:hover,
+.navItem[aria-expanded="true"] {
+  background: rgb(255 255 255 / 0.16);
+}
+
+.header[data-solid] .navItem:hover,
+.header[data-solid] .navItem[aria-expanded="true"] {
+  background: rgb(8 32 50 / 0.06);
+}
+
+.actions {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.icon {
+  display: none;
+  position: relative;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+}
+
+/* The hover square stays 36 px; the extra 4 px each side is tap area only. */
+.icon::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  z-index: -1;
+  border-radius: var(--radius);
+  transition: background-color 0.33s var(--ease);
+}
+
+.icon:hover::before {
+  background: rgb(255 255 255 / 0.16);
+}
+
+.header[data-solid] .icon:hover::before {
+  background: rgb(8 32 50 / 0.06);
+}
+
+/* Dark glass over the photograph, so the white word holds on bright skies; the light canvas on a white page or
+ * once the header turns white on scroll. */
+.header[data-surface="page"] .menuButton,
+.header[data-solid] .menuButton {
+  background: var(--surface);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.menuButton {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 72px;
+  justify-content: center;
+  padding: 8px 18px;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.26);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+@container bar (min-width: 68.75rem) {
+  .nav {
+    display: block;
+  }
+
+  .icon {
+    display: grid;
+  }
+
+  .menuButton {
+    display: none;
+  }
+}
+
+/* The Homes panel: white, full width, the communities as pictures, plain links on the right. */
+.mega {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 0;
+  padding: calc(var(--header-h) + 24px) var(--edge) 40px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 16px 40px rgb(0 0 0 / 0.08);
+  animation: drop 0.25s var(--ease);
+}
+
+.mega[hidden] {
+  display: none;
+}
+
+.megaInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 48px;
+  max-width: var(--page-max);
+  margin-inline: auto;
+}
+
+/*
+ * The project on sale takes two columns and both rows on the left; the five handed over and the navy
+ * "All homes" tile fill three columns beside it, two rows of three.
+ */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px 16px;
+}
+
+.featured {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.tile {
+  display: block;
+  border-radius: 8px;
+}
+
+.thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.featured .thumb {
+  aspect-ratio: auto;
+  height: clamp(200px, 22vw, 268px);
+}
+
+.thumbImg {
+  object-fit: cover;
+  object-position: var(--pos);
+  transition: transform 0.6s var(--ease);
+}
+
+/* A render's thumbnail says so, as every render on the site does. */
+.thumbNote {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: rgb(0 0 0 / 0.5);
+  font-size: 0.625rem;
+  line-height: 0.9375rem;
+  color: #fff;
+}
+
+/* "Now selling", in the guideline's sky blue with navy text. */
+.thumbTag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  font-weight: 600;
+}
+
+.tile:hover .thumbImg {
+  transform: scale(1.04);
+}
+
+.tileName {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.featured .tileName {
+  margin-top: 14px;
+  font-size: 1.5rem;
+  line-height: 1.875rem;
+  letter-spacing: -0.02em;
+}
+
+.tileMeta {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  color: var(--text-2);
+}
+
+.tileExtra {
+  display: inline-block;
+  margin-top: 8px;
+  padding-block: 2px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 4px;
+}
+
+.tileExtra:hover {
+  text-decoration-color: var(--ink);
+}
+
+/* The last tile: the navy field with the house icon, for the index of every community. */
+.allTile {
+  display: grid;
+  align-content: end;
+  gap: 2px;
+  height: 100%;
+  min-height: 132px;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: #fff;
+  transition: background-color 0.3s var(--ease);
+}
+
+.allTile:hover {
+  background: var(--ink-2);
+}
+
+.allTile:focus-visible {
+  outline-color: var(--ink);
+}
+
+.allMark {
+  width: 44px;
+  height: auto;
+  margin-bottom: auto;
+  color: var(--accent);
+}
+
+.allName {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+}
+
+.allMeta {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: rgb(255 255 255 / 0.76);
+}
+
+.side {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  min-width: 210px;
+  padding-left: 40px;
+  border-left: 1px solid var(--line);
+}
+
+.side a {
+  display: block;
+  padding-block: 6px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+
+.side a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgb(255 255 255 / 0.2);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  animation: fade 0.3s var(--ease);
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The menu on phones and tablets: a white page of its own. */
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #fff;
+  color: var(--ink);
+  animation: slide 0.35s var(--ease);
+}
+
+.sheet[hidden] {
+  display: none;
+}
+
+@keyframes slide {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+.sheetBar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-h);
+  padding-inline: var(--edge);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-right: -8px;
+  border-radius: var(--radius);
+}
+
+.close:hover {
+  background: var(--surface);
+}
+
+.sheetNav {
+  padding: 8px calc(var(--gutter) - 12px);
+}
+
+.sheetItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-align: left;
+}
+
+.sheetItem:hover {
+  background: var(--surface);
+}
+
+.sheetItem svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s var(--ease);
+}
+
+.sheetItem[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.sheetSub {
+  padding: 0 0 8px 12px;
+}
+
+.sheetSub[hidden] {
+  display: none;
+}
+
+.sheetSub a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+}
+
+.sheetSub a:hover {
+  background: var(--surface);
+}
+
+.sheetSub span {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.sheetActions {
+  display: grid;
+  gap: 8px;
+  padding: 24px var(--gutter) max(24px, env(safe-area-inset-bottom));
+}
+
+/* Scripts off: the buttons that open panels give way to plain links to the full site. */
+.noJsOnly {
+  display: none !important;
+}
+
+:global(html:not(.js)) .noJsOnly {
+  display: inline-flex !important;
+}
+
+:global(html:not(.js)) .jsOnly {
+  display: none !important;
+}
+
+@container bar (min-width: 68.75rem) {
+  :global(html:not(.js)) .actions .noJsOnly {
+    display: none !important;
+  }
+}

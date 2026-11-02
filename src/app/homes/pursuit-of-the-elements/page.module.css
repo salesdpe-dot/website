@@ -1,0 +1,594 @@
+/*
+ * A link to anything on this page (the bar, #rera from the home page) lands 16 px below the header and
+ * the bar: the page already pads the header and 24 px, so 40 px more clears the 48 px bar.
+ */
+.page :where([id]),
+.anchor {
+  scroll-margin-top: 40px;
+}
+
+/* A full-screen panel lands at the very top instead, as the home page's do: its words sit at its foot. */
+.page :global(:is(#amenities, #clubhouse, #outdoors, #visit)) {
+  scroll-margin-top: calc(-1 * (var(--header-h) + 24px));
+}
+
+/* A band of the page: generous space above and below, the page's edge at the sides. */
+.band {
+  padding: 72px var(--edge);
+}
+
+@media (min-width: 768px) {
+  .band {
+    padding-block: 112px;
+  }
+}
+
+.surface {
+  background: var(--surface);
+}
+
+/* The guideline's navy field. */
+.navy {
+  background: var(--ink);
+  color: #fff;
+}
+
+.inner {
+  min-width: 0;
+}
+
+/* The page's edge, for what sits inside a full-bleed section. */
+.edge {
+  padding-inline: var(--edge);
+}
+
+/* A section's heading: the house icon and a small word, the title large, one line under it. */
+.head {
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+  max-width: 62rem;
+  margin-bottom: 36px;
+}
+
+@media (min-width: 768px) {
+  .head {
+    margin-bottom: 52px;
+  }
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* The house icon, which the guideline allows on its own as a graphic element. */
+.mark {
+  flex: none;
+  width: 26px;
+  height: auto;
+  color: var(--accent);
+}
+
+.title {
+  max-width: 22ch;
+  font-size: clamp(2.125rem, 1.15rem + 3.1vw, 4rem);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.lede {
+  max-width: 46rem;
+  font-size: 1.125rem;
+  line-height: 1.7rem;
+  color: var(--text-2);
+}
+
+/* On navy the word and the title take the brand's sky blue, as on the guideline's colour page. */
+.head[data-tone="dark"] .kicker,
+.head[data-tone="dark"] .title {
+  color: var(--accent);
+}
+
+.head[data-tone="dark"] .lede {
+  color: rgb(255 255 255 / 0.8);
+}
+
+.cover {
+  object-fit: cover;
+  object-position: var(--pos-m);
+}
+
+@media (min-width: 768px) {
+  .cover {
+    object-position: var(--pos);
+  }
+}
+
+.note {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  pointer-events: none;
+}
+
+/* Step inside: the heading, the walk through a home across the whole screen, then the door and the balcony. */
+.inside {
+  padding-block: 72px;
+}
+
+@media (min-width: 768px) {
+  .inside {
+    padding-block: 112px;
+  }
+}
+
+.walk {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .walk {
+    aspect-ratio: auto;
+    height: min(56.25vw, calc(100svh - var(--header-h) - 48px));
+    min-height: 420px;
+  }
+}
+
+.walk::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  height: 30%;
+  background: linear-gradient(0deg, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0));
+  pointer-events: none;
+}
+
+.walk .note {
+  top: 16px;
+  right: var(--edge);
+}
+
+.walkCaption {
+  position: absolute;
+  bottom: 24px;
+  left: var(--edge);
+  z-index: 2;
+  max-width: calc(100% - 2 * var(--edge) - 56px);
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 0.9rem + 0.9vw, 1.625rem);
+  line-height: 1.25;
+  font-weight: 600;
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.4);
+}
+
+.walk .walkToggle {
+  right: var(--edge);
+  bottom: 22px;
+}
+
+.moments {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+@media (min-width: 768px) {
+  .moments {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.moments > .moment {
+  aspect-ratio: 4 / 5;
+}
+
+@media (min-width: 768px) {
+  .moments > .moment {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* A still in a rounded frame, its caption on a shade at the foot. */
+.picture {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: #fff;
+}
+
+.pictureCaption {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 48px 18px 16px;
+  background: var(--scrim-bottom);
+  font-size: 1rem;
+  line-height: 1.375rem;
+  font-weight: 500;
+}
+
+/* The clubhouse from the street and from above, side by side at the top of the rooms. */
+.pair {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 72px;
+}
+
+@media (min-width: 768px) {
+  .pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 112px;
+  }
+}
+
+.pairTile {
+  aspect-ratio: 16 / 10;
+}
+
+/* Under the tabs, the one quiet link. */
+.aside {
+  margin-top: 32px;
+}
+
+/* The pool: the heading, the day-and-night switch across the screen, then the film and the places beside the pool. */
+.pool {
+  padding-block: 72px;
+}
+
+@media (min-width: 768px) {
+  .pool {
+    padding-block: 112px;
+  }
+}
+
+.poolRow {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.poolFilm {
+  aspect-ratio: 4 / 5;
+}
+
+.poolPicture {
+  aspect-ratio: 16 / 10;
+}
+
+@media (min-width: 640px) and (max-width: 899px) {
+  .poolRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .poolFilm {
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+
+  .poolPicture {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* On a computer: the film tall on the left and the places two by two beside it (fewer places take more room). */
+@media (min-width: 900px) {
+  .poolRow {
+    grid-template-columns: minmax(0, 4fr) repeat(2, minmax(0, 4fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    height: min(76svh, 680px);
+    min-height: 500px;
+  }
+
+  .poolFilm {
+    grid-row: 1 / -1;
+    aspect-ratio: auto;
+  }
+
+  .poolPicture {
+    aspect-ratio: auto;
+  }
+
+  .poolRow:is([data-count="2"], [data-count="3"], [data-count="4"]) > :nth-child(2),
+  .poolRow[data-count="3"] > :nth-child(3) {
+    grid-column: span 2;
+  }
+
+  .poolRow[data-count="2"] > :nth-child(2) {
+    grid-row: 1 / -1;
+  }
+}
+
+/* Films: the four walkthroughs, two by two on a computer and a row to swipe on a phone. */
+.strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(84vw, 420px);
+  gap: 14px;
+  margin-inline: calc(-1 * var(--gutter));
+  padding-inline: var(--gutter);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+.strip > li {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+  .strip {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 24px;
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow: visible;
+  }
+}
+
+.short {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  color: #fff;
+  text-align: left;
+}
+
+.short:focus-visible {
+  outline-offset: 6px;
+  border-radius: var(--radius-card);
+}
+
+.shortMedia {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border-radius: var(--radius-card);
+  background: rgb(255 255 255 / 0.06);
+}
+
+.shortMedia img {
+  transition: transform 0.7s var(--ease);
+}
+
+/* The play button: a sky-blue disc, navy arrow. */
+.play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--ink);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.3);
+  transform: translate(-50%, -50%);
+  transition: transform 0.4s var(--ease);
+}
+
+.play svg {
+  width: 26px;
+  height: 26px;
+  margin-left: 3px;
+}
+
+@media (hover: hover) {
+  .short:hover .play {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+
+  .short:hover .shortMedia img {
+    transform: scale(1.03);
+  }
+}
+
+.shortTitle {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.625rem;
+  font-weight: 600;
+}
+
+@media (min-width: 1024px) {
+  .shortTitle {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+
+.shortLine {
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  color: rgb(255 255 255 / 0.74);
+}
+
+/* The map, resting on this community, above the commute checker; as tall as a card on a computer. */
+.map {
+  margin-bottom: 32px;
+}
+
+@media (min-width: 900px) {
+  .map {
+    height: clamp(360px, 56svh, 520px);
+    margin-bottom: 48px;
+  }
+}
+
+/* Check us: the RERA numbers and the record on the left, the award certificate on the right. */
+.check {
+  display: grid;
+  gap: 48px;
+}
+
+@media (min-width: 1024px) {
+  .check {
+    grid-template-columns: minmax(0, 1fr) 315px;
+    gap: 96px;
+    align-items: start;
+  }
+}
+
+.checkText {
+  min-width: 0;
+}
+
+.checkText .head {
+  margin-bottom: 32px;
+}
+
+.rera {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+  padding-block: 24px;
+  border-block: 1px solid rgb(255 255 255 / 0.18);
+}
+
+.reraTitle {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.72);
+}
+
+.reraList {
+  display: grid;
+  gap: 14px;
+}
+
+.reraList li {
+  display: grid;
+  gap: 2px;
+}
+
+.phase {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(255 255 255 / 0.72);
+}
+
+.no {
+  font-size: clamp(1rem, 0.8rem + 0.8vw, 1.375rem);
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.onNavy {
+  color: #fff;
+  text-decoration-color: rgb(255 255 255 / 0.4);
+}
+
+.onNavy:hover {
+  text-decoration-color: #fff;
+}
+
+/* The record, as large sky-blue figures. */
+.proof {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin: 32px 0 0;
+}
+
+.proof > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 6px;
+  min-width: 0;
+}
+
+.proof dt {
+  max-width: 17rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(255 255 255 / 0.76);
+}
+
+.proof dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 1.4rem + 2.6vw, 3.5rem);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+.proof dd a {
+  display: inline-block;
+  min-height: 44px;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgb(0 177 255 / 0.4);
+  text-underline-offset: 8px;
+  transition: text-decoration-color 0.3s var(--ease);
+}
+
+.proof dd a:hover {
+  text-decoration-color: var(--accent);
+}
+
+.award {
+  display: grid;
+  gap: 16px;
+  width: min(100%, 315px);
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  color: rgb(255 255 255 / 0.78);
+}
+
+.award strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.awardImg {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-card);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.35);
+}

@@ -1,0 +1,500 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 28rem);
+    gap: 80px;
+  }
+}
+
+/* The figure stays in view on a phone, just under the sticky header. */
+.strip {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 5;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-inline: calc(var(--gutter) * -1);
+  padding: 10px var(--gutter);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 0.875rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .strip {
+    animation: stripIn 0.6s var(--ease) 0.2s both;
+  }
+
+  /* Opened rows of the year-by-year table arrive one after another. */
+  :global([data-open]) .table tbody tr {
+    animation: rowIn 0.4s var(--ease) both;
+    animation-delay: calc(var(--n, 0) * 30ms);
+  }
+}
+
+@keyframes stripIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rowIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.strip strong {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 500;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 1024px) {
+  .strip {
+    display: none;
+  }
+}
+
+.form {
+  display: grid;
+  gap: 36px;
+}
+
+.field {
+  display: grid;
+  gap: 10px;
+  /* A field that takes focus lands below the sticky figure on a phone, not under it. */
+  scroll-margin-top: 128px;
+}
+
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.label {
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.note {
+  font-size: 0.875rem;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  color: var(--text-2);
+}
+
+.error {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  color: var(--error);
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px transparent;
+  transition: box-shadow 0.2s var(--ease);
+}
+
+.box:hover {
+  background: var(--surface-2);
+}
+
+.box:focus-within {
+  background: #fff;
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+
+.box[data-invalid] {
+  box-shadow: inset 0 0 0 1.5px var(--error);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.25rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+
+.input::placeholder {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-2);
+}
+
+.unit {
+  flex: none;
+  color: var(--text-2);
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+}
+
+.chip {
+  min-width: 64px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.chip:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.chip:active:not(:disabled) {
+  background: var(--line);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  color: #fff;
+}
+
+.chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* --fill is a real percentage so the filled part of a track can ease to its new length. */
+@property --fill {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 0%;
+}
+
+/* Sliders: ink fill, grey track, an ink thumb with a sky-blue ring (28 px, easy to grab). */
+.range {
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+  --track: linear-gradient(to right, var(--ink) var(--fill), var(--surface-2) var(--fill));
+  transition: --fill 0.3s var(--ease);
+}
+
+/* Under a finger or a mouse the fill follows the thumb exactly. */
+.range:active {
+  transition: none;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--track);
+}
+
+.range::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--track);
+}
+
+.range::-webkit-slider-thumb {
+  width: 28px;
+  height: 28px;
+  margin-top: -12px;
+  border: 4px solid var(--accent);
+  border-radius: 50%;
+  background: var(--ink);
+  appearance: none;
+  transition: transform 0.2s var(--ease);
+}
+
+.range::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  border: 4px solid var(--accent);
+  border-radius: 50%;
+  background: var(--ink);
+  transition: transform 0.2s var(--ease);
+}
+
+.range:active::-webkit-slider-thumb {
+  transform: scale(1.1);
+}
+
+.range:active::-moz-range-thumb {
+  transform: scale(1.1);
+}
+
+.range:focus-visible {
+  outline: none;
+}
+
+.range:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.range:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  padding: 32px 24px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+@media (min-width: 768px) {
+  .result {
+    padding: 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .result {
+    position: sticky;
+    top: 24px;
+  }
+}
+
+.resultLabel {
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.emi {
+  margin-top: 8px;
+  min-height: 1.1em;
+  font-size: clamp(2.5rem, 6.4vw, 3.625rem);
+  line-height: 1.1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.emi[data-empty] {
+  color: var(--text-2);
+}
+
+.emiNote {
+  margin-top: 8px;
+  min-height: 3rem;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  color: var(--text-2);
+}
+
+.sum {
+  border-top: 1px solid var(--line);
+}
+
+.sum > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.sum dt {
+  color: var(--text-2);
+}
+
+.sum dd {
+  font-weight: 500;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.sum > div[data-total] dt {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.split {
+  display: grid;
+  gap: 10px;
+}
+
+.bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--accent);
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--ink);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
+}
+
+.split p {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.875rem;
+  color: var(--text-2);
+}
+
+.split p span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.split i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.split i[data-k="principal"] {
+  background: var(--ink);
+}
+
+.split i[data-k="interest"] {
+  background: var(--accent);
+}
+
+.income {
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  color: var(--text);
+}
+
+.income strong {
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Sideways scroll only if a very narrow phone needs it; the rows themselves are never a scroll box. */
+.tableWrap {
+  overflow-x: auto;
+}
+
+.more {
+  justify-self: start;
+  min-height: 44px;
+  margin-top: 8px;
+  border: 0;
+  background: none;
+  font-family: inherit;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.table th,
+.table td {
+  padding: 8px 6px;
+  border-top: 1px solid var(--line);
+  font-weight: 400;
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  border-top: 0;
+  background: var(--surface);
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.table th:first-child {
+  text-align: left;
+}
+
+/* On a phone the four columns fit the card without scrolling sideways. */
+@media (max-width: 479px) {
+  .table th,
+  .table td {
+    padding-inline: 2px;
+  }
+}
+
+@media (min-width: 480px) {
+  .table {
+    min-width: 22rem;
+    font-size: 0.875rem;
+  }
+}
+
+.cta {
+  width: 100%;
+}
+
+.fine {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}

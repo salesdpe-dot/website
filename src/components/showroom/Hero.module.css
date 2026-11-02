@@ -1,0 +1,462 @@
+/*
+ * The hero, after tesla.com: 80% of the screen on computers and 90% on phones, one photograph per slide,
+ * the name and one line at the top under the header, the buttons and the trust line at the foot, then the slide marks.
+ * The cookie bar's height (--consent-h) is added to the foot, so nothing is ever covered.
+ */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
+  isolation: isolate;
+  scroll-snap-align: start;
+  scroll-margin-top: calc(-1 * (var(--header-h) + 24px));
+}
+
+/*
+ * Every slide shares one grid cell, so the hero is as tall as its tallest slide, and never shorter than
+ * tesla.com's proportion. Larger text makes it grow rather than spill over the slide marks.
+ */
+.slides {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.slide {
+  position: relative;
+  grid-area: 1 / 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: calc(50px + var(--consent-h, 0px));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.9s var(--ease);
+}
+
+.slide[data-active] {
+  z-index: 1;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.media {
+  object-fit: cover;
+  object-position: var(--pos-m);
+}
+
+@media (min-width: 768px) {
+  .media {
+    object-position: var(--pos);
+  }
+}
+
+/*
+ * One scrim for every slide: a soft shade behind the header and a firmer one behind the words and buttons at
+ * the foot, which reaches higher on a phone where the words stack taller. The upper photograph stays bright.
+ * Measured on the lightest 5% of pixels behind each line, white text holds 4.5:1 on all three slides.
+ */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.62) 0, rgb(0 0 0 / 0.5) 150px, rgb(0 0 0 / 0.28) 300px, rgb(0 0 0 / 0) 46%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.64) 34%, rgb(0 0 0 / 0.3) 48%, rgb(0 0 0 / 0) 60%);
+}
+
+/* On a computer the buttons and the trust line take less height, so the shade at the foot is lower. */
+@media (min-width: 768px) {
+  .scrim {
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.62) 0, rgb(0 0 0 / 0.5) 150px, rgb(0 0 0 / 0.28) 300px, rgb(0 0 0 / 0) 46%),
+      linear-gradient(0deg, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.6) 22%, rgb(0 0 0 / 0.3) 36%, rgb(0 0 0 / 0) 52%);
+  }
+}
+
+/* The words sit at the top, under the header, and the middle of the photograph is left clear. */
+.copy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(var(--header-h) + clamp(16px, 5svh, 48px)) 24px 0;
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+/* The name is the largest thing on the page: about 38 px on a phone, 78 px at 1440. */
+.title {
+  max-width: 16ch;
+  margin-top: 8px;
+  font-size: clamp(2.375rem, 1.4rem + 3.9vw, 5.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: #fff;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1024px) {
+  .title {
+    max-width: 22ch;
+    margin-top: 12px;
+  }
+}
+
+.line {
+  max-width: 30ch;
+  margin-top: 12px;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  color: #fff;
+  text-wrap: balance;
+}
+
+@media (min-width: 768px) {
+  .line {
+    max-width: 44ch;
+    font-size: 1.375rem;
+    line-height: 1.9rem;
+  }
+}
+
+/* The first slide's figures, above its buttons, from tablets up; a phone keeps the film clear. */
+.specs {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .specs {
+    display: grid;
+    grid-template-columns: 0.8fr 0.9fr 1.4fr 0.8fr;
+    width: min(100%, 960px);
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  .specs dd {
+    font-size: clamp(1.75rem, 1rem + 1.5vw, 2.5rem);
+    white-space: nowrap;
+  }
+}
+
+.ctas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.ctas > :global(.btn) {
+  width: 100%;
+  max-width: 320px;
+}
+
+@media (min-width: 768px) {
+  .ctas {
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .ctas > :global(.btn) {
+    width: 220px;
+  }
+}
+
+/* The foot: the buttons, one trust line, the small print, then the slide marks below. */
+.foot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+}
+
+.trust {
+  max-width: 34rem;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.fact {
+  display: inline-block;
+}
+
+/* On a phone each fact gets its own line, so no line starts with a dot. */
+@media (max-width: 559px) {
+  .trust {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dot {
+    display: none;
+  }
+}
+
+.trust a {
+  display: inline-block;
+  padding-block: 12px;
+  margin-block: -12px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* A quiet small rectangle: the label every impression carries. */
+.note {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgb(0 0 0 / 0.4);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .note {
+    position: absolute;
+    right: var(--edge);
+    bottom: -36px;
+  }
+}
+
+.controls {
+  position: absolute;
+  bottom: calc(14px + var(--consent-h, 0px));
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  translate: -50% 0;
+}
+
+.tabs {
+  display: flex;
+}
+
+/* Each mark is an 8 px dot inside a 24 px target. */
+.tab {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.tab::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.5;
+  transition: opacity 0.3s var(--ease);
+}
+
+.tab[aria-selected="true"]::before {
+  opacity: 1;
+}
+
+.tabLabel {
+  display: none;
+}
+
+/* On a computer each mark is a word in a pill, the one on show lit, so the visitor sees what else is there. */
+@media (min-width: 1024px) and (pointer: fine) {
+  .tabs {
+    gap: 4px;
+  }
+
+  .tab {
+    width: auto;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 16px;
+    transition: background-color 0.3s var(--ease);
+  }
+
+  .tab::before {
+    display: none;
+  }
+
+  .tabLabel {
+    display: block;
+    font-size: 0.8125rem;
+    line-height: 1rem;
+    font-weight: 500;
+    color: rgb(255 255 255 / 0.72);
+    text-shadow: 0 1px 6px rgb(0 0 0 / 0.4);
+    transition: color 0.3s var(--ease);
+  }
+
+  .tab:hover .tabLabel,
+  .tab[aria-selected="true"] .tabLabel {
+    color: #fff;
+  }
+
+  .tab[aria-selected="true"] {
+    background: rgb(255 255 255 / 0.18);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  .pause {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.pause {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.pause svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* On a touch screen the dots and the pause are 44 px targets; the marks themselves stay where they were. */
+@media (pointer: coarse) {
+  .controls {
+    bottom: calc(4px + var(--consent-h, 0px));
+    gap: 0;
+  }
+
+  .tab,
+  .pause {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.18);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  opacity: 0;
+  translate: 0 -50%;
+  transition:
+    opacity 0.3s var(--ease),
+    background-color 0.3s var(--ease);
+}
+
+.prev {
+  left: var(--edge);
+}
+
+.next {
+  right: var(--edge);
+}
+
+.hero:hover .arrow,
+.arrow:focus-visible {
+  opacity: 1;
+}
+
+.arrow:hover {
+  background: rgb(255 255 255 / 0.3);
+}
+
+@media (hover: none) {
+  .arrow {
+    display: none;
+  }
+}
+
+/* Without scripts the first slide simply stays; controls that cannot work are not shown. */
+:global(html:not(.js)) .controls,
+:global(html:not(.js)) .arrow {
+  display: none;
+}
+
+/*
+ * Arrival: when a slide comes on, its words rise one after another (60 ms apart, the registration line last)
+ * and its photograph settles from a slight zoom. The first slide's words are there from the first paint, so the
+ * title counts as painted at once; the rise starts with the second slide. Nothing moves for visitors who reduce
+ * motion.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .hero[data-moved] .slide[data-active] :is(.eyebrow, .title, .line, .specs, .ctas) {
+    animation: arrive 0.7s var(--ease) both;
+  }
+
+  .hero[data-moved] .slide[data-active] .specs {
+    animation-delay: 150ms;
+  }
+
+  .hero[data-moved] .slide[data-active] .title {
+    animation-delay: 60ms;
+  }
+
+  .hero[data-moved] .slide[data-active] .line {
+    animation-delay: 120ms;
+  }
+
+  .hero[data-moved] .slide[data-active] .ctas {
+    animation-delay: 180ms;
+  }
+
+  /* A slide with a film keeps its still steady, so the film fades in over it without a jump. */
+  .slide[data-active]:not([data-film]) .media {
+    animation: settle 8s cubic-bezier(0.2, 0.6, 0.3, 1) both;
+  }
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes settle {
+  from {
+    transform: scale(1.06);
+  }
+
+  to {
+    transform: none;
+  }
+}

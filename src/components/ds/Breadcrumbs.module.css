@@ -1,0 +1,57 @@
+.nav ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.nav li + li::before {
+  content: "/" / "";
+  margin-right: 4px;
+  color: var(--line);
+}
+
+.nav a {
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+}
+
+.nav a:hover {
+  color: var(--ink);
+  text-decoration-color: var(--ink);
+}
+
+.nav [aria-current] {
+  color: var(--ink);
+}
+
+/* A thumb-sized target without changing how the line looks. */
+@media (pointer: coarse) {
+  .nav a {
+    display: inline-block;
+    padding-block: 13px;
+    margin-block: -13px;
+  }
+}
+
+/* On the navy field: pale grey, the current page white. */
+:global([data-tone="dark"]) .nav ol {
+  color: rgb(255 255 255 / 0.7);
+}
+
+:global([data-tone="dark"]) .nav li + li::before {
+  color: rgb(255 255 255 / 0.36);
+}
+
+:global([data-tone="dark"]) .nav a {
+  text-decoration-color: rgb(255 255 255 / 0.36);
+}
+
+:global([data-tone="dark"]) .nav a:hover,
+:global([data-tone="dark"]) .nav [aria-current] {
+  color: #fff;
+  text-decoration-color: #fff;
+}

@@ -1,0 +1,108 @@
+/* The closing panel: the community at night behind the invitation and its two ways to act, on one axis. */
+.section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 90vh;
+  min-height: 90svh;
+  padding: 96px var(--edge) calc(clamp(48px, 8svh, 80px) + var(--consent-h, 0px));
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
+  isolation: isolate;
+}
+
+.section > :first-child {
+  z-index: -2;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(0deg, rgb(8 32 50 / 0.82) 0%, rgb(8 32 50 / 0.55) 32%, rgb(8 32 50 / 0) 62%);
+  pointer-events: none;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  text-align: center;
+}
+
+.inner > div:first-child {
+  min-width: 0;
+}
+
+.mark {
+  display: block;
+  width: clamp(56px, 6vw, 80px);
+  margin: 0 auto 20px;
+  color: var(--accent);
+  filter: drop-shadow(0 2px 12px rgb(0 0 0 / 0.35));
+}
+
+.title {
+  max-width: 18ch;
+  margin-inline: auto;
+  font-size: clamp(2.75rem, 1.6rem + 4.6vw, 6rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: #fff;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.line {
+  max-width: 44ch;
+  margin: 16px auto 0;
+  font-size: 1.125rem;
+  line-height: 1.6rem;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.buttons > a {
+  flex: 1 1 200px;
+  max-width: 260px;
+}
+
+@media (min-width: 600px) {
+  .buttons {
+    width: auto;
+  }
+
+  .buttons > a {
+    flex: 0 0 220px;
+  }
+}
+
+/* The label every impression carries, in the corner clear of the film's pause button. */
+.note {
+  position: absolute;
+  top: calc(var(--header-h) + 12px);
+  right: var(--edge);
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgb(0 0 0 / 0.4);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  color: #fff;
+}
+
+/* The film's pause button, above the shade in the bottom corner. */
+.toggle {
+  right: var(--edge);
+  bottom: calc(16px + var(--consent-h, 0px));
+}

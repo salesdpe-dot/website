@@ -1,0 +1,10 @@
+/* One above the other on a phone, two to a row from tablets up, with no gap, as tesla.com's tiles. */
+.grid {
+  display: grid;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

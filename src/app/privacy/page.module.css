@@ -1,0 +1,67 @@
+.body {
+  display: grid;
+  gap: 16px;
+  color: var(--text);
+  font-size: 1.0625rem;
+  line-height: 1.75rem;
+}
+
+/* Each heading in Montserrat over a short sky-blue rule, so the page scans as its seven answers. */
+.body h2 {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 3px solid var(--accent);
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.body h2:first-child {
+  margin-top: 0;
+}
+
+.body ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.body a:not(:global(.text-link)) {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 4px;
+}
+
+.body a:hover {
+  text-decoration-color: var(--ink);
+}
+
+.body code {
+  padding: 1px 6px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.875em;
+}
+
+.body :global(.text-link) {
+  display: inline;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.updated {
+  font-size: 0.875rem;
+  color: var(--text-2);
+}

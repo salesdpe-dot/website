@@ -1,0 +1,179 @@
+/*
+ * One slim strip along the bottom edge: a row on a computer (44 px of content), two compact rows on a
+ * phone (the words, then the two buttons). Its height is published as --consent-h (see the banner),
+ * and every full-screen photograph adds it to its bottom padding, so the bar never covers a button.
+ * Before scripts run, globals.css reserves the same height, so nothing moves when the bar appears.
+ */
+.bar {
+  position: fixed;
+  z-index: 55;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  gap: 8px;
+  max-height: 70svh;
+  padding: 8px var(--edge) calc(8px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--line);
+  background: #fff;
+  color: var(--text);
+  box-shadow: 0 -6px 24px rgb(8 32 50 / 0.06);
+  animation: up 0.4s var(--ease) 0.3s both;
+}
+
+.bar[data-leaving] {
+  animation: down 0.3s var(--ease) both;
+  pointer-events: none;
+}
+
+/* With the Feedback pill on (development), the bar sits above it on a phone. */
+.bar[data-feedback] {
+  bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 600px) {
+  .bar,
+  .bar[data-feedback] {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 24px;
+    padding-block: 6px calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+  .bar[data-feedback] {
+    bottom: 0;
+  }
+  .choose {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .actions > :global(.btn) {
+    flex: none;
+    min-width: 104px;
+  }
+}
+
+:global(html[data-consent-bar]) {
+  scroll-padding-bottom: calc(var(--consent-h, 0px) + 32px);
+}
+
+/* The last lines of the page (footer, Cookie settings) can always be scrolled clear of the bar. */
+:global(html[data-consent-bar]) body {
+  padding-bottom: var(--consent-h, 0px);
+}
+
+/* It waits 300 ms after first paint, then slides up; it is fixed, so it never moves the page. */
+@keyframes up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+@keyframes down {
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    animation: none;
+  }
+}
+
+.body {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+/* "Privacy" and "Choose" are part of the sentence: same size, underlined. */
+.link {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.link:hover {
+  text-decoration-color: var(--ink);
+}
+
+.actions {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+/* The two main choices are the same size and weight: 40 px to look at, 44 px to touch. */
+.actions > :global(.btn) {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 40px;
+  padding: 0 12px;
+  font-size: 0.875rem;
+}
+
+.actions > :global(.btn)::after {
+  content: "";
+  position: absolute;
+  inset: -2px 0;
+}
+
+.choose {
+  display: grid;
+  gap: 8px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.always {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.toggle {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.toggle input {
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  accent-color: var(--ink);
+}
+
+.toggle span {
+  display: grid;
+  gap: 2px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.toggle strong {
+  font-size: 0.9375rem;
+  color: var(--ink);
+}

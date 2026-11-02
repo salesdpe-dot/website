@@ -1,0 +1,517 @@
+/* The poem on the navy field, a line at a time, in the guideline's sky-blue headline face. */
+.poem {
+  display: grid;
+  gap: 0.12em;
+  font-size: clamp(1.75rem, 0.9rem + 3vw, 3.875rem);
+  line-height: 1.1;
+  color: var(--accent);
+}
+
+.poem .dots {
+  color: rgb(255 255 255 / 0.5);
+}
+
+/* The house icon under the poem, in white, as on the guideline's own page. */
+.poemMark {
+  display: block;
+  width: clamp(64px, 6vw, 96px);
+  height: auto;
+  margin-top: 56px;
+  color: #fff;
+}
+
+/* Each line brightens from a pale navy-white to sky blue as it passes the middle of the screen. The pale
+   colour still reads at 4.6:1 on navy, so a line is readable before it is lit (an opacity fade is not).
+   Without the feature, or with reduced motion, every line is simply at full strength. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .line {
+      animation: lit linear both;
+      animation-timeline: view();
+      animation-range: cover 22% cover 46%;
+    }
+  }
+}
+
+@keyframes lit {
+  from {
+    color: #8a9aa8;
+  }
+
+  to {
+    color: var(--accent);
+  }
+}
+
+.prose {
+  display: grid;
+  gap: 16px;
+  max-width: var(--measure);
+  font-size: 1.0625rem;
+  line-height: 1.75rem;
+  color: var(--text);
+}
+
+/* The founders' story at a size that reads as a statement, not small print. */
+.big {
+  gap: 20px;
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  line-height: 1.6;
+}
+
+.big p:first-child {
+  font-family: var(--font-display);
+  font-size: 1.5em;
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.h2 {
+  font-size: var(--display-large);
+  line-height: var(--display-large-lh);
+  color: var(--ink);
+}
+
+/* The founders: both columns share rows, so the portraits, names and bios line up across. */
+.founders {
+  display: grid;
+  gap: 64px;
+}
+
+@media (min-width: 900px) {
+  .founders {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(6, auto);
+    gap: 12px 64px;
+  }
+
+  .founder {
+    grid-row: span 6;
+    grid-template-rows: subgrid;
+  }
+}
+
+.founder {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.portrait {
+  position: relative;
+  aspect-ratio: 1;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+}
+
+.portraitImg {
+  object-fit: cover;
+  object-position: 50% 25%;
+}
+
+.bio {
+  font-size: 1.0625rem;
+  line-height: 1.75rem;
+  color: var(--text);
+}
+
+.name {
+  font-size: clamp(1.875rem, 1.5rem + 1.2vw, 2.5rem);
+  line-height: 1.12;
+  color: var(--ink);
+}
+
+/* Each founder's own line, as a quotation: navy Montserrat beside a sky-blue rule. */
+.signature {
+  padding-left: 20px;
+  border-left: 3px solid var(--accent);
+  font-size: 1.25rem;
+  line-height: 1.625rem;
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* The track record: a sky-blue line that draws down the page, a photograph and the figures for each community. */
+.track {
+  position: relative;
+}
+
+.rail {
+  position: absolute;
+  top: 56px;
+  bottom: 56px;
+  left: 4px;
+  width: 2px;
+  color: var(--accent);
+}
+
+.list {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list li + li {
+  border-top: 1px solid var(--line);
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) auto;
+  gap: 8px 16px;
+  align-items: center;
+  min-height: 112px;
+  padding: 16px 0 16px 32px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.row::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 5px #fff;
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.thumbImg {
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+
+.row:hover .thumbImg {
+  transform: scale(1.06);
+}
+
+.rowText {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rowYear {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.rowName {
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 2rem);
+  line-height: 1.15;
+}
+
+.row:hover .rowName {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.rowMeta {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.rowFigures {
+  grid-column: 2;
+  display: flex;
+  gap: 24px;
+  font-size: 0.875rem;
+  color: var(--text-2);
+}
+
+.rowFigures strong {
+  margin-right: 4px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.row svg {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+@media (min-width: 900px) {
+  .row {
+    grid-template-columns: 160px minmax(0, 1fr) auto auto;
+    gap: 16px 40px;
+    padding-left: 40px;
+  }
+
+  .rowFigures {
+    grid-column: 3;
+    grid-row: 1;
+    gap: 40px;
+  }
+
+  .rowFigures strong {
+    font-size: 2rem;
+  }
+
+  .row svg {
+    grid-column: 4;
+  }
+}
+
+/* The windsor picture and its words share a top and a bottom edge: the link sits at the foot. */
+.pair > div {
+  align-items: stretch;
+}
+
+.pair > div > div:last-child {
+  grid-template-rows: auto auto 1fr auto;
+  max-width: none;
+}
+
+.pair > div > div:last-child p:not(.eyebrow) {
+  max-width: 34rem;
+}
+
+.pair > div > div:last-child > :last-child {
+  justify-self: start;
+}
+
+.event {
+  display: grid;
+  gap: 32px;
+}
+
+@media (min-width: 900px) {
+  .event {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 64px;
+    align-items: stretch;
+  }
+}
+
+.eventText {
+  display: grid;
+  align-content: start;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 16px;
+  min-width: 0;
+  color: var(--text);
+}
+
+.eventText p:not(.eyebrow) {
+  max-width: 34rem;
+}
+
+.certificate {
+  display: grid;
+  place-items: center;
+  min-height: 20rem;
+  padding: 40px;
+  border-radius: var(--radius-card);
+  background: var(--ink);
+}
+
+.certificate img {
+  width: min(100%, 420px);
+  box-shadow: 0 24px 48px rgb(0 0 0 / 0.35);
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px 24px;
+  margin: 16px 0 0;
+}
+
+@media (min-width: 900px) {
+  .stats {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 4px;
+  min-width: 0;
+}
+
+.stat dd {
+  position: relative;
+  margin: 0;
+  font-family: var(--font-display);
+  /* As large as the column allows for the longest figure ("32,00,000+", about 5.8 em wide), up to 44 px. */
+  font-size: clamp(1.5rem, 16cqi, 2.75rem);
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat dt {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(255 255 255 / 0.76);
+}
+
+.stat {
+  container-type: inline-size;
+  padding-top: 20px;
+  border-top: 1px solid var(--ink-line);
+}
+
+/*
+ * The count-up (Stats.tsx): the real figure stays in place, unseen, to hold the width and for screen readers,
+ * and the counting figure is drawn over it. Without the script, or with reduced motion, it is never armed.
+ */
+.counting {
+  display: none;
+}
+
+.stats[data-armed] .real {
+  opacity: 0;
+}
+
+.stats[data-armed] .counting {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+}
+
+.promises {
+  display: grid;
+  gap: 40px;
+  margin: 0 0 56px;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 900px) {
+  .promises {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 48px;
+  }
+}
+
+.promises li {
+  align-content: start;
+  display: grid;
+  gap: 8px;
+  color: var(--text);
+  font-size: 1.0625rem;
+  line-height: 1.75rem;
+}
+
+.promises li {
+  padding-top: 24px;
+  border-top: 4px solid var(--accent);
+}
+
+.num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.promise {
+  margin-top: 12px;
+  font-size: clamp(1.625rem, 1.3rem + 1vw, 2.125rem);
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+/* The founders' own line about promises, as a pull quote beside a sky-blue rule. */
+.inkQuote {
+  margin: 0;
+  padding-left: 24px;
+  border-left: 4px solid var(--accent);
+}
+
+.ink {
+  max-width: 52rem;
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 2rem);
+  line-height: 1.3;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.sign {
+  margin-top: 16px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+/* The family photographs arrive one after another and lift a little under the pointer. */
+.gal button {
+  transition: transform 0.6s var(--ease);
+}
+
+.gal button img {
+  transition: transform 0.7s var(--ease);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @media (hover: hover) and (pointer: fine) {
+    .gal button:hover,
+    .gal button:focus-visible {
+      transform: translateY(-4px);
+    }
+
+    .gal button:hover img,
+    .gal button:focus-visible img {
+      transform: scale(1.04);
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    .gal ul > li {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+
+    .gal ul > li:nth-child(3n + 2) {
+      animation-range: entry 6% entry 60%;
+    }
+
+    .gal ul > li:nth-child(3n) {
+      animation-range: entry 12% entry 65%;
+    }
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}

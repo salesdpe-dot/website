@@ -1,0 +1,145 @@
+/*
+ * The walkthrough films: wide 16:9 posters, two and a part to a screen on a computer, each with a sky play badge
+ * in the middle and its name underneath. Pointing at one lifts the badge and slowly grows the picture.
+ */
+.section {
+  padding-block: clamp(64px, 9vw, 120px);
+  background: var(--surface);
+}
+
+.item {
+  width: calc(100% / 1.12);
+}
+
+@media (min-width: 768px) {
+  .item {
+    width: calc((100% - 20px) / 1.6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .item {
+    width: calc((100% - 40px) / 2.3);
+  }
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-card);
+  background: none;
+  color: var(--ink);
+  text-align: left;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--ink);
+  isolation: isolate;
+}
+
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(8 32 50 / 0.12);
+  transition: background-color 0.4s var(--ease);
+  pointer-events: none;
+}
+
+.poster {
+  object-fit: cover;
+  object-position: var(--pos, 50% 50%);
+  transition: transform 1.2s var(--ease);
+}
+
+/* The play badge: the brand's sky blue with a navy triangle, in the middle of the frame. */
+.play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: clamp(56px, 6vw, 84px);
+  height: clamp(56px, 6vw, 84px);
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--ink);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 0.3);
+  translate: -50% -50%;
+  transition: scale 0.4s var(--ease);
+}
+
+.play svg {
+  width: 40%;
+  height: 40%;
+  margin-left: 6%;
+  fill: currentColor;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .card:hover .poster {
+    transform: scale(1.04);
+  }
+
+  .card:hover .play {
+    scale: 1.1;
+  }
+}
+
+@media (hover: hover) {
+  .card:hover .frame::after {
+    background: rgb(8 32 50 / 0);
+  }
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.line {
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  color: var(--text-2);
+}
+
+.length {
+  order: -1;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+/* Bottom right: the films carry their own logo in the upper corners and their title in the lower left. */
+.tag {
+  right: 10px;
+  bottom: 10px;
+}

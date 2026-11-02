@@ -1,0 +1,115 @@
+.section {
+  padding: 64px var(--edge);
+}
+
+.section[data-space="tight"] {
+  padding-block: 32px;
+}
+
+.section[data-space="none"] {
+  padding-block: 0;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-block: 96px;
+  }
+
+  .section[data-space="tight"] {
+    padding-block: 48px;
+  }
+}
+
+.section[data-tone-bg="surface"] {
+  background: var(--surface);
+}
+
+/* On navy, a section's title is the guideline's sky blue and its line a pale white. */
+.section[data-tone-bg="navy"] .title {
+  color: var(--accent);
+}
+
+.section[data-tone-bg="navy"] .line {
+  color: rgb(255 255 255 / 0.8);
+}
+
+/* Centred: a page-wide column already fills its padding, so only a narrower one (measure) moves. */
+.inner {
+  max-width: var(--page-max);
+  margin-inline: auto;
+}
+
+.section[data-width="measure"] .inner {
+  max-width: var(--measure);
+}
+
+/* Split: the heading on the left, what it introduces on the right, level at the top (as the facts on a community page). */
+@media (min-width: 1024px) {
+  .section[data-split] .inner {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 8px 80px;
+    align-items: start;
+  }
+
+  .section[data-split] .inner > :first-child {
+    position: sticky;
+    top: calc(var(--header-h) + 32px);
+  }
+}
+
+.section[data-width="full"] .inner {
+  max-width: none;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 32px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .head {
+    margin-bottom: 32px;
+  }
+}
+
+.headText {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  max-width: 48rem;
+}
+
+.title {
+  font-size: var(--display-title);
+  line-height: var(--display-title-lh);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.title[data-size="large"] {
+  font-size: var(--display-large);
+  line-height: var(--display-large-lh);
+}
+
+.line {
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  color: var(--text-2);
+}
+
+.panel {
+  padding: 32px 24px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+@media (min-width: 768px) {
+  .panel {
+    padding: 48px;
+  }
+}

@@ -1,0 +1,280 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: max(560px, 100vh);
+  min-height: max(560px, 100svh);
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
+}
+
+.media {
+  z-index: -2;
+  object-fit: cover;
+  object-position: var(--pos-m);
+}
+
+@media (min-width: 768px) {
+  .media {
+    object-position: var(--pos);
+  }
+}
+
+/* A film over the picture, under the shade; its pause button sits above the shade, bottom left, across from the note. */
+.film {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.toggle {
+  right: auto;
+  left: var(--edge);
+  bottom: calc(16px + var(--consent-h, 0px));
+}
+
+/*
+ * One scrim for every photo panel (the home hero uses the same values): a band behind the header and
+ * the title at the top, a firmer rise behind the figures and buttons, the middle as bright as the photograph.
+ */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.62) 0, rgb(0 0 0 / 0.5) 150px, rgb(0 0 0 / 0.28) 300px, rgb(0 0 0 / 0) 46%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.66) 40%, rgb(0 0 0 / 0.3) 54%, rgb(0 0 0 / 0) 66%);
+}
+
+/* On a computer the figures and buttons sit in a lower band, so the shade at the foot is lower too. */
+@media (min-width: 768px) {
+  .scrim {
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.62) 0, rgb(0 0 0 / 0.5) 150px, rgb(0 0 0 / 0.28) 300px, rgb(0 0 0 / 0) 46%),
+      linear-gradient(0deg, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.6) 22%, rgb(0 0 0 / 0.3) 36%, rgb(0 0 0 / 0) 52%);
+  }
+}
+
+.copy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(var(--header-h) + clamp(16px, 5svh, 48px)) var(--edge) 0;
+  text-align: center;
+}
+
+.eyebrow {
+  --i: 0;
+  margin-bottom: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.title {
+  --i: 1;
+  max-width: 18ch;
+  font-size: var(--display-hero);
+  line-height: var(--display-hero-lh);
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1024px) {
+  .title {
+    max-width: 22ch;
+  }
+}
+
+.line {
+  --i: 2;
+  max-width: 30rem;
+  text-wrap: balance;
+  font-weight: 500;
+  margin-top: 8px;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+}
+
+.foot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  /* The cookie bar's height is added, so the buttons are never under it. */
+  padding: 40px var(--edge) calc(clamp(40px, 6svh, 48px) + var(--consent-h, 0px));
+  /* Only the figures and buttons take clicks; the band around them lets them through to the film's button. */
+  pointer-events: none;
+}
+
+.foot :where(dl, a, button) {
+  pointer-events: auto;
+}
+
+/* Three figures on one baseline in equal columns: the number large, its unit small beside it, the label below. */
+.specs {
+  --i: 3;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: start;
+  width: 100%;
+  max-width: 36rem;
+  margin: 0;
+}
+
+.spec {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  min-width: 0;
+  padding-inline: 4px;
+  text-align: center;
+}
+
+.spec dd {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin: 0;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+  .spec dd {
+    font-size: 2.5rem;
+    line-height: 2.875rem;
+  }
+}
+
+.unit {
+  margin-left: 0.4em;
+  font-size: 0.9375rem;
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.spec dt {
+  font-weight: 500;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  text-wrap: balance;
+}
+
+.ctas {
+  --i: 4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 24px;
+  width: 100%;
+}
+
+.ctas > :global(.btn) {
+  flex: 0 1 220px;
+}
+
+/* The SpecRow version of the figures: up to four, each as wide as its figure and centred under it, on one line. */
+.foot .figures {
+  --i: 3;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.foot .figures > * {
+  align-items: center;
+  padding-inline: clamp(16px, 2.6vw, 36px);
+  text-align: center;
+}
+
+.foot .figures dd {
+  white-space: nowrap;
+}
+
+.foot .figures > :first-child {
+  padding-left: 0;
+}
+
+.foot .figures > :last-child {
+  padding-right: 0;
+}
+
+/* On a phone the four go two by two, in equal columns; the rule between a pair only. */
+@media (max-width: 599px) {
+  .foot .figures {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 22rem;
+    row-gap: 16px;
+  }
+
+  .foot .figures > * {
+    padding-inline: 8px;
+  }
+}
+
+/* The narrowest phones: the longest figure ("1,35,000+ sq ft") still fits its half of the screen. */
+@media (max-width: 379px) {
+  .foot .figures dd {
+    font-size: 1.375rem;
+  }
+}
+
+.link {
+  min-height: 44px;
+  color: #fff;
+  text-decoration-color: rgb(255 255 255 / 0.55);
+}
+
+.link:hover {
+  text-decoration-color: #fff;
+}
+
+.note {
+  position: absolute;
+  right: var(--edge);
+  bottom: calc(16px + var(--consent-h, 0px));
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.6);
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+/* The words rise in one after another, 60 ms apart. Only the text moves: the picture does not wait. */
+@media (prefers-reduced-motion: no-preference) {
+  .eyebrow,
+  .title,
+  .line,
+  .specs,
+  .figures,
+  .ctas {
+    animation: rise-in 0.7s var(--ease) both;
+    animation-delay: calc(var(--i) * 60ms);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

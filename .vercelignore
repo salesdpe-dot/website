@@ -1,0 +1,10 @@
+# Only the site's own files go to Vercel. Everything else in this folder (the client's asset library, documents,
+# quotations, local data and env files) stays on this computer.
+/*
+!/src
+!/public
+!/package.json
+!/package-lock.json
+!/next.config.ts
+!/tsconfig.json
+!/vercel.json

@@ -1,0 +1,139 @@
+import Link from "next/link";
+import { CookieSettingsLink } from "@/components/consent/ConsentBanner";
+import { SlashBreak } from "@/components/ds/SlashBreak";
+import { communities, communityHref, company, links } from "@/lib/content";
+import { company as site } from "@/lib/site";
+import { Logo } from "./Logo";
+import s from "./SiteFooter.module.css";
+
+const columns = [
+  {
+    title: "Communities",
+    links: [...communities.map((c) => ({ label: c.name, href: communityHref(c.slug), meta: c.eyebrow })), { label: "All homes", href: links.homes }],
+  },
+  {
+    title: "Disha Habitat",
+    links: [
+      { label: "Our story", href: links.story },
+      { label: "The founders", href: "/story#homemakers" },
+      { label: "Contact", href: links.contact },
+    ],
+  },
+  {
+    title: "Plan your home",
+    links: [
+      { label: "Book a site visit", href: links.bookVisit },
+      { label: "Homebuyer’s checklist", href: links.checklist },
+      { label: "EMI calculator", href: links.emi },
+      { label: "Compare communities", href: "/compare" },
+      { label: "Construction updates", href: links.updates },
+    ],
+  },
+] as const;
+
+/*
+ * Every page ends on the brand: the guideline's navy field with the white lock-up on it (page 5), "come home"
+ * across the width in sky blue at poster size (page 6), the sales line and a button, then the pages in three
+ * short columns, every way to reach Disha, the footnotes, and one line of small print.
+ */
+export function SiteFooter() {
+  return (
+    <footer className={`band-navy ${s.footer}`} data-tone="dark">
+      <div className={s.top}>
+        {/* The guideline's white lock-up on navy, with its clear space (the height of the home icon) kept around it. */}
+        <Link href="/" prefetch={false} className={s.brand} aria-label="Disha Habitat, home">
+          <Logo className={s.logo} monochrome title="Disha Habitat" />
+        </Link>
+        <p className={`come-home sky ${s.sign}`}>come home</p>
+      </div>
+
+      <div className={s.call}>
+        <p className={s.callLabel}>Sales, Pursuit of the Elements</p>
+        <a href={company.sales.tel} className={`display ${s.phone}`}>
+          {company.sales.display}
+        </a>
+        <div className={s.callActions}>
+          <Link href={links.bookVisit} className="btn btn-primary">
+            Book a visit
+          </Link>
+          <a href={company.whatsapp} className="btn btn-line">
+            WhatsApp us
+          </a>
+        </div>
+      </div>
+
+      <div className={s.grid}>
+        {columns.map((col) => (
+          <nav key={col.title} className={s.col} aria-label={col.title}>
+            <h2 className={s.head}>{col.title}</h2>
+            <ul>
+              {col.links.map((l) => (
+                <li key={l.label}>
+                  {l.href.startsWith("/") ? <Link href={l.href}>{l.label}</Link> : <a href={l.href}>{l.label}</a>}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+        <div className={s.col}>
+          <h2 className={s.head}>Talk to us</h2>
+          <ul>
+            <li>
+              <a href={company.sales.tel}>Sales <span className="whitespace-nowrap">{company.sales.display}</span></a>
+            </li>
+            {site.phones.map((p) => (
+              <li key={p.href}>
+                <a href={p.href}>Office <span className="whitespace-nowrap">{p.display}</span></a>
+              </li>
+            ))}
+            <li>
+              <a href={company.whatsapp}>WhatsApp</a>
+            </li>
+            <li>
+              <a href={`mailto:${company.email}`}><span className="whitespace-nowrap">{company.email}</span></a>
+            </li>
+            <li>
+              <a href={site.office.mapUrl}>{company.office}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className={s.notes}>
+        <p id="note-1">
+          <sup>1</sup> From 29 reviews of Disha Central Park on <a href={links.mygate}>MyGate</a>, checked October 2026.
+        </p>
+        <p>
+          Images marked “Artist’s impression” are computer renders; all other images are photographs.
+        </p>
+        <p>
+          Pursuit of the Elements is registered with Karnataka RERA:{" "}
+          {company.rera.map((r, i) => (
+            <span key={r.no}>
+              {r.phase} <span className={s.code}><SlashBreak code={r.no} /></span>
+              {i < company.rera.length - 1 ? ", " : ". "}
+            </span>
+          ))}
+          Any registration number can be checked at <a href={links.rera}>rera.karnataka.gov.in</a>.
+        </p>
+      </div>
+
+      <ul className={s.links}>
+        <li>
+          {company.copyright} © {company.year}
+        </li>
+        <li>
+          <Link href={links.privacy}>Privacy</Link>
+        </li>
+        <li>
+          <CookieSettingsLink />
+        </li>
+        {company.socials.map((x) => (
+          <li key={x.label}>
+            <a href={x.href}>{x.label}</a>
+          </li>
+        ))}
+      </ul>
+    </footer>
+  );
+}
