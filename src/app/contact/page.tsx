@@ -27,7 +27,7 @@ export default function ContactPage() {
         above={<Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Contact" }]} />}
         eyebrow="Gunaranjan J, founder"
         title="“Let’s meet for coffee.”"
-        line="Guna’s standing invitation. Come to the site in Gunjur, sit down with us at the office on Whitefield Main Road, or call the sales team."
+        line="Come to the site in Gunjur, sit down with us at the office on Whitefield Main Road, or ask the sales team to call you."
       >
         <div className={s.hero}>
           <a href="#book" className="btn btn-primary">

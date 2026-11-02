@@ -20,6 +20,9 @@ export const indexing = process.env.SITE_INDEXING === "true";
  * Per-page metadata: title, description, the canonical address (so the preview address and the
  * www/non-www forms never compete in search), and complete sharing tags for WhatsApp and social.
  */
+/* The towers of Pursuit of the Elements, with "Artist’s impression" on the picture itself. */
+const defaultImage = { url: "/images/og/home.jpg", width: 1200, height: 630, alt: "The Pursuit of the Elements towers above landscaped gardens, artist’s impression" };
+
 export function pageMeta({
   title,
   description,
@@ -40,9 +43,10 @@ export function pageMeta({
       siteName: "Disha Habitat",
       locale: "en_IN",
       url: path,
-      title,
+      // A link preview shows no tab title, so "Our story" alone would not say whose story.
+      title: title.includes("Disha") ? title : `${title} · Disha Habitat`,
       description,
-      images: [image ?? { url: "/images/og/home.jpg", width: 1200, height: 630, alt: "Disha Central Park at dusk" }],
+      images: [image ?? defaultImage],
     },
   };
 }

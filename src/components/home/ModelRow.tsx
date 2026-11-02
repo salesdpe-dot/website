@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ComposeButton } from "@/components/ComposeButton";
 import { LoopFilm } from "@/components/media/LoopFilm";
-import { floorPlans, links, models, modelsHead } from "@/lib/content";
+import { links, models, modelsHead, pricesAndPlans } from "@/lib/content";
 import { focusPoint } from "@/lib/focus";
 import { RailArrows, RailHead, useRail } from "./Rail";
 import r from "./Rail.module.css";
@@ -50,8 +50,8 @@ export function ModelRow() {
                 <Link className="btn btn-primary" href={links.bookVisit}>
                   Book a visit<span className="sr-only">: {m.name}</span>
                 </Link>
-                <ComposeButton channel="whatsapp" topic={floorPlans.compose} className="btn btn-ghost">
-                  {floorPlans.label}
+                <ComposeButton channel="whatsapp" topic={`${pricesAndPlans.compose}: ${m.name}`} className="btn btn-ghost">
+                  {pricesAndPlans.label}
                   <span className="sr-only">: {m.name}</span>
                 </ComposeButton>
               </div>

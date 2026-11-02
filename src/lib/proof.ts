@@ -32,8 +32,8 @@ export const residentRating = {
   checked: "October 2026",
 };
 
-/* Karnataka RERA's public search, where any registration number can be checked. */
-export const reraSearch = "https://rera.karnataka.gov.in/";
+/* Karnataka RERA's list of registered projects, searchable by number, name or promoter. */
+export const reraSearch = "https://rera.karnataka.gov.in/viewAllProjects";
 
 /*
  * Commute: we don't quote travel times (they change by the hour). Instead each destination opens
@@ -57,6 +57,8 @@ export const commuteDestinations = [
 export const nearbySearches = [
   { label: "Schools nearby", query: "schools near Gunjur, Bengaluru" },
   { label: "Hospitals nearby", query: "hospitals near Gunjur, Bengaluru" },
+  { label: "Temples nearby", query: "temples near Gunjur, Bengaluru" },
+  { label: "Supermarkets nearby", query: "supermarkets near Gunjur, Bengaluru" },
 ];
 export const mapsSearchUrl = (query: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 /* Directions to the site from wherever the visitor is. */

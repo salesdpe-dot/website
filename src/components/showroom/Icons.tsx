@@ -86,3 +86,11 @@ export function ArrowRight({ className }: IconProps) {
     </svg>
   );
 }
+
+export function ShareIcon({ className }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 14.25V3.75M8.25 7.5 12 3.75l3.75 3.75M8.25 10.5h-2.5v9.75h12.5V10.5h-2.5" />
+    </svg>
+  );
+}

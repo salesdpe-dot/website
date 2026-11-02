@@ -279,6 +279,8 @@ export const elements = {
     caption: "Master plan",
     kind: "plan" as const,
   },
+  /* The promoter as Karnataka RERA's list of registered projects names it (checked 2 November 2026). */
+  reraPromoter: "Dishahabitat Projects LLP",
   rera: [
     { phase: "Phase I", no: "PRM/KA/RERA/1251/308/PR/280324/006756" },
     { phase: "Phase II", no: "PRM/KA/RERA/1251/308/PR/060924/007003" },

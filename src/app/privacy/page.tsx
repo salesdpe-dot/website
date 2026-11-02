@@ -52,8 +52,8 @@ export default function PrivacyPage() {
 
           <h2>When you send us a message</h2>
           <p>
-            The site visit booker, the message form and the enquiry form open WhatsApp or your email app with the message ready, and you choose
-            whether to send it. When you press a Send button (or Continue on the enquiry form), we also keep what you entered: your name, number,
+            The site visit booker and the message form open WhatsApp or your email app with the message ready, and you choose whether to send
+            it. When you press a Send button (or the sales number in the booker), we also keep what you entered: your name, number,
             email if you gave one, what you asked about, the date and time you chose, the page you sent it from, the page that linked you there and
             your browser type. We keep it on our website’s servers so that we can reply
             even if your message does not reach us. We use it only to reply to you about your enquiry or site visit, and we do not sell it or give it

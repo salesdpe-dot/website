@@ -32,11 +32,13 @@ export function Hero({ slides }: { slides: Slide[] }) {
   /* Halfway through a film, the next slide's film is fetched, so the two never compete for the connection. */
   const [aheadOf, setAheadOf] = useState<string | null>(null);
   const motionOk = useMedia(MOTION_OK);
+  /* On a phone each slide's words fill the screen, so a slide stays until the visitor moves on: a change mid-read loses their place. */
+  const roomy = useMedia("(min-width: 768px)");
   const root = useRef<HTMLElement>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
 
   /* Holds still while the visitor points at it, works inside it, or has scrolled past it. */
-  const playing = motionOk && !paused && !hover && !focusWithin && onScreen;
+  const playing = motionOk && roomy && !paused && !hover && !focusWithin && onScreen;
   /* A film keeps playing (and loops) under the pointer; Pause, reduced motion or scrolling away stop it. */
   const run = motionOk && !paused && onScreen;
   /* A slide whose film is playing stays until the film ends. */

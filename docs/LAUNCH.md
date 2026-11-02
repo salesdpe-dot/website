@@ -68,6 +68,18 @@ the public keys see nothing.
 - **Enquiry capture.** Every enquiry and visit request is saved to the `leads` table in Supabase before the visitor
   is handed to WhatsApp, email or a call. The sales team can read the table at `/feedback-review` or in Supabase.
   Sending each new lead on to a CRM or an email inbox is the next addition.
+- **Handover before the OC.** For four communities the published handover month comes before the occupancy
+  certificate: Windsor Gardens, Central Park, Park West and Courtyard. Until Disha says what that month records
+  (keys, a fit-out handover, or a mistake), the community pages show only the start and the OC. When confirmed,
+  correct `timeline` in `src/lib/projects.ts`; the handover appears again once it is not before the OC.
+- **Apartment sizes.** The master plan sheet says 1, 2, 3 and 4 BHK and "limited edition terrace garden homes"; the
+  site says 2, 3 & 4 BHK. Confirm which is right.
+- **Company names.** The site names Disha Habitat Ventures Pvt. Ltd. (office, contact) and Disha Habitat Projects LLP
+  (footer); Karnataka RERA lists the Elements promoter as Dishahabitat Projects LLP, and earlier communities under
+  other entities. A one-line group structure, with the CIN or LLPIN and GSTIN, would answer the obvious question.
+- **RERA numbers for Central Park, Park West and Courtyard.** Numbers that look like theirs are on the RERA portal;
+  Disha to confirm before they go on the community pages (`rera` in `src/lib/projects.ts`).
+- **Privacy under the DPDP Act.** Name the data fiduciary, a grievance officer and how long enquiries are kept.
 
 ## Checked before handover (15 October 2026)
 

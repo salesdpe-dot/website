@@ -6,7 +6,7 @@
  */
 import { elements } from "@/lib/elements";
 import type { Film } from "@/lib/film";
-import { award, homesHandedOver, residentRating } from "@/lib/proof";
+import { award, homesHandedOver, reraSearch, residentRating } from "@/lib/proof";
 import { formatIndian, company as site } from "@/lib/site";
 
 export type Img = {
@@ -37,8 +37,8 @@ export const links = {
   contact: "/contact",
   privacy: "/privacy",
   emi: "/plan",
-  /* Karnataka RERA's public search, where any registration number can be checked. */
-  rera: "https://rera.karnataka.gov.in/",
+  /* Karnataka RERA's list of registered projects, searchable by number, name or promoter. */
+  rera: reraSearch,
   updates: elements.updates,
   mygate: "https://mygate.com/bengaluru/disha-central-park-499.html",
 } as const;
@@ -64,12 +64,15 @@ export const company = {
 } as const;
 
 const bookVisit: Cta = { label: "Book a visit", href: links.bookVisit };
-/* The same message form as "Get floor plans on WhatsApp" on the project page, topic already chosen. */
-export const floorPlans: Compose = { label: "Get floor plans", compose: "Floor plans and carpet areas" };
+/*
+ * Price is a buyer's first question, and the site can't print one yet: this opens the WhatsApp message form with
+ * prices and floor plans already asked for. "Ask for" says it's a request, not a download.
+ */
+export const pricesAndPlans: Compose = { label: "Ask for prices and plans", compose: "Prices and floor plans" };
 
 /* The one quiet line at the foot of every hero slide. "verify" goes to the RERA strip on the project page. */
 export const trust = {
-  record: `${handed} homes handed over since 2014`,
+  record: `${handed} homes handed over since 2015`,
   rera: "Karnataka RERA registered",
   verify: `${elements.href}#rera`,
 } as const;
@@ -153,7 +156,7 @@ export const heroSlides: Slide[] = [
     image: still("pote-home", 1920, 1080, "a front door opening onto a living room", "50% 50%", "47% 50%"),
     film: film("pote-home", ["720", "p"]),
     primary: bookVisit,
-    secondary: floorPlans,
+    secondary: pricesAndPlans,
     note: "Artist’s impression",
   },
 ];
@@ -187,7 +190,7 @@ export const models: Model[] = [
     figure: { value: "29", unit: "floors" },
     fact: "Over 2 basements and 2 parking levels",
     image: still("towers-4k", 2560, 1440, "the towers above landscaped gardens", "50% 62%", "58% 50%"),
-    href: `${links.elements}#homes`,
+    href: `${links.elements}#presidential`,
   },
   {
     id: "premium",
@@ -197,7 +200,7 @@ export const models: Model[] = [
     fact: "Over a basement and 2 parking levels",
     image: still("out-podium", 1920, 1080, "the podium garden between two towers, from above"),
     film: film("out-podium", ["720"]),
-    href: `${links.elements}#homes`,
+    href: `${links.elements}#premium`,
   },
   {
     id: "millennium",
@@ -206,7 +209,7 @@ export const models: Model[] = [
     figure: { value: "23", unit: "floors" },
     fact: "Over 2 basements and 2 parking levels",
     image: still("entrance-tower", 1920, 1080, "the arched entrance of Tower C", "50% 60%", "50% 50%"),
-    href: `${links.elements}#homes`,
+    href: `${links.elements}#millennium`,
   },
   {
     id: "villas",
@@ -231,7 +234,7 @@ export type Amenity = { name: string; place: string; tags: AmenityTag[]; image: 
 
 export const amenitiesHead = {
   title: "40+ amenities",
-  line: "Inside the 1,35,000\u00a0sq\u00a0ft clubhouse, on its roof, and out on the 20\u00a0acres.",
+  line: "Inside the 1,35,000+\u00a0sq\u00a0ft clubhouse, on its roof, and out on the 20\u00a0acres.",
   link: { label: "See every amenity", href: `${links.elements}#amenities` },
 } as const;
 
@@ -475,9 +478,9 @@ export const fiveElements: { title: string; line: string; tabs: ElementTab[] } =
 /* The brand band, straight from the guideline: navy, a huge sky "come home", and the record in figures. */
 export const brand = {
   tagline: "come home",
-  line: `Disha Habitat has handed over ${handed} homes in five Bengaluru communities since 2014. Pursuit of the Elements is the sixth.`,
+  line: `Disha Habitat has handed over ${handed} homes in five Bengaluru communities since 2015. Pursuit of the Elements is the sixth.`,
   figures: [
-    { value: handed, label: "Homes handed over since 2014" },
+    { value: handed, label: "Homes handed over since 2015" },
     { value: "5", label: "Communities handed over" },
     {
       value: `${residentRating.score}/${residentRating.outOf}`,

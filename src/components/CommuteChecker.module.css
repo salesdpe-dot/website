@@ -11,6 +11,13 @@
   }
 }
 
+/* The common routes, then what's around the site. */
+.side {
+  display: grid;
+  gap: 28px;
+  align-content: start;
+}
+
 .panel {
   display: grid;
   gap: 12px;

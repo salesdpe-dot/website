@@ -20,13 +20,14 @@ const topics = [
   `${elements.name}`,
   "Booking a site visit",
   "Documents and approvals",
+  "Prices and floor plans",
   "Current prices",
   "Floor plans and carpet areas",
   ...projectsNewestFirst.map((p) => p.name),
   "Something else",
 ];
 
-const elementsTopics = [elements.name, "Documents and approvals", "Current prices", "Floor plans and carpet areas"];
+const elementsTopics = [elements.name, "Documents and approvals", "Prices and floor plans", "Current prices", "Floor plans and carpet areas"];
 
 /*
  * A button may name a topic and what it is about, as "Current prices: Presidential Towers". The topic picks the
@@ -46,6 +47,8 @@ function opening(topic: string, detail: string) {
       return "I’d like to book a site visit.";
     case "Documents and approvals":
       return `I’d like to see the documents and approvals for ${elements.name}.`;
+    case "Prices and floor plans":
+      return `Please share the current prices and floor plans for ${homes} at ${elements.name}.`;
     case "Current prices":
       return `Please share the current prices for ${homes} at ${elements.name}.`;
     case "Floor plans and carpet areas":
@@ -236,7 +239,11 @@ export function MessageComposer() {
         )}
 
         <p className={s.fine}>
-          Opens {channel === "whatsapp" ? "WhatsApp" : "your email app"} with this message ready. By sending, you agree that Disha Habitat may store these details to reply to you.
+          Opens {channel === "whatsapp" ? "WhatsApp" : "your email app"} with this message ready. By sending, you agree that Disha Habitat may store these details to reply to you, and only for that.{" "}
+          <a href="/privacy" target="_blank" rel="noopener" className="text-link">
+            Privacy
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
         </p>
         <p className={s.links}>
           <button

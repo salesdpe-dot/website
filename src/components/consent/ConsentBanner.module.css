@@ -1,6 +1,6 @@
 /*
- * One slim strip along the bottom edge: a row on a computer (44 px of content), two compact rows on a
- * phone (the words, then the two buttons). Its height is published as --consent-h (see the banner),
+ * One slim strip along the bottom edge, one row at every width: the words, then the two buttons (44 px of content
+ * on a computer, 40 on a phone, where the words take two lines). Its height is published as --consent-h (see the banner),
  * and every full-screen photograph adds it to its bottom padding, so the bar never covers a button.
  * Before scripts run, globals.css reserves the same height, so nothing moves when the bar appears.
  */
@@ -11,7 +11,9 @@
   right: 0;
   bottom: 0;
   display: grid;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px 12px;
   max-height: 70svh;
   padding: 8px var(--edge) calc(8px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--line);
@@ -28,17 +30,10 @@
 
 @media (min-width: 600px) {
   .bar {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
     column-gap: 24px;
     padding-block: 6px calc(6px + env(safe-area-inset-bottom, 0px));
   }
-  .choose {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
   .actions > :global(.btn) {
-    flex: none;
     min-width: 104px;
   }
 }
@@ -110,7 +105,8 @@
 /* The two main choices are the same size and weight: 40 px to look at, 44 px to touch. */
 .actions > :global(.btn) {
   position: relative;
-  flex: 1 1 0;
+  flex: none;
+  min-width: 76px;
   min-height: 40px;
   padding: 0 12px;
   font-size: 0.875rem;
@@ -125,6 +121,8 @@
 .choose {
   display: grid;
   gap: 8px;
+  grid-column: 1 / -1;
+  grid-row: 2;
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;

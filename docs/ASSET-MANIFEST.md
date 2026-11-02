@@ -296,7 +296,7 @@ name, with an upright `-card` crop where the film has a card cut.
 
 | File | Source | Used for |
 | --- | --- | --- |
-| `public/images/og/home.jpg`, `og/pursuit-of-the-elements.jpg` | Frames of `hero-towers` and of the clubhouse globe | Link previews |
+| `public/images/og/home.jpg`, `og/pursuit-of-the-elements.jpg` | `towers-4k` and `aerial-day` at 1200×630, labelled "Artist’s impression" on the picture | Link previews |
 | `docs/brand/*.svg` | Disha Habitat Guidelines 2025, page 2 | Masters for `components/showroom/Logo.tsx`, the favicon and the apple icon |
 | `public/media/brand-film-720.mp4`, `brand-film.webp` | 12 s of Disha’s brand film (dishahabitat.com, 3.6 s to 15.6 s), 1280×720, and its first frame | The awards panel on the home page |
 

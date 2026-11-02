@@ -162,7 +162,7 @@
 
 @media (min-width: 640px) {
   .marks {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--marks, 3), minmax(0, 1fr));
   }
 }
 
@@ -178,6 +178,10 @@
   .marks li {
     padding: 36px 24px 0 0;
   }
+}
+
+.share {
+  margin-top: 8px;
 }
 
 .markLabel {

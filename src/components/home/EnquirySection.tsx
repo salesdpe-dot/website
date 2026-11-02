@@ -17,11 +17,11 @@ export function EnquirySection() {
     <Section id="enquire" tone="surface" labelledBy="enquire-title">
       <div className={s.intro}>
         <h2 id="enquire-title" className={`display ${s.title}`}>
-          Let’s meet for coffee.
+          Book a site visit.
         </h2>
         <p className={s.line}>
-          {guna.short}’s standing invitation to every buyer. Choose where to meet, at the site in Gunjur or at our office on
-          Whitefield Main Road, then a day and a time, and the sales team confirms it with you.
+          At the site in Gunjur, or over coffee at our office on Whitefield Main Road: choose where, then a day and a time.
+          The sales team confirms it with you.
         </p>
         <p className={s.byline}>
           <Image src={guna.portrait} alt="" width={96} height={96} sizes="48px" className={s.face} />

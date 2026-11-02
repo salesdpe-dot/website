@@ -222,6 +222,11 @@
   color: var(--text-2);
 }
 
+.fine :global(.text-link) {
+  padding-block: 0;
+  font-size: inherit;
+}
+
 .links {
   display: flex;
   flex-wrap: wrap;

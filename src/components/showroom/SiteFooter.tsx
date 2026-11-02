@@ -114,7 +114,7 @@ export function SiteFooter() {
               {i < company.rera.length - 1 ? ", " : ". "}
             </span>
           ))}
-          Any registration number can be checked at <a href={links.rera}>rera.karnataka.gov.in</a>.
+          Any registration number can be checked in <a href={links.rera}>Karnataka RERA’s list of registered projects</a>.
         </p>
       </div>
 

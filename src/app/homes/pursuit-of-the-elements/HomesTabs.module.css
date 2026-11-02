@@ -259,6 +259,10 @@
   margin-top: 28px;
 }
 
+.share {
+  margin-top: 16px;
+}
+
 /* A family coming on show fades up. */
 @media (prefers-reduced-motion: no-preference) {
   .panel:not([hidden]) > * {

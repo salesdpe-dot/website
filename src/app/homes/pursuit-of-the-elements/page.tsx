@@ -10,7 +10,7 @@ import { EnquirySection } from "@/components/home/EnquirySection";
 import { FilmToggle, LoopFilm } from "@/components/media/LoopFilm";
 import { ArrowRight } from "@/components/showroom/Icons";
 import { HomeMark } from "@/components/showroom/Logo";
-import { communities, links, trust } from "@/lib/content";
+import { communities, links, pricesAndPlans, trust } from "@/lib/content";
 import { elements as e, type Reel } from "@/lib/elements";
 import { focusPoint } from "@/lib/focus";
 import { pageMeta } from "@/lib/launch";
@@ -33,7 +33,7 @@ export const metadata: Metadata = pageMeta({
   title: e.name,
   description: `${e.name}, Gunjur, East Bengaluru: 2, 3 & 4 BHK apartments in seven towers and 4 & 5 BHK villas on 20 acres, with a 1,35,000+ sq ft clubhouse. RERA registered.`,
   path: e.href,
-  image: { url: "/images/og/pursuit-of-the-elements.jpg", width: 1200, height: 630, alt: e.cover.alt },
+  image: { url: "/images/og/pursuit-of-the-elements.jpg", width: 1200, height: 630, alt: "The towers, villas, clubhouse and gardens from above, artist’s impression" },
 });
 
 const NEW_TAB = <span className="sr-only">(opens in a new tab)</span>;
@@ -69,6 +69,7 @@ const shorts = (...names: string[]) => names.map((n) => e.shorts.find((f) => f.s
 const families: Family[] = [
   {
     tab: "Presidential Towers",
+    hash: "presidential",
     meta: "D, E · 29 floors",
     name: "Presidential Towers",
     which: "Towers D and E",
@@ -82,6 +83,7 @@ const families: Family[] = [
   },
   {
     tab: "Premium Towers",
+    hash: "premium",
     meta: "A, B, F, G · 25 floors",
     name: "Premium Towers",
     which: "Towers A, B, F and G",
@@ -95,6 +97,7 @@ const families: Family[] = [
   },
   {
     tab: "Millennium Tower",
+    hash: "millennium",
     meta: "C · 23 floors",
     name: "Millennium Tower",
     which: "Tower C",
@@ -182,8 +185,8 @@ export default function ElementsPage() {
             </>,
           ]}
         >
-          <ComposeButton channel="whatsapp" topic="Floor plans and carpet areas" className="btn btn-ghost">
-            Get floor plans
+          <ComposeButton channel="whatsapp" topic={pricesAndPlans.compose} className="btn btn-ghost">
+            {pricesAndPlans.label}
           </ComposeButton>
         </PhotoHero>
       </ViewTransition>
@@ -197,7 +200,7 @@ export default function ElementsPage() {
             title="Seven towers. Independent villas."
             line="2, 3 & 4 BHK apartments in Towers A to G, and 4 & 5 BHK villas, on 20 acres in Gunjur."
           />
-          <HomesTabs families={families} />
+          <HomesTabs families={families} place={`${e.name}, ${e.locality}`} />
           <p className={s.aside}>
             <Link className="text-link" href={links.emi}>
               Work out your monthly EMI <ArrowRight />
@@ -232,7 +235,7 @@ export default function ElementsPage() {
       <section id="check" className={`${s.band} ${s.navy}`} data-tone="dark" aria-labelledby="check-title">
         <div className={`${s.inner} ${s.check}`}>
           <div className={s.checkText}>
-            <Head id="check-title" kicker="Check us" title="Two RERA numbers. One ET award." tone="dark" />
+            <Head id="check-title" kicker="RERA and record" title="Check us before you visit." tone="dark" />
             <div className={s.rera} id="rera">
               <p className={s.small}>Karnataka RERA</p>
               <ul className={s.reraList}>
@@ -245,13 +248,16 @@ export default function ElementsPage() {
                   </li>
                 ))}
               </ul>
+              <p className={s.howTo}>
+                Search for either number in Karnataka RERA’s list of registered projects. Both are registered to {e.reraPromoter}.
+              </p>
               <a className={`text-link ${s.onNavy}`} href={links.rera} target="_blank" rel="noopener noreferrer">
-                Verify on the RERA portal <ArrowRight />
+                Open the RERA list <ArrowRight />
                 {NEW_TAB}
               </a>
             </div>
             <div className={s.record}>
-              <p className={s.small}>Handed over since 2014</p>
+              <p className={s.small}>Handed over since 2015</p>
               <ul className={s.recordList}>
                 {delivered.map((d) => (
                   <li key={d.slug}>

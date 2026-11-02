@@ -27,6 +27,10 @@ export function ClosingCta() {
             Call <span className="whitespace-nowrap">{company.sales.display}</span>
           </a>
         </div>
+        {/* The booker's third choice is a call or video call, for family abroad or a first look from home. */}
+        <p className={s.abroad}>
+          Buying from abroad? <Link href={links.bookVisit}>Ask for a video call</Link>
+        </p>
       </div>
       <p className={s.note}>Artist’s impression</p>
     </section>

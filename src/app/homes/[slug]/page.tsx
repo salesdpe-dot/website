@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { ViewTransition } from "react";
+import { type CSSProperties, ViewTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ShareButton } from "@/components/ShareButton";
 import {
   Accordion,
   CtaBand,
@@ -124,10 +125,15 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
     ...(p.address ? [{ label: "Address", value: p.address }] : []),
   ];
 
-  /* The timeline: three milestones at equal spacing, with the real months between them. */
+  /*
+   * The timeline: the milestones at equal spacing, with the real months between them. Where the published
+   * handover month comes before the occupancy certificate, it is left out until Disha confirms what it records:
+   * a buyer reads keys before the OC as possession without one (docs/LAUNCH.md, decisions for Disha).
+   */
+  const keysFirst = monthIndex(p.timeline.handover) < monthIndex(p.timeline.completion);
   const marks = [
     { k: "Construction start", v: p.timeline.start },
-    { k: "Handover", v: p.timeline.handover },
+    ...(keysFirst ? [] : [{ k: "Handover", v: p.timeline.handover }]),
     { k: "Completion (as per OC)", v: p.timeline.completion },
   ]
     .map((m) => ({ ...m, at: monthIndex(m.v) }))
@@ -254,13 +260,13 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
             <span className={`mega sky ${s.recordFigure}`}>{p.timeline.months} months</span>
             <span className={`display ${s.recordWords}`}>from ground-breaking to the occupancy certificate.</span>
           </h2>
-          {toKeys > 0 && (
+          {toKeys > 0 && !keysFirst && (
             <p className={s.recordLine}>
               Keys handed over {toKeys} months after work began, in {p.timeline.handover}.
             </p>
           )}
         </div>
-        <ol className={s.marks}>
+        <ol className={s.marks} style={{ "--marks": marks.length } as CSSProperties}>
           {marks.map((m, k) => (
             <li key={m.k}>
               <span className={s.track} aria-hidden="true">
@@ -276,6 +282,14 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
             </li>
           ))}
         </ol>
+        <p className={s.share}>
+          <ShareButton
+            text={`${p.name}, ${p.locality}: ${factValue(p.facts, "Homes")} homes, ${p.timeline.months} months from the start of work to the occupancy certificate. By Disha Habitat.`}
+            hash="timeline"
+          >
+            Send this record to family
+          </ShareButton>
+        </p>
       </Section>
 
       {showGallery && (

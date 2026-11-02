@@ -414,6 +414,15 @@
   color: #fff;
 }
 
+/* How to check the numbers, in a sentence. */
+.howTo {
+  max-width: 44ch;
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  color: rgb(255 255 255 / 0.8);
+  text-wrap: pretty;
+}
+
 .onNavy {
   color: #fff;
   text-decoration-color: rgb(255 255 255 / 0.4);

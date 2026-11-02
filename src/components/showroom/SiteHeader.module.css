@@ -185,8 +185,9 @@
   gap: 0;
 }
 
+/* Call and WhatsApp stay in the bar at every width: on a phone they are the only way to reach sales without the menu. */
 .icon {
-  display: none;
+  display: grid;
   position: relative;
   place-items: center;
   width: 44px;
@@ -239,10 +240,6 @@
 @container bar (min-width: 68.75rem) {
   .nav {
     display: block;
-  }
-
-  .icon {
-    display: grid;
   }
 
   .menuButton {

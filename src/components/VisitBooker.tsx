@@ -2,7 +2,7 @@
 
 import { type FocusEvent, type ReactNode, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Building2, Coffee, PhoneCall } from "lucide-react";
-import { ChoiceCards, TextField } from "@/components/ds";
+import { ChoiceCards, SelectField, TextField } from "@/components/ds";
 import { fieldClasses } from "@/components/ds/Field";
 import { elements } from "@/lib/elements";
 import { recordLead } from "@/lib/leads";
@@ -48,6 +48,8 @@ const slots = [
   { id: "evening", label: "Evening", hint: "3 pm to 6 pm IST", h: 15 },
 ];
 const steps = ["Where", "When", "You", "Confirm"];
+/* Which homes the family wants to see, so the sales team brings the right plans. */
+const lookingAt = ["Not sure yet", "Apartments", "Villas", "Both"];
 
 /* Another button on the page can choose where to meet (a place's id) and take the booker to its next step. */
 const PLACE_EVENT = "disha:visit-place";
@@ -148,6 +150,8 @@ export function VisitBooker() {
   const [phone, setPhone] = useState("");
   const [people, setPeople] = useState(2);
   const [callNote, setCallNote] = useState("");
+  const [looking, setLooking] = useState(lookingAt[0]!);
+  const [visitNote, setVisitNote] = useState("");
   const [tried, setTried] = useState(false);
   // Counts failed Continue presses, so each one moves focus to what needs an answer.
   const [tries, setTries] = useState(0);
@@ -213,12 +217,14 @@ export function VisitBooker() {
       !isCall && when ? `Date: ${when}` : "",
       time ? `Preferred time: ${time.label} (${time.hint})` : "",
       !isCall ? `People: ${people}` : "",
+      !isCall && looking !== lookingAt[0] ? `Looking at: ${looking}` : "",
       `Name: ${name.trim()}`,
       `Phone: ${shown}`,
       isCall && callNote.trim() ? `Time zone or best time to call: ${callNote.trim()}` : "",
+      !isCall && visitNote.trim() ? `To plan for: ${visitNote.trim()}` : "",
     ].filter(Boolean);
     return lines.join("\n");
-  }, [p, isCall, when, time, people, name, shown, callNote]);
+  }, [p, isCall, when, time, people, looking, name, shown, callNote, visitNote]);
 
   const next = () => {
     if (!canNext) {
@@ -244,6 +250,8 @@ export function VisitBooker() {
         ...(isCall ? {} : { date: when, people: String(people) }),
         ...(time ? { time: `${time.label} (${time.hint})` } : {}),
         ...(isCall && callNote.trim() ? { callNote: callNote.trim() } : {}),
+        ...(!isCall && looking !== lookingAt[0] ? { lookingAt: looking } : {}),
+        ...(!isCall && visitNote.trim() ? { visitNote: visitNote.trim() } : {}),
         place: p.where,
       },
       consent: true,
@@ -273,9 +281,11 @@ export function VisitBooker() {
         ...(isCall ? [] : ([["Date", when]] as [string, string][])),
         ["Time", time ? `${time.label}, ${time.hint}` : ""],
         ...(isCall ? [] : ([["People", String(people)]] as [string, string][])),
+        ...(!isCall && looking !== lookingAt[0] ? ([["Looking at", looking]] as [string, string][]) : []),
         ["Name", name.trim()],
         ["Mobile", shown],
         ...(isCall && callNote.trim() ? ([["Best time", callNote.trim()]] as [string, string][]) : []),
+        ...(!isCall && visitNote.trim() ? ([["To plan for", visitNote.trim()]] as [string, string][]) : []),
       ]
     : [];
 
@@ -407,7 +417,29 @@ export function VisitBooker() {
                 </div>
               </div>
             )}
-            <p className={s.fine}>By continuing, you agree that Disha Habitat may store these details to reply to you.</p>
+            {/* A home is usually chosen together: what to show, and what to plan for, such as parents or someone joining by video. */}
+            {!isCall && (
+              <div className={`${s.pair} ${s.callNote}`}>
+                <SelectField label="Looking at" value={looking} onChange={(e) => setLooking(e.target.value)} options={lookingAt} />
+                <TextField
+                  label="Anything we should plan for?"
+                  optional
+                  value={visitNote}
+                  onChange={(e) => setVisitNote(e.target.value)}
+                  maxLength={120}
+                  placeholder="Parents coming along, someone joining by video…"
+                  autoComplete="off"
+                />
+              </div>
+            )}
+            <p className={s.fine}>
+              Nothing is sent until you press Send on the next step. Disha Habitat uses these details only to reply to you, and never sells them.{" "}
+              {/* A new tab, so the booking in progress is kept. */}
+              <a href="/privacy" target="_blank" rel="noopener" className="text-link">
+                How we handle them
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </p>
           </div>
         )}
 
@@ -455,7 +487,11 @@ export function VisitBooker() {
               <a href={elements.phone.href} onClick={() => record("call")} className="text-link">
                 {elements.phone.display}
               </a>
-              . By sending, you agree that Disha Habitat may store these details to reply to you.
+              . By sending, you agree that Disha Habitat may store these details to reply to you, and only for that.{" "}
+              <a href="/privacy" target="_blank" rel="noopener" className="text-link">
+                Privacy
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
             </p>
           </div>
         )}

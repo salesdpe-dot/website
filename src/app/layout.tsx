@@ -33,12 +33,12 @@ export const metadata: Metadata = {
     template: "%s · Disha Habitat",
   },
   description:
-    "Pursuit of the Elements, now selling in Gunjur, and 1,102 homes handed over across five Disha Habitat communities in East Bengaluru since 2014.",
+    "Pursuit of the Elements, now selling in Gunjur, and 1,102 homes handed over across five Disha Habitat communities in East Bengaluru since 2015.",
   openGraph: {
     type: "website",
     siteName: "Disha Habitat",
     locale: "en_IN",
-    images: [{ url: "/images/og/home.jpg", width: 1200, height: 630 }],
+    images: [{ url: "/images/og/home.jpg", width: 1200, height: 630, alt: "The Pursuit of the Elements towers above landscaped gardens, artist’s impression" }],
   },
   /* Out of search indexes until launch day (SITE_INDEXING=true; see lib/launch.ts). */
   robots: indexing ? { index: true, follow: true } : { index: false, follow: false },

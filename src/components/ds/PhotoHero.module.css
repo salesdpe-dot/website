@@ -69,7 +69,6 @@
 }
 
 .eyebrow {
-  --i: 0;
   margin-bottom: 8px;
   font-size: 0.8125rem;
   line-height: 1.25rem;
@@ -79,7 +78,6 @@
 }
 
 .title {
-  --i: 1;
   max-width: 18ch;
   font-size: var(--display-hero);
   line-height: var(--display-hero-lh);
@@ -93,7 +91,6 @@
 }
 
 .line {
-  --i: 2;
   max-width: 30rem;
   text-wrap: balance;
   font-weight: 500;
@@ -119,7 +116,6 @@
 
 /* Three figures on one baseline in equal columns: the number large, its unit small beside it, the label below. */
 .specs {
-  --i: 3;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(0, 1fr);
@@ -173,7 +169,6 @@
 }
 
 .ctas {
-  --i: 4;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -188,7 +183,6 @@
 
 /* The SpecRow version of the figures: up to four, each as wide as its figure and centred under it, on one line. */
 .foot .figures {
-  --i: 3;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -235,7 +229,6 @@
 
 /* The trust line: one quiet line of facts under the buttons, a link at its end. */
 .trust {
-  --i: 5;
   max-width: 36rem;
   margin-top: -8px;
   text-align: center;
@@ -293,30 +286,4 @@
   background: rgb(0 0 0 / 0.6);
   font-size: 0.75rem;
   line-height: 1.125rem;
-}
-
-/* The words rise in one after another, 60 ms apart. Only the text moves: the picture does not wait. */
-@media (prefers-reduced-motion: no-preference) {
-  .eyebrow,
-  .title,
-  .line,
-  .specs,
-  .figures,
-  .ctas,
-  .trust {
-    animation: rise-in 0.7s var(--ease) both;
-    animation-delay: calc(var(--i) * 60ms);
-  }
-}
-
-@keyframes rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
 }

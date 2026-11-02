@@ -10,7 +10,7 @@ import { Stats } from "./Stats";
 import { links } from "@/lib/content";
 import { pageMeta } from "@/lib/launch";
 import { projects, projectsByHandover } from "@/lib/projects";
-import { award, homesHandedOver } from "@/lib/proof";
+import { award, homesHandedOver, residentRating as rating } from "@/lib/proof";
 import s from "./page.module.css";
 
 export const metadata: Metadata = pageMeta({
@@ -29,7 +29,7 @@ const voices: Record<string, string> = {
 
 const promises = [
   ["Explain everything.", "No question is too small. If something needs explaining, we sit down and explain it."],
-  ["Build it properly.", "Build quality has always been our biggest strength, and our residents are the ones who tell people so."],
+  ["Build it properly.", `Our residents are the ones who tell people so: ${rating.community} is rated ${rating.score} out of ${rating.outOf} by ${rating.reviews} residents on ${rating.source}.`],
   ["Price it mindfully.", "Every home, from an apartment to an independent villa, is planned and priced with the same care."],
 ] as const;
 
@@ -53,6 +53,16 @@ export default function StoryPage() {
   const last = projectsByHandover.at(-1)!;
   const delivered = stats.find((st) => st.label === "Sq ft delivered")!;
   const making = stats.find((st) => st.label === "Sq ft in the making")!;
+  /*
+   * The published "This is us" figures, with the homes counted from the communities. "1,000+ happy families" and
+   * "20,000+ site visits" are left out: beside 1,102 homes the first reads as a different count, and neither can be checked.
+   */
+  const figures = [
+    stats.find((st) => st.label === "Communities created")!,
+    { value: homesHandedOver, suffix: "", label: "Homes handed over" },
+    delivered,
+    making,
+  ];
 
   return (
     <>
@@ -217,7 +227,7 @@ export default function StoryPage() {
             line="Our homebuyers have been our brand ambassadors from the start, and the community grows with every project."
           />
         </div>
-        <Stats items={stats} />
+        <Stats items={figures} />
       </Section>
 
       <Section labelledBy="promise-title">

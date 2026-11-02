@@ -3,7 +3,7 @@
 import { useRef, useState, type FormEvent } from "react";
 import { fieldClasses } from "@/components/ds";
 import { ArrowRight } from "@/components/showroom/Icons";
-import { commuteDestinations, commuteFrom, directionsUrl } from "@/lib/proof";
+import { commuteDestinations, commuteFrom, directionsUrl, mapsSearchUrl, nearbySearches } from "@/lib/proof";
 import s from "./CommuteChecker.module.css";
 
 const shortcuts = commuteDestinations.slice(0, 4);
@@ -57,22 +57,42 @@ export function CommuteChecker() {
         <p className={s.small}>Opens in a new tab. We don’t store what you type; Google Maps receives it.</p>
       </form>
 
-      <section aria-labelledby="common-routes" className={s.chips}>
-        <h3 id="common-routes" className="eyebrow">
-          Or try a common one
-        </h3>
-        <ul className={s.links}>
-          {shortcuts.map((d) => (
-            <li key={d.label}>
-              <a href={directionsUrl(d.query)} target="_blank" rel="noopener noreferrer" className={s.link}>
-                {d.label}
-                <ArrowRight />
-                {NEW_TAB}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <div className={s.side}>
+        <section aria-labelledby="common-routes" className={s.chips}>
+          <h3 id="common-routes" className="eyebrow">
+            Or try a common one
+          </h3>
+          <ul className={s.links}>
+            {shortcuts.map((d) => (
+              <li key={d.label}>
+                <a href={directionsUrl(d.query)} target="_blank" rel="noopener noreferrer" className={s.link}>
+                  {d.label}
+                  <ArrowRight />
+                  {NEW_TAB}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* For the rest of the family: schools, a hospital, a temple, the shops. Live searches, so we claim no names or distances. */}
+        <section aria-labelledby="around-site" className={s.chips}>
+          <h3 id="around-site" className="eyebrow">
+            Around Gunjur
+          </h3>
+          <ul className={s.links}>
+            {nearbySearches.map((d) => (
+              <li key={d.label}>
+                <a href={mapsSearchUrl(d.query)} target="_blank" rel="noopener noreferrer" className={s.link}>
+                  {d.label}
+                  <ArrowRight />
+                  {NEW_TAB}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </div>
   );
 }

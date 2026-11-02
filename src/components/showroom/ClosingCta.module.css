@@ -78,6 +78,26 @@
   max-width: 260px;
 }
 
+.abroad {
+  width: 100%;
+  margin-top: -12px;
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  text-align: center;
+  color: rgb(255 255 255 / 0.86);
+}
+
+.abroad a {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.5);
+  text-underline-offset: 4px;
+}
+
+.abroad a:hover {
+  text-decoration-color: #fff;
+}
+
 @media (min-width: 600px) {
   .buttons {
     width: auto;

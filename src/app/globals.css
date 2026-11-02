@@ -107,7 +107,7 @@ html.consent-pending {
 
 @media (max-width: 599px) {
   html.consent-pending {
-    --consent-h: calc(85px + env(safe-area-inset-bottom, 0px));
+    --consent-h: calc(57px + env(safe-area-inset-bottom, 0px));
   }
 }
 

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { type Spec, SpecRow } from "@/components/brand/SpecRow";
 import { ComposeButton } from "@/components/ComposeButton";
+import { ShareButton } from "@/components/ShareButton";
 import { FilmToggle, LoopFilm } from "@/components/media/LoopFilm";
 import type { Film } from "@/lib/film";
 import type { Picture } from "@/lib/elements";
@@ -32,8 +33,9 @@ export type Family = {
  * The tower families and the villas as tabs, the way tesla.com switches between a model's versions: the picture or
  * film large on the left, other views of it in small frames below, and the name, its figures and the two buttons on
  * the right. Only the panel on show is laid out, so a hidden one fetches nothing, and only the view on show plays.
+ * `place` names the project in the words "Send to family" sends with a tab's link.
  */
-export function HomesTabs({ families }: { families: Family[] }) {
+export function HomesTabs({ families, place }: { families: Family[]; place: string }) {
   const [active, setActive] = useState(0);
   const [view, setView] = useState(0);
   const pick = (i: number) => {
@@ -114,12 +116,15 @@ export function HomesTabs({ families }: { families: Family[] }) {
               <SpecRow items={f.figures} tone="light" className={s.figures} />
               <div className={s.actions}>
                 <ComposeButton channel="whatsapp" topic={`Floor plans and carpet areas: ${f.name}`} className="btn btn-dark">
-                  Get floor plans
+                  Ask for floor plans
                 </ComposeButton>
                 <ComposeButton channel="whatsapp" topic={`Current prices: ${f.name}`} className="btn btn-outline">
                   Ask for prices
                 </ComposeButton>
               </div>
+              <p className={s.share}>
+                <ShareButton text={`${f.name}, ${place}. ${f.line}`} hash={f.hash} />
+              </p>
             </div>
           </div>
         );
