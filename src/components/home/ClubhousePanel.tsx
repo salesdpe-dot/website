@@ -8,11 +8,12 @@ import s from "./ClubhousePanel.module.css";
 
 /*
  * The clubhouse, full screen, as tesla.com gives a model's best feature a page of its own: the building on film,
- * four figures across the foot, and the names of the rooms inside it. The client's own walkthrough of it opens
- * from here with its music.
+ * four figures across the foot, and the names of the rooms inside it. The client's own film of its roof at dusk,
+ * the pool lit as the panel describes it, opens from here with its music.
  */
+const film = shorts.find((f) => f.src.endsWith("/short-4"));
+
 export function ClubhousePanel() {
-  const film = shorts[0];
   return (
     <section id="clubhouse" className={s.panel} data-tone="dark" aria-labelledby="clubhouse-title">
       <LoopFilm film={clubhouse.film} poster={clubhouse.poster} sizes="100vw" />

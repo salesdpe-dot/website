@@ -1,6 +1,6 @@
 /*
- * The hero, after tesla.com: 80% of the screen on computers and 90% on phones, one photograph per slide,
- * the name and one line at the top under the header, the buttons and the trust line at the foot, then the slide marks.
+ * The hero, after tesla.com: a full screen, one photograph or film per slide, the name and one line at the top
+ * under the header, the two buttons and the trust line at the foot, then the slide marks.
  * The cookie bar's height (--consent-h) is added to the foot, so nothing is ever covered.
  */
 .hero {
@@ -32,10 +32,25 @@
   min-height: 100svh;
   justify-content: space-between;
   gap: 24px;
-  padding-bottom: calc(50px + var(--consent-h, 0px));
+  /* The room under the foot for the slide marks, so the trust line always has clear space above them. */
+  --below: 50px;
+  padding-bottom: calc(var(--below) + var(--consent-h, 0px));
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.9s var(--ease);
+}
+
+@media (min-width: 768px) {
+  .slide {
+    --below: 64px;
+  }
+}
+
+/* On a computer the marks are 32 px pills, 14 px from the foot: the trust line sits 24 px clear of them. */
+@media (min-width: 1024px) and (pointer: fine) {
+  .slide {
+    --below: 72px;
+  }
 }
 
 .slide[data-active] {
@@ -132,26 +147,6 @@
   }
 }
 
-/* The first slide's figures, above its buttons, from tablets up; a phone keeps the film clear. */
-.specs {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .specs {
-    display: grid;
-    grid-template-columns: 0.8fr 0.9fr 1.4fr 0.8fr;
-    width: min(100%, 960px);
-    margin-bottom: 20px;
-    text-align: left;
-  }
-
-  .specs dd {
-    font-size: clamp(1.75rem, 1rem + 1.5vw, 2.5rem);
-    white-space: nowrap;
-  }
-}
-
 .ctas {
   display: flex;
   flex-direction: column;
@@ -234,11 +229,12 @@
   color: #fff;
 }
 
+/* From tablets up the label sits in the lower corner, level with the slide marks. */
 @media (min-width: 768px) {
   .note {
     position: absolute;
     right: var(--edge);
-    bottom: -36px;
+    bottom: calc(14px - var(--below));
   }
 }
 
@@ -413,12 +409,8 @@
  * motion.
  */
 @media (prefers-reduced-motion: no-preference) {
-  .hero[data-moved] .slide[data-active] :is(.eyebrow, .title, .line, .specs, .ctas) {
+  .hero[data-moved] .slide[data-active] :is(.eyebrow, .title, .line, .ctas) {
     animation: arrive 0.7s var(--ease) both;
-  }
-
-  .hero[data-moved] .slide[data-active] .specs {
-    animation-delay: 150ms;
   }
 
   .hero[data-moved] .slide[data-active] .title {

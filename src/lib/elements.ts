@@ -105,7 +105,6 @@ export const elements = {
   films: {
     hero: reel("pote-hero", ["1080", "720", "p"], "the central gardens, courts and villa rows from high up beside a tower", "The gardens from above", undefined, "65% 50%"),
     home: reel("pote-home", ["720", "p"], "a front door opening onto a living room", "Front door, living room, master bedroom", undefined, "47% 50%"),
-    door: reel("out-door", ["720", "p"], "a wooden front door and its digital lock", "The front door and its digital lock"),
     overVillas: reel("out-balcony", ["720", "p"], "the villa rows, lawns, courts and a pool from the tower side, from above", "From the towers: villa rows, lawns and courts"),
     towers: reel("hero-towers", ["1080", "720", "p"], "the towers rising above the central gardens", "The towers"),
     villas: reel("pote-villas", ["720", "p"], "the villa rows from above, the camera pulling back over their gardens", "The villas"),

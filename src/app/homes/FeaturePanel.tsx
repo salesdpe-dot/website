@@ -10,7 +10,8 @@ import s from "./FeaturePanel.module.css";
 type Props = {
   id?: string;
   image: Media;
-  eyebrow: string;
+  /* A word above the title; leave it out where it would only repeat the title. */
+  eyebrow?: string;
   title: string;
   line: string;
   /* Where the picture is anchored on a wide screen and on a phone. */
@@ -43,7 +44,7 @@ export function FeaturePanel({ id, image, eyebrow, title, line, position = "50% 
       <p className={s.note}>Artist’s impression</p>
       <div className={s.foot}>
         <div className={`reveal ${s.copy}`}>
-          <p className={s.eyebrow}>{eyebrow}</p>
+          {eyebrow && <p className={s.eyebrow}>{eyebrow}</p>}
           <h2 id={id ? `${id}-title` : undefined} className={`display ${s.title}`}>
             {title}
           </h2>

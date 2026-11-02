@@ -1,6 +1,8 @@
 /*
  * The Feedback tab: near-black with a white rim, so it shows on white pages and on photographs alike. It sits on the
- * right edge, half way down, where it covers the least: the word on a computer, only the icon on a phone.
+ * right edge, half way down, where it covers the least, with the word "Feedback" running up it, so it never reads
+ * as a chat button. On a phone it is a slim strip, 26 px by 80 px: it reaches half as far over the text as the old
+ * icon-only tab did, and covers less of it.
  */
 .tab {
   position: fixed;
@@ -10,17 +12,18 @@
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
   min-height: 44px;
-  padding: 12px 8px;
+  padding: 6px 5px;
   border: 0;
-  border-radius: 8px 0 0 8px;
+  border-radius: 6px 0 0 6px;
   background: var(--ink);
   color: #fff;
   font: inherit;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
   cursor: pointer;
   box-shadow:
     0 0 0 2px #fff,
@@ -41,24 +44,29 @@
 }
 
 .tabIcon {
-  width: 20px;
-  height: 20px;
+  width: 12px;
+  height: 12px;
   flex: none;
 }
 
 .tab span {
-  display: none;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
 }
 
 @media (min-width: 900px) and (hover: hover) {
   .tab {
+    gap: 10px;
     padding: 16px 12px;
+    border-radius: 8px 0 0 8px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    letter-spacing: 0.01em;
   }
 
-  .tab span {
-    display: inline;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
+  .tabIcon {
+    width: 20px;
+    height: 20px;
   }
 
   .tab:hover {

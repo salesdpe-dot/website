@@ -24,8 +24,6 @@ const words = [
   ["STP", "Sewage treatment plant: it treats a community’s waste water on site so the water can be reused."],
 ].map(([title, body]) => ({ title, body }));
 
-const questions = checklist.reduce((n, c) => n + (c.checks?.length ?? 0), 0);
-
 export default function ChecklistPage() {
   return (
     <>
@@ -33,17 +31,12 @@ export default function ChecklistPage() {
         above={<Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Checklist" }]} />}
         title="Five things to check before you buy."
         line="Khata, occupancy certificate, carpet area, deviation and the sewage treatment plant: what each one is, and what to ask about it before you sign."
-        specs={[
-          { value: String(checklist.length), label: "Must-knows" },
-          { value: String(questions), label: "Questions to ask" },
-          { value: String(words.length), label: "Terms explained" },
-        ]}
       />
       <Section label="The must-knows" space="tight">
         <ChecklistTool items={checklist} />
       </Section>
       <Section tone="surface" split labelledBy="words-title">
-        <SectionHead id="words-title" size="large" title="Words you’ll hear" line="BHK to STP, in a sentence or two each." />
+        <SectionHead id="words-title" size="large" title="Words you’ll hear." line="BHK to STP, in a sentence or two each." />
         <Accordion items={words} defaultOpen={null} />
       </Section>
       <CtaBand

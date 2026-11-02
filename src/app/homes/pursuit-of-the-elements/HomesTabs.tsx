@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type Spec, SpecRow } from "@/components/brand/SpecRow";
 import { ComposeButton } from "@/components/ComposeButton";
 import { FilmToggle, LoopFilm } from "@/components/media/LoopFilm";
@@ -24,6 +24,8 @@ export type Family = {
   figures: Spec[];
   /* The first is shown large; the others are a click away in the small frames under it. */
   views: View[];
+  /* A link to the page with this hash ("#villas") opens on this tab. */
+  hash?: string;
 };
 
 /*
@@ -38,6 +40,23 @@ export function HomesTabs({ families }: { families: Family[] }) {
     setActive(i);
     setView(0);
   };
+
+  /* Arriving on (or moving to) a tab's hash: that tab is chosen and the tabs come into view under the bar. */
+  useEffect(() => {
+    const fromHash = () => {
+      const i = families.findIndex((f) => f.hash && location.hash === `#${f.hash}`);
+      if (i < 0) return;
+      setActive(i);
+      setView(0);
+      document.getElementById(`homes-tab-${i}`)?.closest("section")?.scrollIntoView({ block: "start" });
+    };
+    const frame = requestAnimationFrame(fromHash);
+    addEventListener("hashchange", fromHash);
+    return () => {
+      cancelAnimationFrame(frame);
+      removeEventListener("hashchange", fromHash);
+    };
+  }, [families]);
   return (
     <div className={s.tabs}>
       <div role="tablist" aria-label="Towers and villas" className={s.list}>

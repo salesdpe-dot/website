@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { type KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
-import { SpecRow } from "@/components/brand/SpecRow";
 import { ComposeButton } from "@/components/ComposeButton";
 import { LoopFilm } from "@/components/media/LoopFilm";
 import { type Slide, trust } from "@/lib/content";
@@ -155,7 +154,6 @@ export function Hero({ slides }: { slides: Slide[] }) {
                 <p className={s.line}>{slide.line}</p>
               </div>
               <div className={`photo-foot ${s.foot}`}>
-                {slide.specs && <SpecRow items={slide.specs} className={s.specs} />}
                 <div className={s.ctas}>
                   <Link className="btn btn-primary" href={slide.primary.href}>
                     {slide.primary.label}

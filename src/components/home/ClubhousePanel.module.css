@@ -82,8 +82,12 @@
   gap: 28px;
 }
 
-/* The first figure is the widest ("1,35,000+ sq ft"), so its column is too; no figure breaks across lines. */
-.specs {
+/*
+ * The first figure is the widest ("1,35,000+ sq ft"), so its column is too; no figure breaks across lines. From
+ * 600 px up the four always share one line, each column at least as wide as its figure, so none sits on a line of
+ * its own or runs into the next; up to a computer's width the figures are a size smaller so that the four fit.
+ */
+.foot .specs {
   max-width: 1180px;
 }
 
@@ -91,9 +95,25 @@
   white-space: nowrap;
 }
 
-@media (min-width: 900px) {
-  .specs {
-    grid-template-columns: 1.5fr 1.1fr 1.1fr 1fr;
+@media (min-width: 600px) {
+  .foot .specs {
+    grid-template-columns:
+      minmax(min-content, 1.5fr) minmax(min-content, 1.1fr) minmax(min-content, 1.1fr)
+      minmax(min-content, 1fr);
+  }
+
+  .specs > div {
+    padding-inline: clamp(14px, 2vw, 20px);
+  }
+
+  .specs > div:last-child {
+    padding-right: 0;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1023px) {
+  .specs dd {
+    font-size: clamp(1.5rem, 0.4rem + 2.8vw, 2.25rem);
   }
 }
 

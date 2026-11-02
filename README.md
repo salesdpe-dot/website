@@ -75,11 +75,11 @@ Stack: Next.js 16 (App Router, static pages plus two API routes), React 19, Type
 src/
   app/                    routes, layout, design tokens (globals.css), api/leads and api/feedback
   components/showroom/    site chrome and home sections: SiteHeader, SiteFooter, Logo, Hero, AmenityRow, MapSection, ProofPanel, ClosingCta
-  components/home/        more home sections: ModelRow, ClubhousePanel, ElementsSwitcher, WatchRow, CommunityRow, EnquirySection
+  components/home/        more home sections: ModelRow, ClubhousePanel, ElementsSwitcher, CommunityRow, EnquirySection
   components/brand/       SpecRow (big figures) and WatchFilm (the full-screen player for films with sound)
   components/media/       LoopFilm, the one film player
   components/ds/          shared pieces: PhotoHero, Gallery, Feature, FactList, Accordion, …
-  components/             MessageComposer, VisitBooker, EnquiryForm, CommuteChecker, ChecklistTool, AffordabilityExplorer, …
+  components/             MessageComposer, VisitBooker, CommuteChecker, ChecklistTool, AffordabilityExplorer, …
   lib/content.ts          the home page’s words and pictures
   lib/elements.ts         the project on sale; lib/projects.ts the five delivered communities
   lib/site.ts             company facts and founders; lib/proof.ts delivery record, award, rating

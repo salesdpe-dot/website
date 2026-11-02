@@ -87,7 +87,6 @@ name, with an upright `-card` crop where the film has a card cut.
 | `media/elements/hero-outdoors-*.mp4` | 1080, 720, p | 8 s | `assets 2/Exterior Individual shots /updated individual shot 14.10.2026/Pickleball to Outdoor cafe aerial.mp4` | `lib/content.ts`, `lib/elements.ts` |
 | `media/elements/hero-towers-*.mp4` | 1080, 720, p | 10 s | `assets 2/Exterior Individual shots /Individual Shot/Individual shots set 1/1.MP4` | `lib/content.ts`, `lib/elements.ts`, `lib/film.ts` |
 | `media/elements/out-balcony-*.mp4` | 720, p | 5.0 s | `assets 2/Exterior Individual shots /15.10.2026/BALCONY TO CLUBHOUSE 2.mp4` | `lib/elements.ts` |
-| `media/elements/out-door-*.mp4` | 720, p | 5.0 s | `assets 2/Exterior Individual shots /updated individual shot 14.10.2026/Door opening Close up.mp4` | `lib/elements.ts` |
 | `media/elements/out-elements-*.mp4` | 720, card, p | 6.0 s | `assets 2/Exterior Individual shots /updated individual shot 14.10.2026/Elements to villa 1.mp4` | `lib/content.ts`, `lib/elements.ts` |
 | `media/elements/out-golf-*.mp4` | 720, card, p | 5.0 s | `assets 2/Exterior Individual shots /Individual Shot/Individual shots set 1/22.MP4` | `lib/content.ts`, `lib/elements.ts` |
 | `media/elements/out-kids-play-*.mp4` | 720, card | 5.0 s | `assets 2/Exterior Individual shots /Individual Shot/Individual shots set 1/32.MP4` | `lib/elements.ts` |
@@ -193,7 +192,6 @@ name, with an upright `-card` crop where the film has a card cut.
 | `images/pursuit-of-the-elements/mound-opening.webp` | 1920×1080 | `assets 2/Final updated_HD/Image TIFF and JPEG/JPEG/Mound close to round opening.JPEG` | `lib/content.ts`, `lib/elements.ts` |
 | `images/pursuit-of-the-elements/music.webp` | 2560×1440 | `brand assets/Clubhouse internal/Music room.png` | `lib/elements.ts` |
 | `images/pursuit-of-the-elements/out-balcony.webp` | 1920×1080 | First frame of `media/elements/out-balcony` | `lib/elements.ts` |
-| `images/pursuit-of-the-elements/out-door.webp` | 1920×1080 | First frame of `media/elements/out-door` | `lib/elements.ts` |
 | `images/pursuit-of-the-elements/out-elements-card.webp` | 864×1080 | First frame of `media/elements/out-elements`, cropped upright | `lib/content.ts`, `lib/elements.ts` |
 | `images/pursuit-of-the-elements/out-elements.webp` | 1920×1080 | First frame of `media/elements/out-elements` | `lib/content.ts`, `lib/elements.ts` |
 | `images/pursuit-of-the-elements/out-golf-card.webp` | 864×1080 | First frame of `media/elements/out-golf`, cropped upright | `lib/content.ts`, `lib/elements.ts` |

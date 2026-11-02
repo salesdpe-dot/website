@@ -87,7 +87,10 @@ const still = (name: string, width: number, height: number, alt: string, positio
   mobilePosition,
 });
 
-/* The hero: four slides, each a film, a name, one hard fact and two buttons. tesla.com changes every ten seconds. */
+/*
+ * The hero: four slides, each a film, a name, one line and two buttons, as tesla.com's (which changes every ten
+ * seconds). The figures are further down the page, in the towers row and the clubhouse.
+ */
 export type Slide = {
   id: string;
   /* The slide's mark at the foot of the hero on a computer: one word. */
@@ -100,8 +103,6 @@ export type Slide = {
   /* One small line above the title: what is on offer and where. */
   eyebrow: string;
   note: string;
-  /* A row of figures above the buttons, from tablets up. */
-  specs?: Figure[];
   /* A short silent film over the still, cut from Disha's own renders; the still is its first frame. */
   film?: Film;
 };
@@ -115,12 +116,6 @@ export const heroSlides: Slide[] = [
     line: "2, 3\u00a0&\u00a04 BHK apartments and 4\u00a0&\u00a05 BHK villas on 20\u00a0acres.",
     image: still("hero-towers", 1920, 1080, "the Pursuit of the Elements towers rising above landscaped gardens"),
     film: film("hero-towers", ["1080", "720", "p"]),
-    specs: [
-      { value: "20", unit: "acres", label: "In Gunjur" },
-      { value: "7", unit: "towers", label: "Up to 29 floors" },
-      { value: "1,35,000+", unit: "sq ft", label: "Clubhouse" },
-      { value: "40+", label: "Amenities" },
-    ],
     primary: bookVisit,
     secondary: { label: "See the homes", href: `${links.elements}#homes` },
     note: "Artist’s impression",
@@ -506,14 +501,10 @@ export const brand = {
 
 /*
  * The client's four official walkthrough edits, with music: "<name>-1080.mp4" and "<name>-720.mp4", poster
- * "<name>.webp". Nothing loads until one is opened (WatchFilm).
+ * "<name>.webp". Nothing loads until one is opened (WatchFilm). The home page's clubhouse panel opens "The roof
+ * at dusk", the pool at night.
  */
 export type ShortFilm = { src: string; poster: Img; title: string; line: string; seconds: number };
-
-export const watchHead = {
-  title: "Four walkthroughs",
-  line: "The business lounge, the gym, the grounds and the roof at dusk. 20 seconds each, with music.",
-} as const;
 
 const short = (name: string, title: string, line: string, alt: string, seconds: number): ShortFilm => ({
   src: `${films}/${name}`,
@@ -548,10 +539,13 @@ export const shorts: ShortFilm[] = [
   ),
 ];
 
-/* The handed-over communities' row: real photographs, never renders. */
+/*
+ * The handed-over communities' row: real photographs, never renders. The brand band above it already gives the
+ * homes handed over, so this heading speaks of the places, and each card gives its year and its homes.
+ */
 export const handedOverHead = {
-  title: `${handed} homes handed over`,
-  line: "Five communities, from Windsor Gardens in 2015 to Pursuit of Sunshine in 2025.",
+  title: "Five communities, lived in today",
+  line: "Handed over between 2015 and 2025, from Windsor Gardens to Pursuit of Sunshine.",
 } as const;
 
 /* The map's heading. */
@@ -669,36 +663,6 @@ export const communities: Community[] = [
       mobilePosition: "50% 50%",
     },
     ctas: [{ label: "Explore", href: communityHref("disha-windsor-gardens") }],
-  },
-];
-
-/* Two half-width tiles, where tesla.com shows its offers: the two tools a buyer uses before a visit. */
-export const promos = [
-  {
-    title: "EMI calculator",
-    line: "Loan amount, interest rate and tenure in. Monthly EMI out.",
-    cta: { label: "Open the calculator", href: links.emi },
-    image: {
-      src: `${pics}/coffee-cup.webp`,
-      width: 1920,
-      height: 1080,
-      alt: "Artist’s impression of a Disha Habitat mug, “come home” on its side, on a café table",
-      position: "38% 50%",
-      mobilePosition: "30% 50%",
-    } satisfies Img,
-  },
-  {
-    title: "Buyer’s checklist",
-    line: "Khata, occupancy certificate, carpet area, deviations, sewage treatment: five checks before you sign.",
-    cta: { label: "Read the checklist", href: links.checklist },
-    image: {
-      src: `${pics}/front-door.webp`,
-      width: 1920,
-      height: 1080,
-      alt: "Artist’s impression of a home’s front door with a digital lock",
-      position: "40% 50%",
-      mobilePosition: "40% 50%",
-    } satisfies Img,
   },
 ];
 

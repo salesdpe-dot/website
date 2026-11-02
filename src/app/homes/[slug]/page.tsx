@@ -288,7 +288,7 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
             <SectionHead
               id="gallery-title"
               size="large"
-              title={`Inside ${p.shortName}`}
+              title={`Inside ${p.shortName}.`}
               line={`${describe(gallery)}.`}
             />
           </div>
@@ -309,7 +309,7 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
             <SectionHead
               id="highlights-title"
               size="large"
-              title={`${p.highlights.length} signature spaces`}
+              title={`${p.highlights.length} signature spaces.`}
             />
           </div>
           <ol className={`${s.highlights} reveal-stagger`} data-cols={spaceCols}>
@@ -339,7 +339,7 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
           <div className="reveal">
             <SectionHead
               id="specs-title"
-              title="Specifications"
+              title="Specifications."
               line="Selected items from the published specification."
             />
           </div>

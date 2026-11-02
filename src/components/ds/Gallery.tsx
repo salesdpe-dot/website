@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, CloseIcon } from "@/components/showroom/Icons";
 import type { Media } from "@/lib/projects";
 import s from "./Gallery.module.css";
@@ -18,14 +18,17 @@ type Props = {
   groups?: readonly string[];
   /* What the list of pictures is, for screen readers. */
   label?: string;
+  /* Show only the first `limit` pictures, with a button under them for the rest in a closer grid. The viewer
+     steps through every picture either way. */
+  limit?: number;
 };
 
 /*
  * Pictures in an even grid (the first one large), or in a row that scrolls sideways, each opening a
  * full-screen viewer: arrow keys and swipes move through them, Escape closes, and focus returns to the
- * picture that opened it.
+ * picture that opened it. With `limit`, a few are shown and "See all" shows the rest.
  */
-export function Gallery({ items: all, layout = "mosaic", groups, label }: Props) {
+export function Gallery({ items: all, layout = "mosaic", groups, label, limit }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const triggers = useRef<(HTMLButtonElement | null)[]>([]);
@@ -35,7 +38,25 @@ export function Gallery({ items: all, layout = "mosaic", groups, label }: Props)
   const [group, setGroup] = useState(groups?.[0]);
   const [switched, setSwitched] = useState(false);
   const [ends, setEnds] = useState({ start: true, end: false });
+  const [expanded, setExpanded] = useState(false);
+  const moreRef = useRef<HTMLUListElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const items = groups ? all.filter((item) => item.group === group) : all;
+  /* With a limit, the first pictures lead and the rest wait for "See all". */
+  const cut = layout !== "row" && limit && items.length > limit ? limit : items.length;
+  const lead = items.slice(0, cut);
+  const rest = items.slice(cut);
+  const moreId = useId();
+
+  /* Opening the rest moves focus to the first new picture; closing them brings the button back into view. */
+  const toggle = () => {
+    const opening = !expanded;
+    setExpanded(opening);
+    requestAnimationFrame(() => {
+      if (opening) moreRef.current?.querySelector("button")?.focus();
+      else toggleRef.current?.scrollIntoView({ block: "center" });
+    });
+  };
 
   /* The row's arrows hide at either end. */
   const measure = useCallback(() => {
@@ -82,9 +103,32 @@ export function Gallery({ items: all, layout = "mosaic", groups, label }: Props)
   const sizes = (i: number) =>
     layout === "row"
       ? "(min-width: 900px) 380px, 78vw"
-      : i === 0 && layout === "mosaic"
-        ? "(min-width: 900px) 66vw, 100vw"
-        : "(min-width: 900px) 33vw, 50vw";
+      : i >= cut
+        ? "(min-width: 900px) 25vw, (min-width: 600px) 33vw, 50vw"
+        : i === 0 && layout === "mosaic"
+          ? "(min-width: 900px) 66vw, 100vw"
+          : "(min-width: 900px) 33vw, 50vw";
+
+  const tile = (item: GalleryItem, i: number) => {
+    const tag = kindLabel[item.kind];
+    return (
+      <li key={item.src} className={`lift ${s.tile}`}>
+        <button
+          ref={(el) => {
+            triggers.current[i] = el;
+          }}
+          type="button"
+          className={s.trigger}
+          onClick={() => open(i)}
+          aria-haspopup="dialog"
+        >
+          <Image src={item.src} alt={item.alt} fill sizes={sizes(i)} quality={78} className={item.kind === "plan" ? s.plan : s.img} />
+          {tag && <span className={s.tag}>{tag}</span>}
+          <span className={s.caption}>{item.caption}</span>
+        </button>
+      </li>
+    );
+  };
 
   return (
     <>
@@ -113,38 +157,24 @@ export function Gallery({ items: all, layout = "mosaic", groups, label }: Props)
           className={s.grid}
           data-layout={layout}
           data-fade={switched || undefined}
-          data-grouped={groups ? "" : undefined}
+          data-grouped={groups || rest.length ? "" : undefined}
           aria-label={label}
           onScroll={layout === "row" ? measure : undefined}
         >
-          {items.map((item, i) => {
-            const tag = kindLabel[item.kind];
-            return (
-              <li key={item.src} className={`lift ${s.tile}`}>
-                <button
-                  ref={(el) => {
-                    triggers.current[i] = el;
-                  }}
-                  type="button"
-                  className={s.trigger}
-                  onClick={() => open(i)}
-                  aria-haspopup="dialog"
-                >
-                  <Image
-                    src={item.src}
-                    alt={item.alt}
-                    fill
-                    sizes={sizes(i)}
-                    quality={78}
-                    className={item.kind === "plan" ? s.plan : s.img}
-                  />
-                  {tag && <span className={s.tag}>{tag}</span>}
-                  <span className={s.caption}>{item.caption}</span>
-                </button>
-              </li>
-            );
-          })}
+          {lead.map((item, i) => tile(item, i))}
         </ul>
+        {rest.length > 0 && (
+          <>
+            <ul ref={moreRef} id={moreId} key={`${group}-more`} className={s.grid} data-layout="grid" data-more="" hidden={!expanded} aria-label={label && `${label}, the rest`}>
+              {expanded && rest.map((item, i) => tile(item, cut + i))}
+            </ul>
+            <div className={s.toggle}>
+              <button ref={toggleRef} type="button" className="btn btn-outline" aria-expanded={expanded} aria-controls={moreId} onClick={toggle}>
+                {expanded ? "Show fewer" : `See all ${items.length} pictures`}
+              </button>
+            </div>
+          </>
+        )}
         {layout === "row" && (
           <>
             <button

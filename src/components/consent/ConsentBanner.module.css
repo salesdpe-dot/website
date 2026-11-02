@@ -26,23 +26,12 @@
   pointer-events: none;
 }
 
-/* With the Feedback pill on (development), the bar sits above it on a phone. */
-.bar[data-feedback] {
-  bottom: calc(60px + env(safe-area-inset-bottom, 0px));
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--line);
-}
-
 @media (min-width: 600px) {
-  .bar,
-  .bar[data-feedback] {
+  .bar {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     column-gap: 24px;
     padding-block: 6px calc(6px + env(safe-area-inset-bottom, 0px));
-  }
-  .bar[data-feedback] {
-    bottom: 0;
   }
   .choose {
     grid-column: 1 / -1;

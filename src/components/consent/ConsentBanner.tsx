@@ -5,9 +5,6 @@ import { useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalSto
 import { type Consent, COOKIE_SETTINGS_EVENT, getConsent, onConsentChange, openCookieSettings, saveConsent } from "@/lib/consent";
 import s from "./ConsentBanner.module.css";
 
-/* Same condition as the Feedback tab in the layout: the bar then keeps clear of its phone pill. */
-const feedbackOn = process.env.NEXT_PUBLIC_FEEDBACK === "on" || process.env.NODE_ENV !== "production";
-
 const subscribe = (cb: () => void) => onConsentChange(cb);
 /* "unknown" on the server and during hydration, so the bar never flashes for someone who already chose. */
 const useChoice = (): Consent | "none" | "unknown" =>
@@ -66,14 +63,14 @@ export function ConsentBanner() {
     const el = bar.current;
     if (!visible || !el) return;
     const root = document.documentElement;
-    /* Height plus the gap under the bar; unaffected by the slide-in transform. */
+    /* Its height (plus any gap under it, none today); unaffected by the slide-in transform. */
     const measure = () => root.style.setProperty("--consent-h", `${Math.ceil(el.offsetHeight + (parseFloat(getComputedStyle(el).bottom) || 0))}px`);
     measure();
     root.classList.remove("consent-pending");
     root.dataset.consentBar = "";
     const ro = new ResizeObserver(measure);
     ro.observe(el);
-    // Its offset from the bottom changes with the screen width too, which the observer does not see.
+    // A resize can change its offset from the bottom without changing its size, which the observer does not see.
     addEventListener("resize", measure);
     return () => {
       ro.disconnect();
@@ -99,7 +96,7 @@ export function ConsentBanner() {
   };
 
   return (
-    <section ref={bar} className={s.bar} aria-label="Cookie notice" data-feedback={feedbackOn || undefined} data-leaving={leaving || undefined}>
+    <section ref={bar} className={s.bar} aria-label="Cookie notice" data-leaving={leaving || undefined}>
       <p className={s.body}>
         No tracking unless you accept.{" "}
         <span className={s.nowrap}>

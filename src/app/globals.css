@@ -152,13 +152,26 @@ html.consent-pending {
     cursor: pointer;
   }
 
-  :focus-visible {
-    outline: 2px solid var(--ink);
-    outline-offset: 2px;
+  /*
+   * The focus ring: a 2 px ring with a 2 px gap, drawn in three bands (gap, ring, halo) so it reads on white, on
+   * navy and on any photograph. On a light page the ring is navy between two white bands; inside a dark section
+   * (data-tone="dark") it is white between two navy bands. Whatever lies under it, one band always contrasts.
+   * A component that sets its own box-shadow adds "0 0 0 6px var(--focus-halo)" to it on focus (see .btn-line).
+   */
+  :root {
+    --focus-ring: var(--ink);
+    --focus-halo: #fff;
   }
 
-  [data-tone="dark"] :focus-visible {
-    outline-color: #fff;
+  [data-tone="dark"] {
+    --focus-ring: #fff;
+    --focus-halo: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px var(--focus-halo);
   }
 
   ::selection {
@@ -281,14 +294,26 @@ html.consent-pending {
     box-shadow: inset 0 0 0 1.5px var(--ink);
   }
 
-  /* The second choice on a photograph: dark glass and a hairline, so the sky-blue button stays the one
-     the eye goes to first. */
+  /* The two hairline buttons keep their line while focused, inside the focus halo. */
+  .btn-line:focus-visible {
+    box-shadow:
+      inset 0 0 0 1.5px #fff,
+      0 0 0 6px var(--focus-halo);
+  }
+
+  .btn-outline:focus-visible {
+    box-shadow:
+      inset 0 0 0 1.5px var(--ink),
+      0 0 0 6px var(--focus-halo);
+  }
+
+  /* The second choice on a film or photograph, as tesla.com sets it: frosted white with navy text (at least
+     13:1 over any picture), so it reads as the lighter partner of the sky-blue button beside it. */
   .btn-ghost {
-    background: rgb(0 0 0 / 0.42);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    color: #fff;
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.6);
+    background: rgb(255 255 255 / 0.88);
+    -webkit-backdrop-filter: blur(8px) saturate(1.2);
+    backdrop-filter: blur(8px) saturate(1.2);
+    color: var(--ink);
   }
 
   /* Hover only where a pointer can hover (a tap on a phone must not leave a button looking pressed),
@@ -317,7 +342,7 @@ html.consent-pending {
     }
 
     .btn-ghost:hover:not(:disabled, [aria-disabled="true"]) {
-      background: rgb(0 0 0 / 0.56);
+      background: #fff;
     }
 
     .btn-line:hover:not(:disabled, [aria-disabled="true"]) {

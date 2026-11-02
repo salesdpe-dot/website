@@ -1,6 +1,7 @@
 /*
- * The navy field. A page that ends on a band of its own colour (the sky-blue CtaBand, marked data-flush-end)
- * meets the footer edge to edge; any other page keeps a white gap above it.
+ * The navy field. A page that ends on a band of its own (the sky-blue CtaBand, or the home page, whose wrapper is
+ * marked because it ends on the closing film) carries data-flush-end and meets the footer edge to edge; any other
+ * page keeps a white gap above it.
  */
 .footer {
   margin-top: 64px;

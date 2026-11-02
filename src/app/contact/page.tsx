@@ -80,7 +80,7 @@ export default function ContactPage() {
           <SectionHead
             id="book-title"
             size="large"
-            title="Book a site visit"
+            title="Book a site visit."
             line="Four steps. The request goes from your own WhatsApp or email, and the sales team confirms the time with you."
           />
         </div>

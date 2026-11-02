@@ -14,6 +14,9 @@ import s from "./SiteHeader.module.css";
 
 const hrefOf = communityHref;
 
+/* The navy "All homes" tile already leads to the index, so the list beside the tiles leaves it out. */
+const megaLinks = homesMenuLinks.filter((l) => l.href !== links.homes);
+
 /* Internal addresses move without a page load; outside ones are plain links. */
 function NavLink({ href, className, children, current }: { href: string; className?: string; children: ReactNode; current?: boolean }) {
   if (href.startsWith("/"))
@@ -224,7 +227,7 @@ export function SiteHeader() {
                     </li>
                   </ul>
                   <ul className={s.side}>
-                    {homesMenuLinks.map((l) => (
+                    {megaLinks.map((l) => (
                       <li key={l.label}>
                         <NavLink href={l.href}>{l.label}</NavLink>
                       </li>

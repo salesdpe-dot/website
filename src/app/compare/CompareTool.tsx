@@ -46,8 +46,13 @@ function WithUrl(props: Props) {
 function View({ communities, rows, picks, onPick }: Props & { picks: string[]; onPick: (i: number, v: string) => void }) {
   const uid = useId();
   const chosen = picks.map((p) => communities.find((c) => c.slug === p)).filter((c): c is Community => Boolean(c));
-  const shown = rows.filter((r) => chosen.some((c) => c.values[r]));
   const count = chosen.length;
+  /* A row is a comparison only when two of the chosen have a figure for it; with one chosen, every row it has. */
+  const need = Math.min(2, count);
+  const shown = rows.filter((r) => chosen.filter((c) => c.values[r]).length >= need);
+  /* A handed-over community's missing figure is a dash; the one on sale has not published its figures yet, so its cell stays blank. */
+  const dashed = (c: Community, r: string) => !c.values[r] && !c.selling;
+  const anyDash = shown.some((r) => chosen.some((c) => dashed(c, r)));
   // Empty slots keep their column, so every value sits under its own picker.
   const blanks = Array.from({ length: picks.length - count }, (_, i) => <td key={`blank-${i}`} aria-hidden="true" />);
 
@@ -171,12 +176,14 @@ function View({ communities, rows, picks, onPick }: Props & { picks: string[]; o
                     </th>
                     {chosen.map((c) => (
                       <td key={c.slug} className={s.cell} data-empty={c.values[r] ? undefined : ""}>
-                        {c.values[r] ?? (
-                          <>
-                            <span aria-hidden="true">—</span>
-                            <span className="sr-only">Not published</span>
-                          </>
-                        )}
+                        {c.values[r] ??
+                          c.pending?.[r] ??
+                          (dashed(c, r) && (
+                            <>
+                              <span aria-hidden="true">—</span>
+                              <span className="sr-only">Not published</span>
+                            </>
+                          ))}
                       </td>
                     ))}
                     {blanks}
@@ -186,14 +193,23 @@ function View({ communities, rows, picks, onPick }: Props & { picks: string[]; o
               <tfoot>
                 <tr className={s.actions}>
                   <td className={s.label} />
+                  {/* A visit can be booked only to the one on sale; a community that is lived in links to its own page. */}
                   {chosen.map((c) => (
                     <td key={c.slug} className={s.cell}>
-                      <Link className={s.act} href={links.bookVisit} aria-label={`Book a visit: ${c.name}`}>
-                        Book a visit
-                      </Link>
-                      <Link className={s.actSoft} href={c.href} aria-label={`Explore ${c.name}`}>
-                        Explore
-                      </Link>
+                      {c.selling ? (
+                        <>
+                          <Link className={s.act} href={links.bookVisit} aria-label={`Book a visit: ${c.name}`}>
+                            Book a visit
+                          </Link>
+                          <Link className={s.actSoft} href={c.href} aria-label={`Explore ${c.name}`}>
+                            Explore
+                          </Link>
+                        </>
+                      ) : (
+                        <Link className={s.act} data-quiet="" href={c.href} aria-label={`See the community: ${c.name}`}>
+                          See the community
+                        </Link>
+                      )}
                     </td>
                   ))}
                   {blanks}
@@ -201,7 +217,7 @@ function View({ communities, rows, picks, onPick }: Props & { picks: string[]; o
               </tfoot>
             </table>
           </div>
-          <p className={s.note}>A dash means we have not published that figure.</p>
+          {anyDash && <p className={s.note}>A dash means we have not published that figure.</p>}
         </>
       )}
     </div>

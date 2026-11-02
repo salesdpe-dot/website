@@ -280,7 +280,6 @@ export default function StoryPage() {
               src={award.image}
               width={315}
               height={227}
-              sizes="(min-width: 900px) 420px, 90vw"
               alt="ET Business Awards 2025 Certificate of Excellence for Disha Pursuit of the Elements, Innovation Real Estate Project of the Year"
             />
           </div>

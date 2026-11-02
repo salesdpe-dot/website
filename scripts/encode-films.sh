@@ -67,7 +67,6 @@ out-elements	720,p,card	0	6	0.45	assets 2/Exterior Individual shots /updated ind
 out-villas	720,p	0	6	0.42	assets 2/Exterior Individual shots /Individual Shot/Individual shots set 1/43.MP4
 out-villa-front	720,p	0	6	0.5	assets 2/Exterior Individual shots /updated individual shot 14.10.2026/Villa front to aerial 2.mp4
 out-yoga-gym	720,p,card	0	6	0.5	assets 2/Exterior Individual shots /updated individual shot 14.10.2026/yoga to outdoor gym 1.mp4
-out-door	720,p	0	5	0.42	assets 2/Exterior Individual shots /updated individual shot 14.10.2026/Door opening Close up.mp4
 out-balcony	720,p	0	5	0.5	assets 2/Exterior Individual shots /15.10.2026/BALCONY TO CLUBHOUSE 2.mp4
 out-volleyball	720,card	0	5	0.6	assets 2/Exterior Individual shots /Individual Shot/Individual shots set 1/15.MP4
 out-skate	720,card	0	5	0.55	assets 2/Exterior Individual shots /Individual Shot/Individual shots set 1/16.MP4

@@ -11,6 +11,12 @@ export type Community = {
   render: boolean;
   /* Row label to value. Only real fields are present; a missing key shows as a dash. */
   values: Record<string, string>;
+  /*
+   * On sale and still being built. Its figures (homes, areas, build time) are not published yet, so a row it has
+   * no value for is left blank rather than dashed, unless `pending` has the plain truth for that row.
+   */
+  selling: boolean;
+  pending?: Record<string, string>;
 };
 
 const pick = (facts: readonly { label: string; value: string }[], label: string) => facts.find((f) => f.label === label)?.value;
@@ -22,6 +28,7 @@ const fromProject = (p: (typeof projects)[number]): Community => ({
   href: `/homes/${p.slug}`,
   image: p.cover,
   render: p.cover.kind === "render",
+  selling: false,
   /*
    * Related facts share a row (handover with status, start with the build time), so a delivered
    * community and the one on sale line up on more rows and the table shows fewer dashes.
@@ -51,6 +58,9 @@ const selling: Community = {
   href: elements.href,
   image: elements.cover,
   render: elements.cover.kind === "render",
+  selling: true,
+  /* It has no finish date to count months to: it is on sale now. */
+  pending: { "Start to finish": "Selling now" },
   values: Object.fromEntries(
     Object.entries({
       Status: elements.status,
@@ -67,7 +77,7 @@ const selling: Community = {
 
 export const communities: Community[] = [selling, ...[...projects].reverse().map(fromProject)];
 
-/* Row order; a row appears only when a selected community has a value. */
+/* Row order. A row appears only when at least two of the selected communities have a value for it (or the one, when only one is selected). */
 export const rowOrder = [
   "Status",
   "Location",

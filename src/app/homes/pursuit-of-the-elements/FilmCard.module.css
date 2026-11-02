@@ -1,0 +1,174 @@
+/* The films for a section: one column on a phone, two side by side from a tablet up; a lone film keeps to half. */
+.cards {
+  display: grid;
+  gap: 12px;
+  margin-top: 40px;
+}
+
+@media (min-width: 768px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 56px;
+  }
+}
+
+/* A card: the first frame on the left, the words beside it. The whole card is the button. */
+.card {
+  display: grid;
+  grid-template-columns: clamp(132px, 38%, 224px) minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  transition: background-color 0.33s var(--ease);
+}
+
+.card:focus-visible {
+  outline-offset: 3px;
+}
+
+.thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.img {
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+
+/* The play button: a sky-blue disc with a navy arrow. */
+.play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--ink);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.28);
+  transform: translate(-50%, -50%);
+  transition: transform 0.4s var(--ease);
+}
+
+.play svg {
+  width: 18px;
+  height: 18px;
+  margin-left: 2px;
+}
+
+.note {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  padding: 1px 6px;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.6);
+  color: #fff;
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  white-space: nowrap;
+}
+
+.text {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding-right: 6px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.line {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+/* On a phone the line about what is in the film goes, so the card stays compact. */
+@media (max-width: 479px) {
+  .line {
+    display: none;
+  }
+}
+
+.cue {
+  margin-top: 2px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+@media (min-width: 1024px) {
+  .card {
+    gap: 20px;
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 1.25rem;
+    line-height: 1.625rem;
+  }
+}
+
+/* On the navy field: a lighter navy card, white words, the cue in sky blue (6.9:1 on navy). */
+.dark {
+  background: var(--ink-2);
+  color: #fff;
+}
+
+.dark .thumb {
+  background: rgb(255 255 255 / 0.06);
+}
+
+.dark .line {
+  color: rgb(255 255 255 / 0.74);
+}
+
+.dark .cue {
+  color: var(--accent);
+}
+
+@media (hover: hover) {
+  .card:hover {
+    background: var(--surface-2);
+  }
+
+  .dark:hover {
+    background: rgb(255 255 255 / 0.1);
+  }
+
+  .card:hover .img {
+    transform: scale(1.04);
+  }
+
+  .card:hover .play {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img,
+  .play {
+    transition: none;
+  }
+}

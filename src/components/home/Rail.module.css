@@ -85,8 +85,9 @@
   position: relative;
   display: flex;
   gap: 12px;
-  margin: 28px 0 0;
-  padding: 0 var(--edge) 4px;
+  /* 10px inside the scroller above and below, taken back from the margins, so a card's focus ring isn't clipped. */
+  margin: 18px 0 -6px;
+  padding: 10px var(--edge) 10px;
   list-style: none;
   overflow-x: auto;
   overscroll-behavior-x: contain;

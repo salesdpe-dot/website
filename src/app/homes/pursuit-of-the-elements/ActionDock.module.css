@@ -1,0 +1,102 @@
+/*
+ * The phone's action bar: navy, 60 px with 44 px targets, fixed to the foot of the screen, or on top of the
+ * cookie bar while that is up. It stays under the Feedback tab (z-index 60) and the menus (30), and above the page.
+ * Computers and tablets have the bar under the header instead, so it never shows there.
+ */
+.dock {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .dock {
+    position: fixed;
+    inset: auto 0 var(--consent-h, 0px);
+    z-index: 21;
+    display: block;
+    padding: 8px var(--gutter) calc(8px + env(safe-area-inset-bottom, 0px));
+    background: var(--ink);
+    color: #fff;
+    box-shadow: 0 -8px 24px rgb(8 32 50 / 0.18);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100%);
+  }
+
+  /* While the cookie bar is up (or its space is reserved), it already pads the foot of the screen. */
+  :global(html:is([data-consent-bar], .consent-pending)) .dock {
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--ink-line);
+  }
+
+  .dock[data-show="true"] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  /* While it is up, a control reached with the keyboard is scrolled clear of it. */
+  :global(html):has(.dock[data-show="true"]) {
+    scroll-padding-bottom: calc(var(--consent-h, 0px) + 84px);
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .dock {
+    transition:
+      opacity 0.3s var(--ease),
+      transform 0.4s var(--ease),
+      visibility 0.4s;
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: 8px;
+}
+
+/* Call and WhatsApp: white on navy under a hairline, the icon beside the word. */
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 8px;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.28);
+  color: #fff;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.action:active {
+  background: rgb(255 255 255 / 0.12);
+}
+
+.action:focus-visible,
+.book:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+.book {
+  min-height: 44px;
+  padding-inline: 8px;
+  white-space: nowrap;
+}
+
+/* The narrowest phones: the icons go, the words stay. */
+@media (max-width: 359px) {
+  .icon {
+    display: none;
+  }
+}

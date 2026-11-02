@@ -1,6 +1,6 @@
 "use client";
 
-import { type FocusEvent, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { type FocusEvent, type ReactNode, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Building2, Coffee, PhoneCall } from "lucide-react";
 import { ChoiceCards, TextField } from "@/components/ds";
 import { fieldClasses } from "@/components/ds/Field";
@@ -48,6 +48,18 @@ const slots = [
   { id: "evening", label: "Evening", hint: "3 pm to 6 pm IST", h: 15 },
 ];
 const steps = ["Where", "When", "You", "Confirm"];
+
+/* Another button on the page can choose where to meet (a place's id) and take the booker to its next step. */
+const PLACE_EVENT = "disha:visit-place";
+
+/* A button that starts the booker on a call or video call: for buyers who can't come to Bengaluru yet. */
+export function AskForCallButton({ className, children }: { className?: string; children: ReactNode }) {
+  return (
+    <button type="button" className={className} onClick={() => window.dispatchEvent(new CustomEvent(PLACE_EVENT, { detail: "call" }))}>
+      {children}
+    </button>
+  );
+}
 
 /* Today's date in Bengaluru, whatever the visitor's own time zone. */
 const istToday = () => {
@@ -168,6 +180,24 @@ export function VisitBooker() {
     const target = box?.querySelector<HTMLElement>("[aria-invalid=true], [data-unanswered], fieldset[aria-describedby] input");
     target?.focus();
   }, [tries]);
+  /* A place chosen from outside (AskForCallButton): the booker moves to "When" and comes into view. */
+  useEffect(() => {
+    const choose = (ev: Event) => {
+      const id = (ev as CustomEvent<string>).detail;
+      if (!places.some((x) => x.id === id)) return;
+      setPlace(id);
+      setSlot(null);
+      setTried(false);
+      setDir("fwd");
+      setStep(1);
+      requestAnimationFrame(() => {
+        root.current?.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+        stepBox.current?.querySelector<HTMLElement>("[data-step-title]")?.focus({ preventScroll: true });
+      });
+    };
+    window.addEventListener(PLACE_EVENT, choose);
+    return () => window.removeEventListener(PLACE_EVENT, choose);
+  }, []);
   const nameOk = name.trim().length >= 2;
   const shown = shownPhone(phone);
 

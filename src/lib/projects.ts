@@ -70,14 +70,14 @@ export const projects: Project[] = [
     index: "05",
     locality: "Budigere Road, Bengaluru",
     intro:
-      "322 homes on 4 acres off Budigere Road, in two towers of 19 floors. Every home has an 8 ft × 12 ft sundeck.",
+      "322 homes on 4 acres off Budigere Road, in two towers of 19 floors. Every home has an 8\u00a0ft\u00a0×\u00a012\u00a0ft sundeck.",
     facts: [
       { label: "Project size", value: "4 acres" },
       { label: "Homes", value: "322" },
       { label: "Home types", value: "2 & 3 BHK" },
       { label: "Floors", value: "19 + basement" },
       { label: "Built-up area", value: "6,20,000 sq ft" },
-      { label: "Signature feature", value: "8 ft × 12 ft sundecks" },
+      { label: "Signature feature", value: "8\u00a0ft\u00a0×\u00a012\u00a0ft sundecks" },
       { label: "Project type", value: "Gated community" },
     ],
     timeline: built({ start: "January 2023", completion: "March 2025", handover: "June 2025" }),

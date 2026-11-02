@@ -256,13 +256,17 @@
       line-height: 1.125rem;
     }
 
-    /* The shade: deep behind the words on the left and the sentence at the foot, light over the rest of the picture. */
+    /*
+     * The shade: deep behind the words on the left, a navy pool behind the sentence at the foot on the right (the
+     * side shade has faded out by then), and light over the rest of the picture.
+     */
     .stage::before {
       content: "";
       position: absolute;
       inset: 0;
       z-index: -1;
       background:
+        radial-gradient(ellipse 58% 62% at 100% 100%, color-mix(in srgb, var(--ink) 78%, transparent) 0%, color-mix(in srgb, var(--ink) 52%, transparent) 50%, transparent 100%),
         linear-gradient(90deg, color-mix(in srgb, var(--ink) 82%, transparent) 0%, color-mix(in srgb, var(--ink) 40%, transparent) 55%, transparent 85%),
         linear-gradient(0deg, color-mix(in srgb, var(--ink) 70%, transparent) 0%, transparent 45%);
       pointer-events: none;
@@ -320,9 +324,13 @@
       animation-timeline: --story;
     }
 
-    /* Word n is in front from n x 20% to n x 20% + 20%; the hand-over takes 5% of the track either side. */
+    /* Word n is in front from n x 20% to n x 20% + 20%; the hand-over takes 5% of the track either side.
+       The first is in front from the start, as its picture is. */
     .word:nth-child(1) {
-      animation-range: contain -5% contain 20%;
+      color: #fff;
+      transform: none;
+      animation-name: step-first;
+      animation-range: contain 0% contain 20%;
     }
 
     .word:nth-child(2) {
@@ -345,6 +353,11 @@
     .copy {
       padding-bottom: calc(8px + var(--consent-h, 0px));
       text-shadow: 0 1px 12px rgb(0 0 0 / 0.35);
+    }
+
+    /* Over the pictures the small heading is white: sky blue at 13 px is too faint on a green film. */
+    .kicker {
+      color: #fff;
     }
 
     .sentence {
@@ -370,6 +383,19 @@
   }
 
   20%,
+  80% {
+    color: #fff;
+    transform: none;
+  }
+
+  100% {
+    color: var(--dim);
+    transform: scale(0.36);
+  }
+}
+
+@keyframes step-first {
+  0%,
   80% {
     color: #fff;
     transform: none;

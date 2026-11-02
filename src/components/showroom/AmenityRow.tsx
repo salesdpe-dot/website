@@ -17,7 +17,6 @@ const SIZES = "(min-width: 1024px) 30vw, (min-width: 600px) 45vw, 80vw";
 
 type Filter = "All" | AmenityTag;
 const filters: Filter[] = ["All", ...amenityTags];
-const count = (f: Filter) => (f === "All" ? amenities.length : amenities.filter((a) => a.tags.includes(f)).length);
 
 /* A hyphenated word stays whole, so "Temperature-controlled" never breaks at its hyphen. */
 const keepWhole = (name: string) =>
@@ -99,13 +98,13 @@ export function AmenityRow() {
         {filters.map((f) => (
           <button key={f} type="button" className={s.chip} aria-pressed={f === filter} onClick={() => pick(f)}>
             {f}
-            <span className={s.count}>{count(f)}</span>
           </button>
         ))}
       </div>
 
       <p className="sr-only" role="status">
-        {shown.length} {dealt === "All" ? "amenities" : `in ${dealt}`}
+        {/* No count: the row holds 20 cards, and the heading says 40+ amenities. */}
+        Showing {dealt === "All" ? "all" : dealt}
       </p>
       <ul ref={row} className={`${r.row} ${s.row}`} data-leaving={filter !== dealt || undefined} data-dealt={changed || undefined}>
         {shown.map((a, i) => {

@@ -16,18 +16,15 @@ type Props = {
 };
 
 /*
- * A page ends on its one action, set as the guideline's sky-blue block (page 5): "come home" in navy, the
- * invitation large, two buttons, and optionally a picture. Navy on sky reads at 6.9:1. The block runs into
- * the navy footer below it, the two brand colours side by side.
+ * A page ends on its one action, set as the guideline's sky-blue block (page 5): the invitation large in navy,
+ * two buttons, and optionally a picture. Navy on sky reads at 6.9:1. The block runs into the navy footer below
+ * it, the two brand colours side by side; the footer carries the "come home" signature, so this block does not.
  */
 export function CtaBand({ title, line, actions, id = "cta-title", image, note }: Props) {
   return (
     <section className={s.section} aria-labelledby={id} data-flush-end="" data-has-image={image ? "" : undefined}>
       <div className={s.inner}>
         <div className={s.copy}>
-          <p className={`come-home ${s.sign}`} aria-hidden="true">
-            come home
-          </p>
           <h2 id={id} className={`display ${s.title}`}>
             {title}
           </h2>

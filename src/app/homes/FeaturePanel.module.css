@@ -61,11 +61,12 @@
   line-height: 1.125rem;
 }
 
+/* The cookie bar's height and, on a phone, the action bar's (--dock-h, set by the page) are added, so neither covers a button. */
 .foot {
   position: relative;
   display: grid;
   gap: 28px;
-  padding: 0 var(--edge) calc(clamp(32px, 6svh, 64px) + var(--consent-h, 0px));
+  padding: 0 var(--edge) calc(clamp(32px, 6svh, 64px) + var(--consent-h, 0px) + var(--dock-h, 0px));
   text-shadow: 0 1px 14px rgb(0 0 0 / 0.35);
 }
 
@@ -102,7 +103,7 @@
   text-wrap: pretty;
 }
 
-/* The figures and the buttons, under a hairline; side by side on a computer. */
+/* The figures and the buttons, under a hairline; side by side on a wide screen, where four figures still have room. */
 .base {
   display: grid;
   gap: 24px;
@@ -110,7 +111,7 @@
   border-top: 1px solid rgb(255 255 255 / 0.24);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .base {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: end;

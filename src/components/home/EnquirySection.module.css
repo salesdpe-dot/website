@@ -48,45 +48,91 @@
   object-fit: cover;
 }
 
-/* Two white cards of equal height: a narrow one with the three ways to reach us, and the form. */
+/* The booker on its white card, and beside it (under it on a phone) a narrower card: abroad, WhatsApp, call. */
 .grid {
   display: grid;
   gap: 16px;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1100px) {
   .grid {
-    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    grid-template-columns: minmax(0, 1fr) 22rem;
     gap: 24px;
     align-items: stretch;
   }
 }
 
-.reach {
-  display: grid;
-  margin: 0;
-  padding: 8px 24px;
+.booker {
+  min-width: 0;
+}
+
+/* The booking card fills its column, so it ends level with the card beside it; brought into view, it clears the bar under the header. */
+.booker > * {
+  height: 100%;
+  scroll-margin-top: 48px;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px 20px;
   border-radius: var(--radius-card);
   background: #fff;
-  list-style: none;
 }
 
 @media (min-width: 768px) {
-  .reach {
-    padding: 16px 40px;
+  .side {
+    padding: 40px;
   }
 }
 
-/* On a computer the three share the card's height equally, each starting at the top of its third. */
-@media (min-width: 1024px) {
-  .reach {
-    grid-template-rows: repeat(3, 1fr);
+.abroad {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 10px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* On a tablet, where the card runs the full width under the booker: abroad on the left, the other two on the right. */
+@media (min-width: 768px) and (max-width: 1099px) {
+  .side {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 48px;
   }
+
+  .abroad {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .reach li:first-child {
+    padding-top: 0;
+  }
+}
+
+.sideTitle {
+  font-size: 1.375rem;
+  line-height: 1.75rem;
+  color: var(--ink);
+}
+
+.abroad .note {
+  margin-bottom: 8px;
+}
+
+.reach {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .reach li {
   display: grid;
-  align-content: start;
   justify-items: start;
   gap: 2px;
   padding: 20px 0;
@@ -96,10 +142,8 @@
   border-top: 1px solid var(--line);
 }
 
-@media (min-width: 1024px) {
-  .reach li {
-    padding: 32px 0;
-  }
+.reach li:last-child {
+  padding-bottom: 0;
 }
 
 .label {
@@ -120,15 +164,9 @@
   font: inherit;
   font-size: 1.125rem;
   line-height: 1.5rem;
+  font-weight: 500;
   text-align: left;
   cursor: pointer;
-}
-
-@media (min-width: 768px) {
-  .value {
-    font-size: 1.25rem;
-    line-height: 1.625rem;
-  }
 }
 
 .value:hover {
@@ -142,25 +180,7 @@
 }
 
 .note {
-  font-size: 0.875rem;
-  line-height: 1.375rem;
-  color: var(--text-2);
-}
-
-/* The form sits on white inside the grey section. */
-.grid > .form {
-  background: #fff;
-}
-
-.formTitle {
-  font-size: 1.5625rem;
-  line-height: 1.9375rem;
-  color: var(--ink);
-}
-
-.formLine {
-  margin: 6px 0 24px;
-  color: var(--text-2);
   font-size: 0.9375rem;
   line-height: 1.5rem;
+  color: var(--text-2);
 }

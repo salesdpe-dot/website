@@ -36,7 +36,7 @@ export default function PlanPage() {
         <AffordabilityExplorer />
       </Section>
       <Section tone="surface" split labelledBy="notes-title">
-        <SectionHead id="notes-title" size="large" title="How the figure is worked out" />
+        <SectionHead id="notes-title" size="large" title="How the figure is worked out." />
         <Accordion items={notes} defaultOpen={null} />
       </Section>
     </>

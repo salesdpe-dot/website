@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import Image from "next/image";
 import { type Spec as Figure, SpecRow } from "@/components/brand/SpecRow";
 import { FilmToggle, LoopFilm } from "@/components/media/LoopFilm";
@@ -31,13 +31,16 @@ type Props = {
   figures?: Figure[];
   /* More actions after `actions`, such as a button that opens the message form; styled by the caller. */
   children?: ReactNode;
+  /* One quiet line under the buttons, such as the delivery record and the RERA registration: its parts are
+     set apart by dots, and on a phone each takes a line of its own. */
+  trust?: ReactNode[];
 };
 
 /*
  * A page that opens on a photograph, the way tesla.com opens each model: the name at the top over a
  * soft scrim, three figures and the buttons at the foot. The header floats over it in white.
  */
-export function PhotoHero({ title, line, eyebrow, image, specs, actions, note, film, figures, children }: Props) {
+export function PhotoHero({ title, line, eyebrow, image, specs, actions, note, film, figures, children, trust }: Props) {
   return (
     <section className={s.hero} data-tone="dark" aria-labelledby="page-title">
       <Image
@@ -65,7 +68,7 @@ export function PhotoHero({ title, line, eyebrow, image, specs, actions, note, f
         </h1>
         {line && <p className={s.line}>{line}</p>}
       </div>
-      {(specs?.length || figures?.length || actions?.length || children) && (
+      {(specs?.length || figures?.length || actions?.length || children || trust?.length) && (
         <div className={`photo-foot ${s.foot}`}>
           {figures && figures.length > 0 && <SpecRow items={figures} className={s.figures} />}
           {specs && specs.length > 0 && (
@@ -91,6 +94,20 @@ export function PhotoHero({ title, line, eyebrow, image, specs, actions, note, f
               ))}
               {children}
             </div>
+          )}
+          {trust && trust.length > 0 && (
+            <p className={s.trust}>
+              {trust.map((part, i) => (
+                <Fragment key={i}>
+                  {i > 0 && (
+                    <span className={s.dot} aria-hidden="true">
+                      {" · "}
+                    </span>
+                  )}
+                  <span className={s.fact}>{part}</span>
+                </Fragment>
+              ))}
+            </p>
           )}
         </div>
       )}

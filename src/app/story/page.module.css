@@ -277,13 +277,8 @@
   }
 }
 
-/* The windsor picture and its words share a top and a bottom edge: the link sits at the foot. */
-.pair > div {
-  align-items: stretch;
-}
-
+/* The Windsor picture with its words centred beside it; the link follows the paragraph, 24 px below it. */
 .pair > div > div:last-child {
-  grid-template-rows: auto auto 1fr auto;
   max-width: none;
 }
 
@@ -293,25 +288,34 @@
 
 .pair > div > div:last-child > :last-child {
   justify-self: start;
+  margin-top: 8px;
 }
 
+/*
+ * The award: the certificate small, with the words beside it (under it on a phone). The certificate image is only
+ * 315 × 227 px, so it is never shown wider than that; it sits on a navy mat, as a framed certificate would.
+ */
 .event {
   display: grid;
   gap: 32px;
+  align-items: center;
 }
 
 @media (min-width: 900px) {
   .event {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 64px;
-    align-items: stretch;
+    grid-template-columns: auto minmax(0, 40rem);
+    justify-content: start;
+    gap: 56px;
+  }
+
+  .event .certificate {
+    order: -1;
   }
 }
 
 .eventText {
   display: grid;
   align-content: start;
-  grid-template-rows: auto auto 1fr auto;
   gap: 16px;
   min-width: 0;
   color: var(--text);
@@ -321,20 +325,26 @@
   max-width: 34rem;
 }
 
+.eventText > :last-child {
+  justify-self: start;
+  margin-top: 8px;
+}
+
 .certificate {
-  display: grid;
-  place-items: center;
-  min-height: 20rem;
-  padding: 40px;
+  justify-self: start;
+  width: fit-content;
+  max-width: 100%;
+  padding: 20px;
   border-radius: var(--radius-card);
   background: var(--ink);
 }
 
 .certificate img {
-  width: min(100%, 420px);
-  box-shadow: 0 24px 48px rgb(0 0 0 / 0.35);
+  display: block;
+  width: min(100%, 315px);
   height: auto;
   border-radius: var(--radius);
+  box-shadow: 0 12px 24px rgb(0 0 0 / 0.35);
 }
 
 .stats {
@@ -381,26 +391,6 @@
   container-type: inline-size;
   padding-top: 20px;
   border-top: 1px solid var(--ink-line);
-}
-
-/*
- * The count-up (Stats.tsx): the real figure stays in place, unseen, to hold the width and for screen readers,
- * and the counting figure is drawn over it. Without the script, or with reduced motion, it is never armed.
- */
-.counting {
-  display: none;
-}
-
-.stats[data-armed] .real {
-  opacity: 0;
-}
-
-.stats[data-armed] .counting {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  white-space: nowrap;
 }
 
 .promises {

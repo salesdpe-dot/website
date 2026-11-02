@@ -1,8 +1,8 @@
-/* The drawing on its grey card; a click anywhere on it opens the viewer. */
+/* The client's sheet laid on the page colour with a wide margin, so it reads as a document; a click opens the viewer. */
 .thumb {
   display: block;
   width: 100%;
-  padding: 16px;
+  padding: clamp(16px, 5vw, 72px);
   border-radius: var(--radius-card);
   background: var(--surface);
   cursor: zoom-in;
@@ -12,6 +12,19 @@
   display: block;
   width: 100%;
   height: auto;
+  border-radius: 2px;
+  box-shadow:
+    0 1px 2px rgb(8 32 50 / 0.08),
+    0 12px 36px rgb(8 32 50 / 0.1);
+  transition: box-shadow 0.4s var(--ease);
+}
+
+@media (hover: hover) {
+  .thumb:hover .thumbImg {
+    box-shadow:
+      0 1px 2px rgb(8 32 50 / 0.1),
+      0 18px 48px rgb(8 32 50 / 0.16);
+  }
 }
 
 .actions {

@@ -2,24 +2,25 @@ import type { Metadata } from "next";
 import { ViewTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { WatchFilm } from "@/components/brand/WatchFilm";
 import { CommuteLazy } from "@/components/CommuteLazy";
 import { ComposeButton } from "@/components/ComposeButton";
 import { Gallery, PhotoHero } from "@/components/ds";
 import { SlashBreak } from "@/components/ds/SlashBreak";
 import { EnquirySection } from "@/components/home/EnquirySection";
 import { FilmToggle, LoopFilm } from "@/components/media/LoopFilm";
-import { ArrowRight, PlayIcon } from "@/components/showroom/Icons";
+import { ArrowRight } from "@/components/showroom/Icons";
 import { HomeMark } from "@/components/showroom/Logo";
-import { communities, links } from "@/lib/content";
+import { communities, links, trust } from "@/lib/content";
 import { elements as e, type Reel } from "@/lib/elements";
 import { focusPoint } from "@/lib/focus";
 import { pageMeta } from "@/lib/launch";
-import { award, homesHandedOver } from "@/lib/proof";
+import { award, delivered } from "@/lib/proof";
 import { formatIndian } from "@/lib/site";
 import { FeaturePanel } from "../FeaturePanel";
 import { SubNav } from "../SubNav";
+import { ActionDock } from "./ActionDock";
 import { ElementsStory } from "./ElementsStory";
+import { FilmCards } from "./FilmCard";
 import { FilmTile } from "./FilmTile";
 import { type Family, HomesTabs, type View } from "./HomesTabs";
 import { MediaBrowser } from "./MediaBrowser";
@@ -37,27 +38,32 @@ export const metadata: Metadata = pageMeta({
 
 const NEW_TAB = <span className="sr-only">(opens in a new tab)</span>;
 
-/* The bar's sections. On a phone the ones marked go, so the rest fit across a 390 px screen. */
+/* The bar's sections, in the page's order. On a phone the ones marked go, so the rest fit across a 390 px screen. */
 const nav = [
-  { id: "inside", label: "Inside", phoneHidden: true },
   { id: "homes", label: "Homes" },
+  { id: "inside", label: "Inside", phoneHidden: true },
+  { id: "check", label: "RERA" },
+  { id: "location", label: "Map" },
   { id: "clubhouse", label: "Clubhouse" },
   { id: "pool", label: "Pool", phoneHidden: true },
   { id: "outdoors", label: "Outdoors" },
-  { id: "films", label: "Films", phoneHidden: true },
   { id: "gallery", label: "Gallery", phoneHidden: true },
-  { id: "plan", label: "Plan" },
-  { id: "location", label: "Map" },
-  { id: "check", label: "RERA", phoneHidden: true },
-  { id: "enquire", label: "Visit" },
+  { id: "plan", label: "Master plan", phoneHidden: true },
+  { id: "visit", label: "Visit" },
 ];
 
-const { hero, home, door, overVillas, towers, villas, villaRows, villasAerial, clubhouse, clubFront, clubAerial, outdoors, night, pool } = e.films;
+/* Every "Book a visit" goes straight to the booker. */
+const BOOK = "#enquire";
+
+const { hero, home, overVillas, towers, villas, villaRows, villasAerial, clubhouse, clubFront, clubAerial, outdoors, night, pool } = e.films;
 /* A view for the tabs: a film over its first frame, or a still from the gallery by its file name. */
 const film = (r: Reel): View => ({ picture: r.poster, film: r.film });
 const picture = (name: string) => e.gallery.find((p) => p.src.endsWith(`/${name}.webp`))!;
 const still = (name: string): View => ({ picture: picture(name) });
-const balcony = picture("balcony-view");
+/* Under the walk through a home: a second bedroom and the view from a balcony (the film already opens on the front door). */
+const moments = [picture("bedroom-2"), picture("balcony-view")];
+/* The client's four films with music, each in the section it shows. */
+const shorts = (...names: string[]) => names.map((n) => e.shorts.find((f) => f.src.endsWith(`/${n}`))!);
 
 /* The tower families and the villas, as on the project site's floor-plan pages. */
 const families: Family[] = [
@@ -112,26 +118,45 @@ const families: Family[] = [
       { value: "40+", label: "Amenities" },
     ],
     views: [film(villasAerial), film(villaRows), film(overVillas), film(villas), still("villa-lane"), still("villas-street")],
+    hash: "villas",
   },
 ];
 
-const gallery = e.gallery;
-const groups = ["Exteriors", "Clubhouse", "Outdoors", "Homes"] as const;
+/*
+ * The gallery leads with twelve renders, a mix of the grounds, the homes, the villas and the clubhouse that the
+ * sections above don't already show large; "See all" shows the rest, and the viewer steps through every one.
+ */
+const picks = [
+  "aerial-day",
+  "clubhouse-globe",
+  "living",
+  "villa-lane",
+  "lounge",
+  "fountain-walk",
+  "library",
+  "bedroom",
+  "villa-pavilion-pool",
+  "music",
+  "lily-pond",
+  "aerial-night",
+].map(picture);
+const gallery = [...picks, ...e.gallery.filter((p) => !picks.includes(p))];
 
 /* The home page's map, resting on this community. */
 const mapItems = communities.map(({ slug, name, place }) => ({ slug, name, place }));
 const mapStart = Math.max(0, mapItems.findIndex((c) => c.slug === e.slug));
 
 /*
- * The project on sale, laid out like a tesla.com model page: the film and its figures, then a bar that follows
- * you down the page. A walk through a home, the towers and villas as tabs, the five elements as you scroll, the
- * clubhouse room by room on film, the rooftop pool by day and night, the grounds zone by zone, the four films with
- * music, every render, the master plan, the drive, the papers, the site at night, and one enquiry form. Every
- * picture and film is a render, and says so.
+ * The project on sale, laid out like a tesla.com model page and in the order a buyer decides: the film, its
+ * figures and the record, then a bar that follows you down the page. The towers and villas as tabs, a walk through
+ * a home, the RERA numbers, the record and the award, the map and the drive, then the clubhouse room by room, the
+ * rooftop pool, the grounds zone by zone (each with its film with sound), the five elements as you scroll, the
+ * renders, the master plan, and the visit booker. Every picture and film is a render, and says so.
  */
 export default function ElementsPage() {
   return (
-    <div className={s.page}>
+    /* It ends on the visit section's own grey band, so the footer meets it edge to edge. */
+    <div className={s.page} data-flush-end="">
       <ViewTransition name={`community-${e.slug}`} share="morph" default="none">
         <PhotoHero
           eyebrow={`${e.status} · ${e.locality}`}
@@ -146,7 +171,16 @@ export default function ElementsPage() {
             { value: "1,35,000+", unit: "sq ft", label: "Clubhouse" },
             { value: "40+", label: "Amenities" },
           ]}
-          actions={[{ label: "Book a visit", href: "#enquire" }]}
+          actions={[{ label: "Book a visit", href: BOOK }]}
+          trust={[
+            trust.record,
+            <>
+              Two Karnataka RERA numbers{" "}
+              <a href="#rera">
+                Verify<span className="sr-only"> the RERA registrations</span>
+              </a>
+            </>,
+          ]}
         >
           <ComposeButton channel="whatsapp" topic="Floor plans and carpet areas" className="btn btn-ghost">
             Get floor plans
@@ -154,34 +188,12 @@ export default function ElementsPage() {
         </PhotoHero>
       </ViewTransition>
 
-      <SubNav items={nav} label="On this page" cta={{ label: "Book a visit", href: "#enquire" }} />
-
-      {/* Step inside: the walk through a home, full width, then the door and the balcony. */}
-      <section id="inside" className={s.inside} aria-labelledby="inside-title">
-        <div className={s.edge}>
-          <Head id="inside-title" kicker="Step inside" title="Front door to master bedroom." />
-        </div>
-        <figure className={s.walk}>
-          <LoopFilm film={home.film} poster={home.poster} sizes="100vw" />
-          <FilmToggle className={s.walkToggle} />
-          <figcaption className={s.walkCaption}>{home.poster.caption}</figcaption>
-          <span className={s.note}>Artist’s impression</span>
-        </figure>
-        <div className={s.moments}>
-          <FilmTile reel={door} sizes="(min-width: 768px) 50vw, 100vw" className={`reveal ${s.moment}`} />
-          <figure className={`reveal ${s.picture} ${s.moment}`}>
-            <Image src={balcony.src} alt={balcony.alt} fill sizes="(min-width: 768px) 50vw, 100vw" quality={78} className={s.cover} style={focusPoint(balcony)} />
-            <span className={s.note}>Artist’s impression</span>
-            <figcaption className={s.pictureCaption}>{balcony.caption}</figcaption>
-          </figure>
-        </div>
-      </section>
+      <SubNav items={nav} label="On this page" cta={{ label: "Book a visit", href: BOOK }} />
 
       <section id="homes" className={`${s.band} ${s.surface}`} aria-labelledby="homes-title">
         <div className={s.inner}>
           <Head
             id="homes-title"
-            kicker="Homes"
             title="Seven towers. Independent villas."
             line="2, 3 & 4 BHK apartments in Towers A to G, and 4 & 5 BHK villas, on 20 acres in Gunjur."
           />
@@ -194,7 +206,94 @@ export default function ElementsPage() {
         </div>
       </section>
 
-      <ElementsStory />
+      {/* Step inside: the walk through a home, full width, then a bedroom and the balcony. */}
+      <section id="inside" className={s.inside} aria-labelledby="inside-title">
+        <div className={s.edge}>
+          <Head id="inside-title" title="Front door to master bedroom." />
+        </div>
+        <figure className={s.walk}>
+          <LoopFilm film={home.film} poster={home.poster} sizes="100vw" />
+          <FilmToggle className={s.walkToggle} />
+          <figcaption className={s.walkCaption}>{home.poster.caption}</figcaption>
+          <span className={s.note}>Artist’s impression</span>
+        </figure>
+        <div className={`${s.edge} ${s.moments}`}>
+          {moments.map((p) => (
+            <figure key={p.src} className={`reveal ${s.picture} ${s.moment}`}>
+              <Image src={p.src} alt={p.alt} fill sizes="(min-width: 1440px) 660px, (min-width: 768px) 50vw, 100vw" quality={78} className={s.cover} style={focusPoint(p)} />
+              <span className={s.note}>Artist’s impression</span>
+              <figcaption className={s.pictureCaption}>{p.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      {/* The proof: the RERA numbers to check, the communities already handed over, and the award. */}
+      <section id="check" className={`${s.band} ${s.navy}`} data-tone="dark" aria-labelledby="check-title">
+        <div className={`${s.inner} ${s.check}`}>
+          <div className={s.checkText}>
+            <Head id="check-title" kicker="Check us" title="Two RERA numbers. One ET award." tone="dark" />
+            <div className={s.rera} id="rera">
+              <p className={s.small}>Karnataka RERA</p>
+              <ul className={s.reraList}>
+                {e.rera.map((r) => (
+                  <li key={r.no}>
+                    <span className={s.phase}>{r.phase}</span>
+                    <span className={s.no}>
+                      <SlashBreak code={r.no} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <a className={`text-link ${s.onNavy}`} href={links.rera} target="_blank" rel="noopener noreferrer">
+                Verify on the RERA portal <ArrowRight />
+                {NEW_TAB}
+              </a>
+            </div>
+            <div className={s.record}>
+              <p className={s.small}>Handed over since 2014</p>
+              <ul className={s.recordList}>
+                {delivered.map((d) => (
+                  <li key={d.slug}>
+                    <Link href={`/homes/${d.slug}`} className={s.recordName}>
+                      {d.name}
+                    </Link>
+                    <span className={s.recordYear}>{d.handoverYear}</span>
+                    <span className={s.recordHomes}>{formatIndian(d.homes)} homes</span>
+                  </li>
+                ))}
+              </ul>
+              <a className={`text-link ${s.onNavy}`} href={e.updates} target="_blank" rel="noopener noreferrer">
+                Construction updates, latest {e.latestUpdate} <ArrowRight />
+                {NEW_TAB}
+              </a>
+            </div>
+          </div>
+          <figure className={s.award}>
+            <Image
+              src={award.image}
+              alt={`${award.title} ${award.honour} for ${e.name}`}
+              width={315}
+              height={227}
+              sizes="315px"
+              quality={78}
+              className={s.awardImg}
+            />
+            <figcaption>
+              <strong>{award.title}</strong>
+              {award.honour}: {award.citation}
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="location" className={`${s.band} ${s.surface}`} aria-labelledby="location-title">
+        <div className={s.inner}>
+          <Head id="location-title" title="Gunjur, East Bengaluru." line="Pick your office, and Google Maps shows today’s drive from the site." />
+          <ProjectMap items={mapItems} start={mapStart} />
+          <CommuteLazy />
+        </div>
+      </section>
 
       <div id="amenities" className={s.anchor}>
         <div id="clubhouse">
@@ -202,7 +301,6 @@ export default function ElementsPage() {
             id="clubhouse-film"
             image={clubhouse.poster}
             film={clubhouse.film}
-            eyebrow="The clubhouse"
             title="The clubhouse"
             line="Behind the Elements globe roundabout: a rooftop pool, a mini theatre, indoor courts, a banquet hall and guest rooms."
             position={clubhouse.poster.position}
@@ -219,7 +317,7 @@ export default function ElementsPage() {
             </a>
           </FeaturePanel>
 
-          <section id="rooms" className={`${s.band} ${s.navy}`} aria-labelledby="rooms-title">
+          <section id="rooms" className={`${s.band} ${s.navy}`} data-tone="dark" aria-labelledby="rooms-title">
             <div className={s.inner}>
               <div className={s.pair}>
                 <FilmTile reel={clubFront} sizes="(min-width: 768px) 50vw, 100vw" className={`reveal ${s.pairTile}`} />
@@ -233,6 +331,7 @@ export default function ElementsPage() {
                 tone="dark"
               />
               <MediaBrowser id="rooms" label="Rooms in the clubhouse" items={e.clubRooms} />
+              <FilmCards shorts={shorts("short-clubhouse-1", "short-clubhouse-2")} tone="dark" />
             </div>
           </section>
         </div>
@@ -241,7 +340,6 @@ export default function ElementsPage() {
           <div className={s.edge}>
             <Head
               id="pool-title"
-              kicker="The pool"
               title="A temperature-controlled pool on the roof."
               line="With a kids’ pool, a pool deck, a pool bar, a juice bar and a tropical poolside café."
             />
@@ -261,6 +359,9 @@ export default function ElementsPage() {
                 <figcaption className={s.pictureCaption}>{p.caption}</figcaption>
               </figure>
             ))}
+          </div>
+          <div className={s.edge}>
+            <FilmCards shorts={shorts("short-4")} />
           </div>
         </section>
 
@@ -294,38 +395,18 @@ export default function ElementsPage() {
                 line="Pet park, mini golf, skate park, pickleball court, beach volleyball, cricket pitch, jogging track, and a camping zone with picnic tents round a fire pit."
               />
               <MediaBrowser id="zones" label="Outdoor zones" items={e.zones} tone="light" />
+              <FilmCards shorts={shorts("short-1")} />
             </div>
           </section>
         </div>
       </div>
 
-      <section id="films" className={`${s.band} ${s.navy}`} aria-labelledby="films-title">
-        <div className={s.inner}>
-          <Head id="films-title" kicker="Films" title="Four films, with sound." line="Walkthroughs of the clubhouse and the grounds, 20 seconds each." tone="dark" />
-          <ul className={s.strip}>
-            {e.shorts.map((f) => (
-              <li key={f.src} className="reveal">
-                <WatchFilm short={f} className={s.short}>
-                  <span className={s.shortMedia}>
-                    <Image src={f.poster.src} alt="" fill sizes="(min-width: 768px) 48vw, 84vw" quality={75} className={s.cover} />
-                    <span className={s.play} aria-hidden="true">
-                      <PlayIcon />
-                    </span>
-                    <span className={s.note}>Artist’s impression</span>
-                  </span>
-                  <span className={s.shortTitle}>{f.title}</span>
-                  <span className={s.shortLine}>{f.line}</span>
-                </WatchFilm>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <ElementsStory />
 
       <section id="gallery" className={`${s.band} ${s.surface}`} aria-labelledby="gallery-title">
         <div className={s.inner}>
-          <Head id="gallery-title" kicker="Gallery" title={`${gallery.length} renders.`} line="Exteriors, clubhouse, outdoors and homes." />
-          <Gallery items={gallery} groups={groups} label="Artist’s impressions" />
+          <Head id="gallery-title" title="The gallery." line="Exteriors, the clubhouse, the grounds and the homes." />
+          <Gallery items={gallery} limit={picks.length} label="Artist’s impressions" />
         </div>
       </section>
 
@@ -333,110 +414,54 @@ export default function ElementsPage() {
         <div className={s.inner}>
           <Head
             id="plan-title"
-            kicker="Master plan"
-            title="Seven towers, the villas, the clubhouse and the grounds, on one sheet."
-            line="Open it full size to read the legend."
+            title="The master plan."
+            line="Seven towers, the villas, the clubhouse and the grounds on one sheet. Open it full size to read the legend."
           />
           <PlanViewer src={e.masterPlan.src} alt={e.masterPlan.alt} width={e.masterPlan.width} height={e.masterPlan.height} />
         </div>
       </section>
 
-      <section id="location" className={`${s.band} ${s.surface}`} aria-labelledby="location-title">
-        <div className={s.inner}>
-          <Head id="location-title" kicker="Location" title="Gunjur, East Bengaluru." line="Pick your office, and Google Maps shows today’s drive from the site." />
-          <ProjectMap items={mapItems} start={mapStart} />
-          <CommuteLazy />
-        </div>
-      </section>
+      {/* The visit: the site at night, then the booker. The phone's action bar goes once this is reached. */}
+      <div id="visit">
+        <FeaturePanel
+          id="visit-film"
+          image={night.poster}
+          film={night.film}
+          eyebrow={e.locality}
+          title="See it in person"
+          line={`Sales: ${e.phone.display}. Come and walk the site with us.`}
+          position={night.poster.position}
+          mobilePosition={night.poster.mobilePosition}
+        >
+          <a className="btn btn-primary" href={BOOK}>
+            Book a visit
+          </a>
+          <a className="btn btn-ghost" href={e.phone.href}>
+            Call sales
+          </a>
+        </FeaturePanel>
 
-      <section id="check" className={`${s.band} ${s.navy}`} aria-labelledby="check-title">
-        <div className={`${s.inner} ${s.check}`}>
-          <div className={s.checkText}>
-            <Head id="check-title" kicker="Check us" title="Two RERA numbers. One ET award." tone="dark" />
-            <div className={s.rera} id="rera">
-              <p className={s.reraTitle}>Karnataka RERA</p>
-              <ul className={s.reraList}>
-                {e.rera.map((r) => (
-                  <li key={r.no}>
-                    <span className={s.phase}>{r.phase}</span>
-                    <span className={s.no}>
-                      <SlashBreak code={r.no} />
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <a className={`text-link ${s.onNavy}`} href={links.rera} target="_blank" rel="noopener noreferrer">
-                Verify on the RERA portal <ArrowRight />
-                {NEW_TAB}
-              </a>
-            </div>
-            <dl className={s.proof}>
-              <div>
-                <dt>Homes handed over since 2014, in five communities</dt>
-                <dd>
-                  <Link href="/homes">{formatIndian(homesHandedOver)}</Link>
-                </dd>
-              </div>
-              <div>
-                <dt>Latest construction photographs</dt>
-                <dd>
-                  <a href={e.updates} target="_blank" rel="noopener noreferrer">
-                    {e.latestUpdate}
-                    {NEW_TAB}
-                  </a>
-                </dd>
-              </div>
-            </dl>
-          </div>
-          <figure className={s.award}>
-            <Image
-              src={award.image}
-              alt={`${award.title} ${award.honour} for ${e.name}`}
-              width={315}
-              height={227}
-              sizes="(min-width: 1024px) 360px, 80vw"
-              quality={78}
-              className={s.awardImg}
-            />
-            <figcaption>
-              <strong>{award.title}</strong>
-              {award.honour}: {award.citation}
-            </figcaption>
-          </figure>
-        </div>
-      </section>
+        <EnquirySection />
+      </div>
 
-      <FeaturePanel
-        id="visit"
-        image={night.poster}
-        film={night.film}
-        eyebrow={e.locality}
-        title="See it in person"
-        line={`Sales: ${e.phone.display}. Come and walk the site with us.`}
-        position={night.poster.position}
-        mobilePosition={night.poster.mobilePosition}
-      >
-        <a className="btn btn-primary" href="#enquire">
-          Book a visit
-        </a>
-        <a className="btn btn-ghost" href={e.phone.href}>
-          Call sales
-        </a>
-      </FeaturePanel>
-
-      <EnquirySection defaultInterest={e.name} n="" />
+      <ActionDock until="visit" book={BOOK} />
     </div>
   );
 }
 
-/* A section's heading: the house icon and a small word, the title large, and one line under it. */
-function Head({ id, kicker, title, line, tone = "light" }: { id: string; kicker: string; title: string; line?: string; tone?: "light" | "dark" }) {
+/*
+ * A section's heading: the title large and one line under it. A few (no more than three on the page) carry the
+ * house icon and a small word above, where it adds something the bar's label doesn't.
+ */
+function Head({ id, kicker, title, line, tone = "light" }: { id: string; kicker?: string; title: string; line?: string; tone?: "light" | "dark" }) {
   return (
     <div className={`reveal ${s.head}`} data-tone={tone}>
-      <p className={s.kicker}>
-        <HomeMark className={s.mark} />
-        {kicker}
-      </p>
+      {kicker && (
+        <p className={s.kicker}>
+          <HomeMark className={s.mark} />
+          {kicker}
+        </p>
+      )}
       <h2 id={id} className={`display ${s.title}`}>
         {title}
       </h2>

@@ -1,14 +1,9 @@
-import type { CSSProperties } from "react";
 import s from "./Count.module.css";
 
 /*
- * A whole number that counts up once when it first shows. The real number is the text, so it reads
- * the same with no CSS animation support or with reduced motion; the count itself is drawn by CSS.
+ * A whole number, shown as its final figure in the server HTML. It no longer counts up: a count caught half way
+ * reads as a wrong number. The props stay, so callers need no change.
  */
 export function Count({ to }: { to: number }) {
-  return (
-    <span className={s.count} style={{ "--to": to } as CSSProperties}>
-      {to}
-    </span>
-  );
+  return <span className={s.count}>{to}</span>;
 }

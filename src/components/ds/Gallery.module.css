@@ -182,8 +182,8 @@
 }
 
 /*
- * A grouped mosaic (its count changes with the group) closes its last row: a picture left alone spans
- * the row, and the last of a pair spans two columns.
+ * A grouped or shortened mosaic (its count changes with the group or the limit) closes its last row: a
+ * picture left alone spans the row, and the last of a pair spans two columns.
  */
 .grid[data-grouped][data-layout="mosaic"] .tile:last-child:nth-child(even):not(:first-child) {
   grid-column: 1 / -1;
@@ -205,6 +205,34 @@
     grid-column: span 2;
     aspect-ratio: auto;
   }
+}
+
+/* The rest, once "See all" is pressed: a closer grid under the first pictures. */
+.grid[data-more] {
+  margin-top: 8px;
+}
+
+.grid[data-more][hidden] {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .grid[data-more] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .grid[data-more] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 12px;
+  }
+}
+
+.toggle {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
 }
 
 .trigger {

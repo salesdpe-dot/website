@@ -46,8 +46,8 @@ export default function PrivacyPage() {
             </li>
           </ul>
           <p>
-            While the site is being reviewed, a Feedback tab may appear. If you send feedback with it, the site also saves a random number (
-            <code>disha-visitor</code>) so that notes from the same browser can be read together. It is sent only with your feedback.
+            If you leave a note with the Feedback tab on the right edge of the page, the site also saves a random number (
+            <code>disha-visitor</code>) so that notes from the same browser can be read together. It is sent only with your notes.
           </p>
 
           <h2>When you send us a message</h2>
@@ -59,6 +59,13 @@ export default function PrivacyPage() {
             even if your message does not reach us. We use it only to reply to you about your enquiry or site visit, and we do not sell it or give it
             to anyone else. A message you send on WhatsApp or by email reaches Disha Habitat like any other message, and WhatsApp and your email
             provider handle it under their own policies.
+          </p>
+
+          <h2>Feedback notes</h2>
+          <p>
+            When you send a note with the Feedback tab, we keep what you wrote, your name and email if you gave them, the page and the part of
+            it the note is about, your screen size, the kind of device, your browser type and language, and that random number, so that the
+            people working on the site can see what each note refers to.
           </p>
 
           <h2>Our website host</h2>

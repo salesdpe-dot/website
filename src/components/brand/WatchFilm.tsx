@@ -22,7 +22,8 @@ export function WatchFilm({ short, className, children }: { short: Short; classN
 
   const open = () => {
     const wide = window.matchMedia("(min-width: 1024px) and (min-resolution: 1.5dppx), (min-width: 1600px)").matches;
-    setSrc(`${short.src}-${wide ? "1080" : "720"}.mp4`);
+    // Each film opens on 2.5 s of a white "Disha Habitat presents" card; start just after it, on the first picture.
+    setSrc(`${short.src}-${wide ? "1080" : "720"}.mp4#t=2.8`);
     loopsWerePaused.current = filmsPaused.get();
     filmsPaused.set(true);
     dialog.current?.showModal();

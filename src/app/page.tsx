@@ -3,12 +3,10 @@ import { ClubhousePanel } from "@/components/home/ClubhousePanel";
 import { CommunityRow } from "@/components/home/CommunityRow";
 import { ElementsSwitcher } from "@/components/home/ElementsSwitcher";
 import { ModelRow } from "@/components/home/ModelRow";
-import { WatchRow } from "@/components/home/WatchRow";
 import { AmenityRow } from "@/components/showroom/AmenityRow";
 import { ClosingCta } from "@/components/showroom/ClosingCta";
 import { Hero } from "@/components/showroom/Hero";
 import { MapSection } from "@/components/showroom/MapSection";
-import { PromoGrid } from "@/components/showroom/PromoGrid";
 import { ProofPanel } from "@/components/showroom/ProofPanel";
 import { communities, heroSlides, mapHead } from "@/lib/content";
 import { pageMeta } from "@/lib/launch";
@@ -27,12 +25,12 @@ export const metadata: Metadata = {
 /*
  * As tesla.com's home page, with more of everything: the hero's four films; the homes as tesla.com's row of
  * models; the amenities, filtered; the clubhouse and the five elements, a full screen each; the brand band
- * with the record; the client's walkthrough films; the communities handed over; the map; the two tools; and
- * the closing step over the community at night.
+ * with the record; the communities handed over; the map; and the closing step over the community at night.
+ * The page ends on that film, so it is marked to meet the footer edge to edge (SiteFooter.module.css).
  */
 export default function Home() {
   return (
-    <div className={s.page}>
+    <div className={s.page} data-flush-end="">
       <h1 className="sr-only">Disha Habitat: Pursuit of the Elements in Gunjur, and five communities handed over in Bengaluru</h1>
       <Hero slides={heroSlides} />
       <ModelRow />
@@ -40,14 +38,12 @@ export default function Home() {
       <ClubhousePanel />
       <ElementsSwitcher />
       <ProofPanel />
-      <WatchRow />
       <CommunityRow />
       <MapSection
         title={mapHead.title}
         line={mapHead.line}
         items={communities.map(({ slug, name, place, eyebrow }) => ({ slug, name, place, eyebrow }))}
       />
-      <PromoGrid />
       <ClosingCta />
     </div>
   );

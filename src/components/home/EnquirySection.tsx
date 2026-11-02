@@ -1,21 +1,17 @@
 import Image from "next/image";
 import { ComposeButton } from "@/components/ComposeButton";
-import { EnquiryForm } from "@/components/EnquiryForm";
-import { Panel, Section } from "@/components/ds";
+import { Section } from "@/components/ds";
+import { AskForCallButton, VisitBooker } from "@/components/VisitBooker";
 import { elements } from "@/lib/elements";
-import { company, homemakers } from "@/lib/site";
+import { homemakers } from "@/lib/site";
 import s from "./EnquirySection.module.css";
 
 /*
- * The visit panel: the invitation, then two cards of equal height side by side: the three ways to
- * reach Disha, stacked, and the form. `n` is the old section number, still accepted.
+ * The visit section of the project page: Guna's invitation, then the same four-step booker as /contact (where,
+ * when, who, then send it on WhatsApp or by email, with a calendar file for a visit), and beside it the call for
+ * buyers abroad and the quieter ways to reach the sales team.
  */
-export function EnquirySection({ defaultInterest }: { defaultInterest?: string; n?: string }) {
-  // On the project on sale, enquiries go to its own sales line and inbox; elsewhere, to the office.
-  const forElements = defaultInterest === elements.name;
-  const phones = forElements ? [elements.phone] : company.phones;
-  const email = forElements ? elements.email : company.email;
-  const topic = forElements ? elements.name : undefined;
+export function EnquirySection() {
   const guna = homemakers[0];
   return (
     <Section id="enquire" tone="surface" labelledBy="enquire-title">
@@ -24,8 +20,8 @@ export function EnquirySection({ defaultInterest }: { defaultInterest?: string; 
           Let’s meet for coffee.
         </h2>
         <p className={s.line}>
-          {guna.short}’s standing invitation to every buyer. Ask for floor plans, prices or a site visit, then send it to the sales
-          team on WhatsApp or by email.
+          {guna.short}’s standing invitation to every buyer. Choose where to meet, at the site in Gunjur or at our office on
+          Whitefield Main Road, then a day and a time, and the sales team confirms it with you.
         </p>
         <p className={s.byline}>
           <Image src={guna.portrait} alt="" width={96} height={96} sizes="48px" className={s.face} />
@@ -36,38 +32,35 @@ export function EnquirySection({ defaultInterest }: { defaultInterest?: string; 
         </p>
       </div>
       <div className={s.grid}>
-        <ul className={s.reach} aria-label="Other ways to reach us">
-          <li>
-            <span className={s.label}>{forElements ? "Call sales" : "Call"}</span>
-            {phones.map((p) => (
-              <a key={p.href} href={p.href} className={s.value}>
-                {p.display}
+        <div className={s.booker}>
+          <VisitBooker />
+        </div>
+        <aside className={s.side} aria-label="Other ways to reach the sales team">
+          <section className={s.abroad} aria-labelledby="abroad-title">
+            <h3 id="abroad-title" className={`display ${s.sideTitle}`}>
+              Buying from abroad?
+            </h3>
+            <p className={s.note}>
+              Ask for a video call instead. Choose a morning, afternoon or evening in India time and add your own time zone; the
+              sales team will confirm the time with you.
+            </p>
+            <AskForCallButton className="btn btn-dark">Ask for a video call</AskForCallButton>
+          </section>
+          <ul className={s.reach}>
+            <li>
+              <span className={s.label}>Rather write?</span>
+              <ComposeButton channel="whatsapp" topic={elements.name} className={s.value}>
+                Message us on WhatsApp
+              </ComposeButton>
+            </li>
+            <li>
+              <span className={s.label}>Call sales</span>
+              <a href={elements.phone.href} className={s.value}>
+                {elements.phone.display}
               </a>
-            ))}
-            <span className={s.note}>{forElements ? `${elements.shortName} sales team` : "Our corporate office"}</span>
-          </li>
-          <li>
-            <span className={s.label}>WhatsApp</span>
-            <ComposeButton channel="whatsapp" topic={topic} className={s.value}>
-              Message us
-            </ComposeButton>
-            <span className={s.note}>Write here and it opens in WhatsApp, ready to send</span>
-          </li>
-          <li>
-            <span className={s.label}>Email</span>
-            <ComposeButton channel="email" topic={topic} className={s.value}>
-              {/* A long address may wrap, but only after the @. */}
-              {email.split("@")[0]}@<wbr />
-              {email.split("@")[1]}
-            </ComposeButton>
-            <span className={s.note}>Write here and it opens in your email app</span>
-          </li>
-        </ul>
-        <Panel className={s.form}>
-          <h3 className={`display ${s.formTitle}`}>Book a site visit</h3>
-          <p className={s.formLine}>Tell us a little about what you’re looking for. You’ll see the message before you send it.</p>
-          <EnquiryForm defaultInterest={defaultInterest} />
-        </Panel>
+            </li>
+          </ul>
+        </aside>
       </div>
     </Section>
   );

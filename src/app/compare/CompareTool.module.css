@@ -256,9 +256,30 @@
   text-decoration: none;
 }
 
+/* See the community: the same size, as a navy outline, so the sky-blue button stays the one for the project on sale. */
+.act[data-quiet] {
+  padding: 6px 12px;
+  background: transparent;
+  color: var(--ink);
+  line-height: 1.25rem;
+  text-align: center;
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+
+@media (min-width: 768px) {
+  .act[data-quiet] {
+    padding-inline: 16px;
+  }
+}
+
 @media (hover: hover) {
   .act:hover {
     background: var(--accent-hover);
+  }
+
+  .act[data-quiet]:hover {
+    background: var(--ink);
+    color: #fff;
   }
 }
 
