@@ -120,7 +120,8 @@ export const heroSlides: Slide[] = [
     image: still("hero-towers", 1920, 1080, "the Pursuit of the Elements towers rising above landscaped gardens"),
     film: film("hero-towers", ["1080", "720", "p"]),
     primary: bookVisit,
-    secondary: { label: "See the homes", href: `${links.elements}#homes` },
+    /* The first slide is the one a phone holds, so the price question is on it. */
+    secondary: pricesAndPlans,
     note: "Artist’s impression",
   },
   {
@@ -156,7 +157,7 @@ export const heroSlides: Slide[] = [
     image: still("pote-home", 1920, 1080, "a front door opening onto a living room", "50% 50%", "47% 50%"),
     film: film("pote-home", ["720", "p"]),
     primary: bookVisit,
-    secondary: pricesAndPlans,
+    secondary: { label: "See the homes", href: `${links.elements}#homes` },
     note: "Artist’s impression",
   },
 ];

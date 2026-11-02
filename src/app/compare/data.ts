@@ -35,7 +35,7 @@ const fromProject = (p: (typeof projects)[number]): Community => ({
    */
   values: Object.fromEntries(
     Object.entries({
-      Status: `Handed over ${p.timeline.handover}`,
+      Status: `Handed over ${p.handoverYear}`,
       Location: p.locality,
       Homes: pick(p.facts, "Homes"),
       Land: pick(p.facts, "Project size"),

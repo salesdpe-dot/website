@@ -87,7 +87,9 @@
   color: rgb(255 255 255 / 0.86);
 }
 
+/* Padding on an inline link widens what a thumb can hit without moving the line. */
 .abroad a {
+  padding-block: 12px;
   color: #fff;
   text-decoration: underline;
   text-decoration-color: rgb(255 255 255 / 0.5);

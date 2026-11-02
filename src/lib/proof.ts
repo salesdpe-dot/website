@@ -13,7 +13,6 @@ export const delivered = projectsByHandover.map((p) => ({
   locality: p.locality,
   homes: Number(p.facts.find((f) => f.label === "Homes")?.value ?? 0),
   start: p.timeline.start,
-  handover: p.timeline.handover,
   handoverYear: p.handoverYear,
   months: p.timeline.months,
 }));

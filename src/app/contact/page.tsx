@@ -75,7 +75,8 @@ export default function ContactPage() {
         </ul>
       </Section>
 
-      <Section tone="surface" labelledBy="book-title">
+      {/* "#book" is the whole section, so every "Book a visit" link lands on its title, not under it. */}
+      <Section id="book" tone="surface" labelledBy="book-title">
         <div className="reveal">
           <SectionHead
             id="book-title"
@@ -85,7 +86,7 @@ export default function ContactPage() {
           />
         </div>
         <div className={s.layout}>
-          <div id="book" className={s.booker}>
+          <div className={s.booker}>
             <VisitBooker />
           </div>
           <aside className={s.places} aria-labelledby="find-title">

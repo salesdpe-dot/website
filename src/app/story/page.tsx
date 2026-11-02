@@ -208,7 +208,7 @@ export default function StoryPage() {
             </h2>
             <p>
               {windsor.name}, on Panathur–Varthur Road: {homesOf(windsor)} homes on 1.25 acres, among coconut palms. We broke ground in{" "}
-              {windsor.timeline.start} and handed over the keys in {windsor.timeline.handover}.
+              {windsor.timeline.start}, and the occupancy certificate came in {windsor.timeline.completion}.
             </p>
             <Link href={`/homes/${windsor.slug}`} className="text-link">
               See {windsor.shortName}

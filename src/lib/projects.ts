@@ -352,7 +352,7 @@ export const projects: Project[] = [
     index: "03",
     locality: "Bengaluru",
     intro:
-      "118 homes on 1.5 acres, in mustard and white, handed over in July 2018.",
+      "118 homes on 1.5 acres, in mustard and white, handed over in 2018.",
     facts: [
       { label: "Project size", value: "1.5 acres" },
       { label: "Homes", value: "118" },
