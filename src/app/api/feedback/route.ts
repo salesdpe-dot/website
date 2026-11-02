@@ -11,7 +11,8 @@ const kinds = new Set<string>([...feedbackKinds.map((k) => k.id), "other"]);
 const devices = new Set(["phone", "tablet", "computer"]);
 
 export async function POST(req: Request) {
-  if (rateLimited(`fb:${clientAddress(req)}`, 20, 10 * 60_000)) {
+  /* 60 notes in 10 minutes from one address: room for a whole team reviewing together from one office network. */
+  if (rateLimited(`fb:${clientAddress(req)}`, 60, 10 * 60_000)) {
     return Response.json({ ok: false, error: "Too many notes in a short time. Please try again in a few minutes." }, { status: 429 });
   }
   const body = await readJson(req, 24_000);
