@@ -15,6 +15,30 @@
   gap: 32px;
 }
 
+/* Below a computer's width the map comes straight after the heading, before the list, so it is seen first. */
+@media (max-width: 899px) {
+  .inner {
+    gap: 24px;
+  }
+
+  .side {
+    display: contents;
+  }
+
+  .map {
+    order: 1;
+  }
+
+  .list,
+  .side > :global(.text-link) {
+    order: 2;
+  }
+
+  .side > :global(.text-link) {
+    justify-self: start;
+  }
+}
+
 @media (min-width: 900px) {
   .inner {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);

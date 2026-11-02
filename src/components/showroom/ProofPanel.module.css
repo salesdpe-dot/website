@@ -1,7 +1,8 @@
 /*
  * The brand band, after page 6 of the Disha Habitat guideline: a full navy field, the tagline set huge in sky blue
  * and lower case, the white house icon above it, and the same icon very large and faint, cropped by the corner.
- * Below a hairline, the record in four large figures, the award's certificate as the fourth.
+ * Then how to check the record beside the link to the story, the record in three equal figures between hairlines,
+ * and the award on a line of its own, its certificate small beside the words.
  */
 .band {
   position: relative;
@@ -44,76 +45,101 @@
   text-wrap: balance;
 }
 
-.line {
-  max-width: 44ch;
-  margin-top: clamp(24px, 3vw, 40px);
-  font-size: clamp(1.125rem, 0.95rem + 0.6vw, 1.5rem);
-  line-height: 1.45;
-  color: rgb(255 255 255 / 0.9);
-}
-
-.figures {
+/* The line and the link share one row on a computer, so the space beside the line is used. */
+.sub {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 40px 24px;
-  margin: clamp(56px, 8vw, 112px) 0 0;
-  padding-top: clamp(32px, 4vw, 48px);
-  border-top: 1px solid rgb(255 255 255 / 0.22);
+  gap: 20px;
+  justify-items: start;
+  margin-top: clamp(24px, 3vw, 40px);
 }
 
 @media (min-width: 1024px) {
-  .figures {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  .sub {
+    grid-template-columns: minmax(0, 36rem) auto;
+    justify-content: space-between;
+    align-items: end;
     gap: 48px;
   }
 }
 
-/* The figure reads first, as on tesla.com; the label stays first in the markup for screen readers. */
+.line {
+  font-size: clamp(1.125rem, 0.95rem + 0.6vw, 1.5rem);
+  line-height: 1.45;
+  color: rgb(255 255 255 / 0.9);
+  text-wrap: pretty;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+
+.link svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s var(--ease);
+}
+
+.link:hover svg,
+.link:focus-visible svg {
+  transform: translateX(4px);
+}
+
+/* On a phone, one figure to a row: the figure on the left, its label beside it. */
+.figures {
+  display: grid;
+  margin: clamp(48px, 7vw, 96px) 0 0;
+  border-top: 1px solid rgb(255 255 255 / 0.22);
+}
+
 .figure {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  min-width: 0;
-}
-
-.value,
-.certificate {
-  order: -1;
-  height: clamp(2.5rem, 1.5rem + 4.8vw, 6.5rem);
-  margin: 0;
-}
-
-/* Below a computer's width the award takes a row of its own: the certificate, and the citation beside it. */
-.award {
-  grid-column: 1 / -1;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: minmax(0, 8.5rem) minmax(0, 1fr);
+  grid-template-areas: "value label";
   align-items: center;
   gap: 20px;
+  padding-block: 22px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.14);
 }
 
-.certificate {
-  flex: none;
-  height: clamp(6rem, 4rem + 6vw, 8rem);
-}
-
-/* On a computer it is the fourth figure, a little taller than the others so its lettering can be read. */
-@media (min-width: 1024px) {
-  .award {
-    grid-column: auto;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
+/* From a tablet's width, three equal columns with a hairline between them; the figure reads first, as on tesla.com.
+ * The label stays first in the markup for screen readers. */
+@media (min-width: 768px) {
+  .figures {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .certificate {
-    height: clamp(5rem, 3rem + 6.4vw, 10.5rem);
-    margin-top: calc(clamp(2.5rem, 1.5rem + 4.8vw, 6.5rem) - clamp(5rem, 3rem + 6.4vw, 10.5rem));
+  .figure {
+    grid-template-columns: none;
+    grid-template-areas: "value" "label";
+    align-content: start;
+    gap: 14px;
+    padding: clamp(28px, 3.5vw, 48px) clamp(20px, 2.5vw, 40px) clamp(28px, 3.5vw, 44px);
+    border-bottom: 0;
+    border-left: 1px solid rgb(255 255 255 / 0.14);
+  }
+
+  .figure:first-child {
+    padding-left: 0;
+    border-left: 0;
   }
 }
 
 .value {
+  grid-area: value;
+  margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 1.5rem + 4.8vw, 6.5rem);
+  font-size: clamp(2.5rem, 1.4rem + 3.6vw, 5.75rem);
   line-height: 1;
   font-weight: 600;
   letter-spacing: -0.04em;
@@ -122,6 +148,7 @@
 }
 
 .label {
+  grid-area: label;
   max-width: 26ch;
   font-size: 0.9375rem;
   line-height: 1.375rem;
@@ -142,43 +169,53 @@
   text-decoration: underline;
 }
 
-.citation {
-  display: block;
-  margin-top: 4px;
-  color: #fff;
-  font-weight: 500;
-}
-
-.certificate img {
-  display: block;
-  width: auto;
-  height: 100%;
-  border-radius: 4px;
-  box-shadow: 0 12px 32px rgb(0 0 0 / 0.35);
-}
-
-.link {
-  display: inline-flex;
+/* The award: the certificate at no more than its own 315 px width (here about half), the words beside it. */
+.award {
+  display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  margin-top: clamp(40px, 5vw, 64px);
-  font-size: 1rem;
+  gap: clamp(16px, 2vw, 28px);
+  margin: 0;
+  padding-top: clamp(24px, 3vw, 36px);
+  border-top: 1px solid rgb(255 255 255 / 0.22);
+}
+
+@media (max-width: 767px) {
+  .award {
+    border-top: 0;
+  }
+}
+
+.certificate {
+  flex: none;
+  width: clamp(112px, 10vw, 156px);
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.35);
+}
+
+.awardText {
+  display: grid;
+  gap: 4px;
+  max-width: 48ch;
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  color: rgb(255 255 255 / 0.84);
+}
+
+.awardName {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.72);
+}
+
+.citation {
+  font-family: var(--font-display);
+  font-size: clamp(1.0625rem, 0.95rem + 0.4vw, 1.375rem);
+  line-height: 1.3;
   font-weight: 500;
   color: #fff;
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 8px;
-}
-
-.link svg {
-  width: 18px;
-  height: 18px;
-  transition: transform 0.3s var(--ease);
-}
-
-.link:hover svg,
-.link:focus-visible svg {
-  transform: translateX(4px);
+  text-wrap: balance;
 }

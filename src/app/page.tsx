@@ -24,9 +24,9 @@ export const metadata: Metadata = {
 
 /*
  * As tesla.com's home page, with more of everything: the hero's four films; the homes as tesla.com's row of
- * models; then the proof while the visitor is still deciding (the brand band with the record, and the communities
- * handed over); the amenities, filtered; the clubhouse and the five elements, a full screen each; the map; and the
- * closing step over the community at night.
+ * models; then the proof while the visitor is still deciding (the brand band with the record, the six communities
+ * on one map, and the five handed over as they look now); the amenities, filtered; the clubhouse and the five
+ * elements, a full screen each; and the closing step over the community at night.
  * The page ends on that film, so it is marked to meet the footer edge to edge (SiteFooter.module.css).
  */
 export default function Home() {
@@ -36,15 +36,15 @@ export default function Home() {
       <Hero slides={heroSlides} />
       <ModelRow />
       <ProofPanel />
-      <CommunityRow />
-      <AmenityRow />
-      <ClubhousePanel />
-      <ElementsSwitcher />
       <MapSection
         title={mapHead.title}
         line={mapHead.line}
         items={communities.map(({ slug, name, place, eyebrow }) => ({ slug, name, place, eyebrow }))}
       />
+      <CommunityRow />
+      <AmenityRow />
+      <ClubhousePanel />
+      <ElementsSwitcher />
       <ClosingCta />
     </div>
   );

@@ -479,7 +479,8 @@ export const fiveElements: { title: string; line: string; tabs: ElementTab[] } =
 /* The brand band, straight from the guideline: navy, a huge sky "come home", and the record in figures. */
 export const brand = {
   tagline: "come home",
-  line: `Disha Habitat has handed over ${handed} homes in five Bengaluru communities since 2015. Pursuit of the Elements is the sixth.`,
+  /* The figures follow, so the line says how to check them rather than repeating them. */
+  line: "Every figure here can be checked: each community has its own page, and the rating is MyGate’s.",
   figures: [
     { value: handed, label: "Homes handed over since 2015" },
     { value: "5", label: "Communities handed over" },
@@ -544,12 +545,12 @@ export const shorts: ShortFilm[] = [
 ];
 
 /*
- * The handed-over communities' row: real photographs, never renders. The brand band above it already gives the
- * homes handed over, so this heading speaks of the places, and each card gives its year and its homes.
+ * The handed-over communities' row: real photographs, never renders. It follows the map, which has already named
+ * and placed them, so this heading speaks of how they look now, and each card gives its year and its homes.
  */
 export const handedOverHead = {
-  title: "Five communities, lived in today",
-  line: "Handed over between 2015 and 2025, from Windsor Gardens to Pursuit of Sunshine.",
+  title: "Lived in today",
+  line: "The five handed over between 2015 and 2025, in photographs, not renders.",
 } as const;
 
 /* The map's heading. */
