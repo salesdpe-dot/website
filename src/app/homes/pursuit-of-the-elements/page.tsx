@@ -148,7 +148,7 @@ export default function ElementsPage() {
           ]}
           actions={[{ label: "Book a visit", href: "#enquire" }]}
         >
-          <ComposeButton channel="whatsapp" topic="Floor plans" className="btn btn-ghost">
+          <ComposeButton channel="whatsapp" topic="Floor plans and carpet areas" className="btn btn-ghost">
             Get floor plans
           </ComposeButton>
         </PhotoHero>

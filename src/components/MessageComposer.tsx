@@ -28,16 +28,28 @@ const topics = [
 
 const elementsTopics = [elements.name, "Documents and approvals", "Current prices", "Floor plans and carpet areas"];
 
-function opening(topic: string) {
+/*
+ * A button may name a topic and what it is about, as "Current prices: Presidential Towers". The topic picks the
+ * opening line and the detail goes into it, so the team sees which homes the visitor was looking at.
+ */
+function split(requested?: string): [string, string] {
+  if (!requested) return [topics[0]!, ""];
+  const [head, ...rest] = requested.split(": ");
+  if (head && rest.length && topics.includes(head)) return [head, rest.join(": ")];
+  return [topics.includes(requested) ? requested : topics[0]!, ""];
+}
+
+function opening(topic: string, detail: string) {
+  const homes = detail ? `homes in ${detail}` : "homes";
   switch (topic) {
     case "Booking a site visit":
       return "I’d like to book a site visit.";
     case "Documents and approvals":
       return `I’d like to see the documents and approvals for ${elements.name}.`;
     case "Current prices":
-      return `Please share the current prices for homes at ${elements.name}.`;
+      return `Please share the current prices for ${homes} at ${elements.name}.`;
     case "Floor plans and carpet areas":
-      return `Please send the floor plans and carpet areas for homes at ${elements.name}.`;
+      return `Please send the floor plans and carpet areas for ${homes} at ${elements.name}.`;
     case "Something else":
       return "I’d like to know more about your homes.";
     default:
@@ -49,7 +61,8 @@ export function MessageComposer() {
   const uid = useId();
   const ref = useRef<HTMLDialogElement>(null);
   const [channel, setChannel] = useState<Channel>("whatsapp");
-  const [topic, setTopic] = useState(topics[0]);
+  const [topic, setTopic] = useState(topics[0]!);
+  const [detail, setDetail] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -64,7 +77,9 @@ export function MessageComposer() {
       const d = (e as CustomEvent<{ channel?: Channel; topic?: string }>).detail ?? {};
       if (d.channel) setChannel(d.channel);
       // Each opening starts from its own topic (or the default), never the last visitor action's.
-      setTopic(d.topic && topics.includes(d.topic) ? d.topic : topics[0]);
+      const [t, about] = split(d.topic);
+      setTopic(t);
+      setDetail(about);
       setTried(false);
       setCopied(false);
       setSent(false);
@@ -82,7 +97,7 @@ export function MessageComposer() {
   const ok = nameOk && phoneOk && emailOk;
 
   const message = buildMessage(
-    opening(topic),
+    opening(topic, detail),
     [
       ["Name", name],
       ["Mobile", parsed.ok ? shownPhone(phone) : undefined],
@@ -103,7 +118,7 @@ export function MessageComposer() {
       name: name.trim(),
       phone: parsed.ok ? parsed.display : undefined,
       email: email.trim() || undefined,
-      interest: topic,
+      interest: detail ? `${topic}: ${detail}` : topic,
       message: note.trim() || undefined,
       channel,
       consent: true,
@@ -147,7 +162,15 @@ export function MessageComposer() {
         </div>
 
         <div className={s.fields}>
-          <SelectField label="I’m interested in" value={topic} onChange={(e) => setTopic(e.target.value)} options={topics} />
+          <SelectField
+            label="I’m interested in"
+            value={topic}
+            onChange={(e) => {
+              setTopic(e.target.value);
+              setDetail("");
+            }}
+            options={topics}
+          />
           <TextField
             label="Your name"
             value={name}
