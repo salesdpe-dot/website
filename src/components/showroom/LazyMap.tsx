@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import type { MapItem } from "./CommunityMap";
+import type { MapProps } from "./CommunityMap";
 import s from "./CommunityMap.module.css";
 
 /* The map's code (about 25 KB with its data) is fetched only when its place is near the screen. */
@@ -11,9 +11,7 @@ const CommunityMap = dynamic(() => import("./CommunityMap").then((m) => m.Commun
   loading: () => <div className={s.map} aria-hidden="true" />,
 });
 
-type Props = { items: MapItem[]; active: number; onPick: (i: number) => void };
-
-export function LazyMap(props: Props) {
+export function LazyMap(props: MapProps) {
   const holder = useRef<HTMLDivElement>(null);
   const [near, setNear] = useState(false);
 

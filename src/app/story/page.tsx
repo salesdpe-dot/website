@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Accordion, CtaBand, Gallery, Section, SectionHead } from "@/components/ds";
+import { Accordion, CtaBand, Section, SectionHead } from "@/components/ds";
 import { PhotoHero } from "@/components/ds";
 import { ArrowRight } from "@/components/showroom/Icons";
 import { HomeMark } from "@/components/showroom/Logo";
-import { company, dishaFamily, formatIndian, homemakerProfiles, homemakers, poem, stats } from "@/lib/site";
+import { company, formatIndian, homemakerProfiles, homemakers, poem, stats } from "@/lib/site";
+import { Album } from "./Album";
 import { Stats } from "./Stats";
 import { links } from "@/lib/content";
 import { pageMeta } from "@/lib/launch";
@@ -26,15 +27,6 @@ const promises = [
 ] as const;
 
 const artists = ["Shankar Ehsaan Loy", "Shreya Ghoshal", "Armaan Malik", "Piyush Mishra", "K S Chithra", "Sunil Grover"];
-
-const family = dishaFamily.slice(0, 6).map((f) => ({
-  src: f.src,
-  width: 1600,
-  height: f.src.includes("team-1-") ? 1204 : 1067,
-  alt: f.alt,
-  caption: f.kind,
-  kind: "photo" as const,
-}));
 
 const homesOf = (p: (typeof projects)[number]) => p.facts.find((f) => f.label === "Homes")?.value;
 const year = (date: string) => date.split(" ")[1];
@@ -204,10 +196,18 @@ export default function StoryPage() {
         </blockquote>
       </Section>
 
-      <Section space="tight" labelledBy="family-title">
-        <SectionHead id="family-title" title="One big family." line="Homeowners at home, and the site and office teams who built their homes." />
-        <div className={s.gal}>
-          <Gallery items={family} layout="row" label="The Disha family" />
+      {/* The album as on the first Our story page: two piles of prints to flick through, on the navy band. */}
+      <Section tone="navy" labelledBy="family-title" className={s.familyBand}>
+        <div className={s.family}>
+          <div className={s.familyHead}>
+            <p className="eyebrow">Our homemakers · The Disha family</p>
+            <h2 id="family-title" className={`display ${s.familyTitle}`}>
+              One big family, <span className={s.keep}>close-knit</span> and mindful.
+            </h2>
+            <p className={s.familyLine}>The families who live in our homes, and the people who build them. Pull up a chair and go through the album.</p>
+            <p className={s.familyHint}>Tap or click a photo for the next one</p>
+          </div>
+          <Album />
         </div>
       </Section>
 

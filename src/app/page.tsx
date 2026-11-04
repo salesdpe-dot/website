@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 /*
  * As tesla.com's home page: the hero's four films; the homes as tesla.com's row of models; then the proof while
  * the visitor is still deciding (the brand band with the record, and the six communities on one map, each
- * handed-over one shown in a photograph as it is today); the amenities, filtered; and the closing step over the
+ * one's picture rising out of its plot); the amenities, filtered; and the closing step over the
  * community at night. The clubhouse and the five elements have their full pages on the project page.
  * The page ends on that film, so it is marked to meet the footer edge to edge (SiteFooter.module.css).
  */
@@ -42,8 +42,9 @@ export default function Home() {
           place,
           eyebrow,
           line,
-          /* Only a photograph: the one on sale has renders only, so its card carries words instead. */
-          photo: render ? undefined : image,
+          /* The handed-over communities in photographs as they are today; the one on sale in a labelled render. */
+          photo: image,
+          render,
         }))}
       />
       <AmenityRow />

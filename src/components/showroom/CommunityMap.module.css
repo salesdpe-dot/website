@@ -1,6 +1,6 @@
 /*
- * The map panel: the showroom's grey, square corners like the cards, names in the page's own type.
- * Stacked above the cards on phones and tablets; beside them, as tall as a card, on computers.
+ * The map panel: the showroom's grey, rounded like the cards, names in the page's own type. Its size is set by
+ * the section it is in (MapSection.module.css).
  */
 .slot {
   height: 100%;
@@ -9,16 +9,10 @@
 .map {
   position: relative;
   overflow: hidden;
-  height: clamp(300px, 48svh, 420px);
+  height: 100%;
   border-radius: var(--radius-card);
   background: #f2f2f2;
   isolation: isolate;
-}
-
-@media (min-width: 900px) {
-  :global(html.js) .map {
-    height: 100%;
-  }
 }
 
 .picture,
@@ -42,6 +36,35 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+}
+
+/* The line from the plot on show to its picture's frame, drawn once the picture has nearly settled. */
+.leaders {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.leader {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+}
+
+.leader[data-on="true"] {
+  stroke-dashoffset: 0;
+  opacity: 1;
+  transition:
+    stroke-dashoffset 0.6s var(--ease) 0.9s,
+    opacity 0.2s ease 0.9s;
 }
 
 /*
@@ -202,10 +225,10 @@
   visibility: visible;
 }
 
-/* Said in words when the card on show has no plot on the map. */
+/* Said in words when the community on show has no plot on the map: at the top on a phone, clear of the frame. */
 .note {
   position: absolute;
-  bottom: 8px;
+  top: 8px;
   left: 8px;
   width: fit-content;
   max-width: calc(100% - 9.5rem);
@@ -218,16 +241,33 @@
   box-shadow: 0 1px 6px rgb(0 0 0 / 0.14);
 }
 
+@media (min-width: 900px) {
+  .note {
+    top: auto;
+    bottom: 8px;
+  }
+}
+
+/* The map credit, at the top right on a phone, where the frame does not lie. */
 .credit {
   position: absolute;
+  top: 0;
   right: 0;
-  bottom: 0;
   padding: 2px 8px;
-  border-top-left-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
   background: rgb(255 255 255 / 0.85);
   font-size: 0.6875rem;
   line-height: 1rem;
   color: var(--text-2);
+}
+
+@media (min-width: 900px) {
+  .credit {
+    top: auto;
+    bottom: 0;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: var(--radius);
+  }
 }
 
 .credit a {
@@ -243,7 +283,8 @@
   .canvas,
   .place,
   .pin,
-  .edge {
+  .edge,
+  .leader {
     transition: none;
   }
 }

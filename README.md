@@ -39,11 +39,11 @@ Every page is built around the buyer’s questions, each answered with proof (re
 
 | Route | Page |
 | --- | --- |
-| `/` | Laid out like tesla.com: a four-film hero with the project's figures → the seven towers and the villas as model cards → 20 amenity films, filtered by category → the clubhouse at night with its rooms → the five elements, one tab each → the navy “come home” band with the record and the ET award → the client's four walkthrough films with sound → the five delivered communities → the map → EMI and checklist tiles → a closing film with Book a visit |
+| `/` | Laid out like tesla.com: a four-film hero with the project's figures → the seven towers and the villas as model cards → the navy “come home” band with the record and the ET award → the six communities on one map across the page: choose one and the map flies to its plot, and its picture rises out of the plot's outline into a frame → 40+ amenity films, filtered by category → a closing film with Book a visit |
 | `/homes` | “1,102 homes, handed over.”: Pursuit of the Elements first, then the five delivered communities and a chart of months from ground-breaking to occupancy certificate |
 | `/homes/pursuit-of-the-elements` | The project on sale, laid out like a tesla.com model page: a film hero with figures, the walk-in films, tower and villa tabs, the five elements, a clubhouse browser of 19 room films, the rooftop pool by day and night, a browser of 24 outdoor zones, the four walkthrough films, 78 renders by group, the master plan, a live commute checker, RERA and the ET award, enquiry |
 | `/homes/[slug]` | Each delivered community as a case study: figures, the build record on a navy timeline, photographs, homeowners' words; ends by pointing to the project on sale |
-| `/story` | The founders' poem and story (draft wording for their approval), the five communities, the record in figures, the ET award, and a link to the brand film on YouTube |
+| `/story` | The founders' poem and story (draft wording for their approval), the five communities, the record in figures, the promises, the family album (two piles of prints to flick through, as on the first version), the ET award, and a link to the brand film on YouTube |
 | `/contact` | Every channel, a four-step visit booker, what happens next, office map, every community with directions |
 | `/checklist`, `/checklist/[slug]` | A working checklist of five must-knows, with a guide for each |
 | `/plan` | EMI calculator with notes on how the estimate is made |

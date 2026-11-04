@@ -1,0 +1,172 @@
+/*
+ * The album on the navy band: two piles of prints side by side on a computer, one under the other on a phone.
+ * Each print is a white-bordered photograph with a handwritten caption; the ones under it peek out at angles.
+ */
+.piles {
+  display: grid;
+  gap: 48px;
+}
+
+@media (min-width: 640px) {
+  .piles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(32px, 4vw, 56px);
+  }
+}
+
+.pile {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "kind kind"
+    "note note"
+    "stack stack"
+    "controls controls";
+  width: 100%;
+  max-width: 26rem;
+  margin-inline: auto;
+}
+
+/* On a phone each pile's arrows sit up beside its name, which saves a row under every pile. */
+@media (max-width: 639px) {
+  .pile {
+    grid-template-areas:
+      "kind controls"
+      "note controls"
+      "stack stack";
+  }
+}
+
+/* The pile's name in handwriting, in the brand's sky blue (6.9:1 on navy). */
+.kind {
+  grid-area: kind;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.note {
+  grid-area: note;
+  margin-top: 4px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(255 255 255 / 0.74);
+}
+
+.stack {
+  grid-area: stack;
+  display: grid;
+  margin-top: 28px;
+}
+
+.print {
+  grid-area: 1 / 1;
+  display: block;
+  padding: 12px 12px 0;
+  background: #fbf8f1;
+  color: var(--ink);
+  text-align: left;
+  box-shadow: 0 16px 28px -16px rgb(0 0 0 / 0.6);
+  pointer-events: none;
+  transition:
+    rotate 0.45s cubic-bezier(0.3, 1.25, 0.45, 1),
+    translate 0.45s cubic-bezier(0.3, 1.1, 0.45, 1),
+    scale 0.3s ease;
+}
+
+.print[data-top] {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .print[data-top]:hover {
+    scale: 1.02;
+  }
+}
+
+.print:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.photo {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.photo img {
+  object-fit: cover;
+}
+
+.caption {
+  display: block;
+  padding: 10px 0 12px;
+  font-size: 1.6rem;
+  line-height: 1;
+  text-align: center;
+  color: rgb(8 32 50 / 0.82);
+}
+
+.controls {
+  grid-area: controls;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+@media (max-width: 639px) {
+  .controls {
+    align-self: center;
+    margin-top: 0;
+  }
+}
+
+.count {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: rgb(255 255 255 / 0.74);
+}
+
+.arrows {
+  display: flex;
+  gap: 8px;
+}
+
+.arrow {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  border-radius: 999px;
+  color: #fff;
+  transition:
+    background-color 0.3s var(--ease),
+    color 0.3s var(--ease);
+}
+
+.arrow svg {
+  width: 18px;
+  height: 18px;
+}
+
+.arrow:hover {
+  background: #fff;
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .print,
+  .arrow {
+    transition: none;
+  }
+}

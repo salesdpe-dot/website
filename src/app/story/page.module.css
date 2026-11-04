@@ -481,25 +481,57 @@
   color: var(--text-2);
 }
 
-/* The family photographs lift a little under the pointer. */
-.gal button {
-  transition: transform 0.6s var(--ease);
+/*
+ * The album band: on a computer the words on the left, level with the middle of the two piles of prints on the
+ * right; on a phone the words first.
+ */
+/* A print tossed off its pile flies past the edge; it is cut off there rather than widening the page. */
+.familyBand {
+  overflow-x: clip;
 }
 
-.gal button img {
-  transition: transform 0.7s var(--ease);
+.family {
+  display: grid;
+  gap: 40px;
 }
 
-@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
-  .gal button:hover,
-  .gal button:focus-visible {
-    transform: translateY(-4px);
+@media (min-width: 1024px) {
+  .family {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    align-items: center;
+    gap: 64px;
   }
+}
 
-  .gal button:hover img,
-  .gal button:focus-visible img {
-    transform: scale(1.04);
-  }
+.familyHead {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.familyTitle {
+  font-size: var(--display-title);
+  line-height: var(--display-title-lh);
+  color: #fff;
+  text-wrap: balance;
+}
+
+.keep {
+  white-space: nowrap;
+}
+
+.familyLine {
+  max-width: 36ch;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  color: rgb(255 255 255 / 0.84);
+}
+
+.familyHint {
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  font-weight: 500;
+  color: var(--accent);
 }
 
 /*

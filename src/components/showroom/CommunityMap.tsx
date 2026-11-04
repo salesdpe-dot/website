@@ -1,21 +1,31 @@
 "use client";
 
-import { type CSSProperties, useEffect, useRef, useState } from "react";
+import { type CSSProperties, type RefObject, useEffect, useRef, useState } from "react";
 import { area, base, mapLabels, mapPlots, tiles } from "@/lib/map.generated";
 import { MOTION_OK, useMedia } from "@/lib/useMedia";
 import s from "./CommunityMap.module.css";
 
 /*
- * The map prototype's idea, in the showroom's colours: a map of East Bengaluru beside the community
- * cards. When a card comes into view the map flies to that community's plot (out over the city and back
- * down, as the map prototype's camera does); a name on the map brings its card into view.
+ * The map prototype's idea, in the showroom's colours: a map of East Bengaluru. When a community is chosen the
+ * map flies to its plot (out over the city and back down, as the map prototype's camera does), and its picture
+ * rises out of the plot's own outline into the frame beside it, joined to the plot by a line.
  *
  * Drawn on a canvas from pictures made by scripts/build-map.py: one plate for the whole area, and sharper
  * tiles near each plot, loaded only when the map flies there. Plots are drawn on top, in the brand's sky blue.
  */
 
 export type MapItem = { slug: string; name: string; place: string };
-type Props = { items: MapItem[]; active: number; onPick: (i: number) => void };
+export type MapProps = {
+  items: MapItem[];
+  active: number;
+  onPick: (i: number) => void;
+  /* Called as the map lands on a community, just before its picture rises: the frame must show it by then. */
+  onLand?: (i: number) => void;
+  /* The frame laid over the map, whose first child is the picture; the map grows it out of the plot. */
+  frame?: RefObject<HTMLElement | null>;
+  /* Anything else laid over the map (the list on a computer); the plot on show is placed clear of it. */
+  cover?: RefObject<HTMLElement | null>;
+};
 
 /* The camera: the centre of the view and its width, in metres. */
 type Cam = { x: number; y: number; w: number };
@@ -24,7 +34,7 @@ const GROUND = "#f2f2f2"; // the pictures' own ground colour (a light tint of th
 const SKY = "#00b1ff"; // the brand's accent
 const SKY_PALE = "#99e0ff"; // sky blue at 40% on white
 const NAVY = "#082032";
-const FOCUS_SPAN = 4800; // metres across the map's shorter side when it rests on a community
+const FOCUS_SPAN = 3600; // metres across the clear part of the map when it rests on a community
 const ZOOM = { min: 0.06, max: 0.11 }; // px per metre at rest: the tiles are drawn at 0.2
 const MAX_DPR = 2;
 
@@ -74,12 +84,33 @@ function flight(a: Cam, b: Cam) {
 
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 
-/* Where the camera rests for a card: on its plot, or over all of them when the plot is not mapped. */
-function restFor(slug: string | undefined, W: number, H: number): Cam {
+/*
+ * The part of the map left clear by what is laid over it: a frame across the foot (or the top) takes rows away, a
+ * narrower one at the right (or the left) takes columns.
+ */
+function clearArea(W: number, H: number, covers: Rect[]): Rect {
+  let [x0, y0, x1, y1] = [0, 0, W, H];
+  for (const r of covers) {
+    if (r.w > W * 0.66) {
+      if (r.y + r.h / 2 > H / 2) y1 = Math.min(y1, r.y);
+      else y0 = Math.max(y0, r.y + r.h);
+    } else if (r.x + r.w / 2 > W / 2) x1 = Math.min(x1, r.x);
+    else x0 = Math.max(x0, r.x + r.w);
+  }
+  return { x: x0, y: y0, w: Math.max(120, x1 - x0), h: Math.max(120, y1 - y0) };
+}
+
+/*
+ * Where the camera rests for a community: its plot in the middle of the clear part of the map, or every plot in that
+ * part when its own is not mapped.
+ */
+function restFor(slug: string | undefined, W: number, H: number, clear: Rect): Cam {
+  const fx = clear.x + clear.w / 2;
+  const fy = clear.y + clear.h / 2;
   const p = slug ? plotBySlug.get(slug) : undefined;
   if (p) {
-    const z = Math.min(ZOOM.max, Math.max(ZOOM.min, Math.min(W, H) / FOCUS_SPAN));
-    return { x: p.centre[0], y: p.centre[1], w: W / z };
+    const z = Math.min(ZOOM.max, Math.max(ZOOM.min, Math.min(clear.w, clear.h) / FOCUS_SPAN));
+    return { x: p.centre[0] + (W / 2 - fx) / z, y: p.centre[1] + (H / 2 - fy) / z, w: W / z };
   }
   // every plot in view, with room above the top one for its name, below for the note, and at the sides for half a name
   const xs = mapPlots.map((q) => q.centre[0]);
@@ -87,9 +118,46 @@ function restFor(slug: string | undefined, W: number, H: number): Cam {
   const pad = { x: 88, top: 56, bottom: 64 };
   const bw = Math.max(...xs) - Math.min(...xs);
   const bh = Math.max(...ys) - Math.min(...ys);
-  const z = Math.min((W - 2 * pad.x) / bw, (H - pad.top - pad.bottom) / bh);
-  const cy = (Math.max(...ys) + Math.min(...ys)) / 2 + (pad.bottom - pad.top) / 2 / z;
-  return { x: (Math.max(...xs) + Math.min(...xs)) / 2, y: cy, w: W / z };
+  const z = Math.min(Math.max(40, clear.w - 2 * pad.x) / bw, Math.max(40, clear.h - pad.top - pad.bottom) / bh);
+  const mx = (Math.max(...xs) + Math.min(...xs)) / 2;
+  const my = (Math.max(...ys) + Math.min(...ys)) / 2;
+  return { x: mx + (W / 2 - fx) / z, y: my + (H / 2 - fy + (pad.bottom - pad.top) / 2) / z, w: W / z };
+}
+
+/*
+ * The plot's outline resampled to n points, and the frame's rectangle as the same number of points, both as
+ * percentages of the picture, so that CSS can turn one clip-path polygon into the other (from the map prototype).
+ */
+function outlineMorph(points: { x: number; y: number }[], w: number, h: number, n = 32) {
+  // start from the corner nearest the top left and go clockwise on screen, as the rectangle does
+  let signed = 0;
+  points.forEach((p, i) => {
+    const q = points[(i + 1) % points.length];
+    signed += p.x * q.y - q.x * p.y;
+  });
+  const ordered = signed < 0 ? [...points].reverse() : points;
+  const start = ordered.reduce((bi, p, i) => (p.x + p.y < ordered[bi].x + ordered[bi].y ? i : bi), 0);
+  const ring = [...ordered.slice(start), ...ordered.slice(0, start), ordered[start]];
+  const seg = ring.slice(1).map((p, i) => Math.hypot(p.x - ring[i].x, p.y - ring[i].y));
+  const total = seg.reduce((a, b) => a + b, 0);
+  const pct = (x: number, y: number) => `${((x / w) * 100).toFixed(2)}% ${((y / h) * 100).toFixed(2)}%`;
+  const from: string[] = [];
+  for (let k = 0; k < n; k++) {
+    let d = (k / n) * total;
+    let i = 0;
+    while (i < seg.length - 1 && d > seg[i]) d -= seg[i++];
+    const t = seg[i] ? d / seg[i] : 0;
+    from.push(pct(ring[i].x + (ring[i + 1].x - ring[i].x) * t, ring[i].y + (ring[i + 1].y - ring[i].y) * t));
+  }
+  const to: string[] = [];
+  const q = n / 4;
+  for (let k = 0; k < n; k++) {
+    const f = (k % q) / q;
+    const side = Math.floor(k / q);
+    const [x, y] = side === 0 ? [f, 0] : side === 1 ? [1, f] : side === 2 ? [1 - f, 1] : [0, 1 - f];
+    to.push(`${(x * 100).toFixed(2)}% ${(y * 100).toFixed(2)}%`);
+  }
+  return { from: `polygon(${from.join(", ")})`, to: `polygon(${to.join(", ")})` };
 }
 
 /*
@@ -136,7 +204,7 @@ function turned(x: number, y: number, w: number, h: number, deg: number): Rect {
 const overlaps = (a: Rect, b: Rect, gap = 6) =>
   a.x < b.x + b.w + gap && b.x < a.x + a.w + gap && a.y < b.y + b.h + gap && b.y < a.y + a.h + gap;
 
-export function CommunityMap({ items, active, onPick }: Props) {
+export function CommunityMap({ items, active, onPick, onLand, frame, cover }: MapProps) {
   const root = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const pins = useRef<(HTMLButtonElement | null)[]>([]);
@@ -144,9 +212,16 @@ export function CommunityMap({ items, active, onPick }: Props) {
   const edges = useRef<(HTMLButtonElement | null)[]>([]);
   const note = useRef<HTMLParagraphElement>(null);
   const credit = useRef<HTMLParagraphElement>(null);
+  const leader = useRef<SVGPathElement>(null);
+  const landed = useRef(onLand);
+  useEffect(() => {
+    landed.current = onLand;
+  }, [onLand]);
   const motionOk = useMedia(MOTION_OK);
   const [near, setNear] = useState(false);
   const [ready, setReady] = useState(false);
+  /* The first picture rises only once the map is well in view, so the visitor sees it happen. */
+  const [seen, setSeen] = useState(false);
   /* For the first moments after the map appears, the names drop in one after another. */
   const [intro, setIntro] = useState(true);
   useEffect(() => {
@@ -166,9 +241,14 @@ export function CommunityMap({ items, active, onPick }: Props) {
     tiles: new Map<number, HTMLImageElement | null>(),
     frame: 0,
     flightId: 0,
+    /* whether a picture has risen yet: after that, a resize puts it straight back in place */
+    risen: false,
     draw: () => {},
     settle: () => {},
     want: (() => {}) as (cam: Cam) => void,
+    clear: (): Rect => ({ x: 0, y: 0, w: 1, h: 1 }),
+    rise: (() => {}) as (animate: boolean) => void,
+    sink: () => {},
   });
 
   // Start loading only when the map is about to scroll into view.
@@ -183,6 +263,22 @@ export function CommunityMap({ items, active, onPick }: Props) {
         }
       },
       { rootMargin: "300px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e?.isIntersecting) {
+          setSeen(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.45 },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -336,14 +432,8 @@ export function CommunityMap({ items, active, onPick }: Props) {
       const top = cam.y - H / 2 / z;
       const taken: Rect[] = [];
       const view = { x: 4, y: 4, w: W - 8, h: H - 8 };
-      const box0 = el.getBoundingClientRect();
-      // the note and the map credit are never covered
-      const fixed: Rect[] = [note.current, credit.current]
-        .filter((p) => p !== null)
-        .map((p) => {
-          const r = p.getBoundingClientRect();
-          return { x: r.left - box0.left, y: r.top - box0.top, w: r.width, h: r.height };
-        });
+      // the note, the map credit and whatever is laid over the map (the list, the picture's frame) are never covered
+      const fixed: Rect[] = [...rectsOf([note.current, credit.current]), ...covers()];
       taken.push(...fixed);
       const inside = (r: Rect) =>
         r.x >= view.x && r.y >= view.y && r.x + r.w <= view.x + view.w && r.y + r.h <= view.y + view.h;
@@ -456,9 +546,112 @@ export function CommunityMap({ items, active, onPick }: Props) {
         });
       }
     }
+
+    /* Elements laid on the map, in the map's own pixels; those that miss it (the list under it on a phone) drop out. */
+    function rectsOf(els: (Element | null | undefined)[]): Rect[] {
+      const b = el!.getBoundingClientRect();
+      return els.flatMap((e) => {
+        const r = e?.getBoundingClientRect();
+        if (!r?.width) return [];
+        const x = r.left - b.left;
+        const y = r.top - b.top;
+        return x < b.width && y < b.height && x + r.width > 0 && y + r.height > 0 ? [{ x, y, w: r.width, h: r.height }] : [];
+      });
+    }
+    const covers = () => rectsOf([frame?.current, cover?.current]);
+    const clear = () => clearArea(S.W, S.H, covers());
+
+    /* The picture goes, and its line with it, while the map flies. */
+    const sink = () => {
+      const fr = frame?.current;
+      if (fr?.dataset.state) fr.dataset.state = "off";
+      if (leader.current) leader.current.dataset.on = "false";
+    };
+
+    /*
+     * The picture rises out of the plot: it starts shrunk onto the plot and clipped to the plot's outline, then grows
+     * into the frame as the clip opens out to the frame's rectangle. A community with no plot on the map, or no
+     * motion wanted, has its picture simply appear.
+     */
+    const rise = (animate: boolean) => {
+      const i = S.target;
+      S.risen = true;
+      landed.current?.(i);
+      const fr = frame?.current;
+      const shot = fr?.firstElementChild as HTMLElement | null | undefined;
+      const { W, cam } = S;
+      if (!fr || !shot || !cam) return;
+      const z = W / cam.w;
+      const left = cam.x - W / 2 / z;
+      const top = cam.y - S.H / 2 / z;
+      const [F] = rectsOf([fr]);
+      const p = plotBySlug.get(items[i]?.slug ?? "");
+      if (!F || !p) {
+        if (leader.current) leader.current.dataset.on = "false";
+        shot.style.transform = "";
+        shot.style.clipPath = "";
+        fr.dataset.state = "on";
+        return;
+      }
+      const pts = p.points.map(([x, y]) => ({ x: (x - left) * z, y: (y - top) * z }));
+      const xs = pts.map((q) => q.x);
+      const ys = pts.map((q) => q.y);
+      const b = { x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) };
+      const cx = (b.x0 + b.x1) / 2;
+      const cy = (b.y0 + b.y1) / 2;
+
+      // The line: from the plot's edge across (or down) to the frame.
+      const line = leader.current;
+      if (line) {
+        const within = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+        let d = "";
+        if (F.x > b.x1 + 16) {
+          const sx = b.x1 + 6;
+          const ex = F.x - 6;
+          d = `M${sx} ${cy}H${(sx + ex) / 2}L${ex} ${within(cy, F.y + 24, F.y + F.h - 24)}`;
+        } else if (F.y > b.y1 + 16) {
+          const sy = b.y1 + 6;
+          const ey = F.y - 6;
+          d = `M${cx} ${sy}V${(sy + ey) / 2}L${within(cx, F.x + 24, F.x + F.w - 24)} ${ey}`;
+        }
+        if (d) line.setAttribute("d", d);
+        line.dataset.on = d ? "true" : "false";
+      }
+
+      if (!animate) {
+        shot.style.transform = "";
+        shot.style.clipPath = "";
+        fr.dataset.state = "on";
+        return;
+      }
+      const sx = F.x + shot.offsetLeft;
+      const sy = F.y + shot.offsetTop;
+      const sw = shot.offsetWidth;
+      const sh = shot.offsetHeight;
+      const k = Math.max((b.x1 - b.x0) / sw, (b.y1 - b.y0) / sh);
+      const morph = outlineMorph(
+        pts.map((q) => ({ x: (q.x - cx) / k + sw / 2, y: (q.y - cy) / k + sh / 2 })),
+        sw,
+        sh,
+      );
+      fr.dataset.state = "from";
+      shot.style.transform = `translate(${cx - (sx + sw / 2)}px, ${cy - (sy + sh / 2)}px) scale(${k})`;
+      shot.style.clipPath = morph.from;
+      void shot.offsetWidth;
+      requestAnimationFrame(() => {
+        if (S.target !== i || fr.dataset.state !== "from") return;
+        fr.dataset.state = "on";
+        shot.style.transform = "none";
+        shot.style.clipPath = morph.to;
+      });
+    };
+
     S.draw = schedule;
     S.settle = settle;
     S.want = want;
+    S.clear = clear;
+    S.rise = rise;
+    S.sink = sink;
 
     const size = () => {
       const r = el.getBoundingClientRect();
@@ -470,11 +663,12 @@ export function CommunityMap({ items, active, onPick }: Props) {
       cv.width = Math.round(r.width * dpr);
       cv.height = Math.round(r.height * dpr);
       S.flightId++;
-      S.cam = restFor(items[S.target]?.slug, S.W, S.H);
+      S.cam = restFor(items[S.target]?.slug, S.W, S.H, clear());
       delete el.dataset.moving;
       want(S.cam);
       draw();
       settle();
+      if (S.risen) rise(false);
     };
     const ro = new ResizeObserver(size);
     ro.observe(el);
@@ -500,7 +694,20 @@ export function CommunityMap({ items, active, onPick }: Props) {
       S.frame = 0;
       S.flightId++;
     };
-  }, [near, items]);
+  }, [near, items, frame, cover]);
+
+  // The first picture rises once the map has drawn and is well in view.
+  useEffect(() => {
+    const S = st.current;
+    if (!ready || !seen || S.risen) return;
+    const t = window.setTimeout(
+      () => {
+        if (!S.risen && S.cam && !("moving" in (root.current?.dataset ?? {}))) S.rise(motionOk);
+      },
+      motionOk ? 300 : 0,
+    );
+    return () => window.clearTimeout(t);
+  }, [ready, seen, motionOk]);
 
   // Fly to the shown community.
   useEffect(() => {
@@ -508,7 +715,8 @@ export function CommunityMap({ items, active, onPick }: Props) {
     if (S.target === active && S.cam) return;
     S.target = active;
     if (!S.cam || !S.W) return;
-    const to = restFor(items[active]?.slug, S.W, S.H);
+    S.sink();
+    const to = restFor(items[active]?.slug, S.W, S.H, S.clear());
     const id = ++S.flightId;
     // the tiles for where the camera lands start loading now, so they are there when it arrives
     S.want(to);
@@ -516,7 +724,10 @@ export function CommunityMap({ items, active, onPick }: Props) {
       delete root.current?.dataset.moving;
       S.cam = to;
       S.draw();
-      requestAnimationFrame(() => S.settle());
+      requestAnimationFrame(() => {
+        S.settle();
+        S.rise(false);
+      });
       return;
     }
     const path = flight(S.cam, to);
@@ -532,7 +743,10 @@ export function CommunityMap({ items, active, onPick }: Props) {
       if (t < 1) requestAnimationFrame(step);
       else {
         if (el) delete el.dataset.moving;
-        requestAnimationFrame(() => S.settle());
+        requestAnimationFrame(() => {
+          S.settle();
+          S.rise(true);
+        });
       }
     };
     requestAnimationFrame(step);
@@ -549,6 +763,9 @@ export function CommunityMap({ items, active, onPick }: Props) {
       <div className={s.picture} role="img" aria-label={label}>
         <canvas ref={canvas} className={s.canvas} aria-hidden="true" />
       </div>
+      <svg className={s.leaders} aria-hidden="true">
+        <path ref={leader} className={s.leader} pathLength={1} data-on="false" />
+      </svg>
       <div className={s.labels} aria-hidden="true">
         {mapLabels.map((l, i) => (
           <span
