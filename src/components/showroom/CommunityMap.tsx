@@ -696,15 +696,16 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
     };
   }, [near, items, frame, cover]);
 
-  // The first picture rises once the map has drawn and is well in view.
+  // The first picture rises once the map is well in view and has drawn; on a slow connection it does not wait for
+  // the map's own picture longer than 2.5 seconds.
   useEffect(() => {
     const S = st.current;
-    if (!ready || !seen || S.risen) return;
+    if (!seen || S.risen) return;
     const t = window.setTimeout(
       () => {
         if (!S.risen && S.cam && !("moving" in (root.current?.dataset ?? {}))) S.rise(motionOk);
       },
-      motionOk ? 300 : 0,
+      !ready ? 2500 : motionOk ? 300 : 0,
     );
     return () => window.clearTimeout(t);
   }, [ready, seen, motionOk]);
