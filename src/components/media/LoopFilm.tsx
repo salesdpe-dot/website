@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { Img } from "@/lib/content";
-import { type Film, filmMayAutoplay, filmsPaused, filmUrl, onPageLoad, pageLoaded } from "@/lib/film";
+import { type Film, filmCut, filmMayAutoplay, filmSources, filmsPaused, onPageLoad, pageLoaded } from "@/lib/film";
 import { focusPoint } from "@/lib/focus";
 import { MOTION_OK, useMedia } from "@/lib/useMedia";
 import { PauseIcon, PlayIcon } from "@/components/showroom/Icons";
@@ -56,7 +56,7 @@ export function LoopFilm({
   const video = useRef<HTMLVideoElement>(null);
   const [near, setNear] = useState(false);
   const [inView, setInView] = useState(false);
-  const [src, setSrc] = useState<string>();
+  const [cut, setCut] = useState<string>();
   const [shown, setShown] = useState(false);
   const loaded = useSyncExternalStore(onPageLoad, pageLoaded, () => false);
   const stopped = useSyncExternalStore(filmsPaused.subscribe, filmsPaused.get, () => false);
@@ -80,21 +80,21 @@ export function LoopFilm({
   /* The cut is chosen once, from the frame's size when the film is first wanted. */
   useEffect(() => {
     const el = box.current;
-    if (src || !el || !allowed || !near || !(wanted || prefetch) || !filmMayAutoplay()) return;
+    if (cut || !el || !allowed || !near || !(wanted || prefetch) || !filmMayAutoplay()) return;
     const r = el.getBoundingClientRect();
-    setSrc(filmUrl(film, { width: r.width, height: r.height }));
-  }, [src, allowed, near, wanted, prefetch, film]);
+    setCut(filmCut(film, { width: r.width, height: r.height }));
+  }, [cut, allowed, near, wanted, prefetch, film]);
 
   useEffect(() => {
     const v = video.current;
-    if (!v || !src) return;
+    if (!v || !cut) return;
     if (wanted && near) {
       v.play().catch(() => {});
     } else {
       v.pause();
       if (rewind ?? (play === false && !prefetch)) v.currentTime = 0;
     }
-  }, [src, wanted, near, play, prefetch, rewind]);
+  }, [cut, wanted, near, play, prefetch, rewind]);
 
   /* A hidden tab plays nothing. */
   useEffect(() => {
@@ -116,14 +116,13 @@ export function LoopFilm({
           style={focusPoint(poster)}
         />
       )}
-      {src && (
+      {cut && (
         <video
           ref={video}
           className={s.video}
           style={poster ? focusPoint(poster) : undefined}
           data-shown={shown || undefined}
-          data-cut={src.endsWith("-p.mp4") ? "portrait" : undefined}
-          src={src}
+          data-cut={cut.endsWith("-p") ? "portrait" : undefined}
           muted
           loop={loop}
           playsInline
@@ -138,7 +137,11 @@ export function LoopFilm({
           }}
           onPause={onPause}
           onEnded={onEnded}
-        />
+        >
+          {filmSources(cut).map((f) => (
+            <source key={f.src} src={f.src} type={f.type} />
+          ))}
+        </video>
       )}
       {controls && <FilmToggle label={label} />}
     </div>

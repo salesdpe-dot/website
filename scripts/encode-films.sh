@@ -1,6 +1,7 @@
 #!/bin/bash
 # Encodes the site's silent films from the client's renders in assets/ (not in git) into public/media/elements.
-# Usage: bash scripts/encode-films.sh [name ...]      (no names: every film; needs ffmpeg)
+# Usage: bash scripts/encode-films.sh [--av1] [name ...]   (no names: every film; needs ffmpeg with libsvtav1 and
+# libvmaf; --av1 makes only the AV1 copies, from the H.264 files already in public/)
 #
 # Each film is cut from one source clip at the in-point and length below, in the renditions src/lib/film.ts
 # picks between: 1080 (1920×1080), 720 (1280×720), p (540×960, cropped upright for phones held that way)
@@ -20,6 +21,11 @@ mkdir -p "$OUT"
 # Batch one used preset veryslow. Batch two (room-*, club-*, out-*, short-*) used slow: the same picture at the
 # same CRF for about 4% more bytes, three times quicker.
 X264="-c:v libx264 -profile:v high -pix_fmt yuv420p -movflags +faststart -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv"
+# SVT-AV1 preset 4: about 3% fewer bytes than preset 6 at the same VMAF, for 2.5 times the encoding time.
+AV1="-c:v libsvtav1 -preset 4 -pix_fmt yuv420p -movflags +faststart -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv"
+export SVT_LOG=1 # the encoder's errors only
+AV1_ONLY=
+[[ ${1:-} == --av1 ]] && AV1_ONLY=1 && shift
 preset() { [[ $1 == room-* || $1 == club-* || $1 == out-* || $1 == short-* ]] && echo slow || echo veryslow; }
 
 # name  renditions  in(s)  length(s)  centre  source (under assets/)
@@ -105,18 +111,74 @@ norm() {
     echo "crop=trunc(min(iw\\,ih*16/9)/2)*2:trunc(min(ih\\,iw*9/16)/2)*2,scale=1920:1080:flags=lanczos,"
 }
 
-# One rendition: encode <name> <rendition> <source> <in> <length> <centre>
-encode() {
-  local name=$1 rend=$2 src=$3 in=$4 dur=$5 c=$6 vf crf
+# The crop and scale for one rendition: chain <rendition> <centre>
+chain() {
+  local rend=$1 c=$2
   cropx() { python3 -c "w=$1; x=round(($c*1920 - w/2)/2)*2; print(max(0,min(1920-w,x)))"; }
   case $rend in
-    1080) vf="scale=1920:1080:flags=lanczos"; crf=30 ;;
-    720) vf="scale=1280:720:flags=lanczos"; crf=30 ;;
-    p) vf="crop=608:1080:$(cropx 608):0,scale=540:960:flags=lanczos"; crf=29 ;;
-    card) vf="crop=864:1080:$(cropx 864):0,scale=640:800:flags=lanczos"; crf=28 ;;
+    1080) echo "scale=1920:1080:flags=lanczos" ;;
+    720) echo "scale=1280:720:flags=lanczos" ;;
+    p) echo "crop=608:1080:$(cropx 608):0,scale=540:960:flags=lanczos" ;;
+    card) echo "crop=864:1080:$(cropx 864):0,scale=640:800:flags=lanczos" ;;
   esac
-  ffmpeg -nostdin -v error -ss "$in" -i "$src" -t "$dur" -vf "$(norm "$src")$vf,format=yuv420p" -an $X264 -preset "$(preset "$name")" -crf $crf -y "$OUT/$name-$rend.mp4"
+}
+
+# One rendition: encode <name> <rendition> <source> <in> <length> <centre>
+encode() {
+  local name=$1 rend=$2 src=$3 in=$4 dur=$5 c=$6 crf
+  case $rend in
+    1080 | 720) crf=30 ;;
+    p) crf=29 ;;
+    card) crf=28 ;;
+  esac
+  ffmpeg -nostdin -v error -ss "$in" -i "$src" -t "$dur" -vf "$(norm "$src")$(chain "$rend" "$c"),format=yuv420p" -an $X264 -preset "$(preset "$name")" -crf $crf -y "$OUT/$name-$rend.mp4"
   echo "  $name-$rend.mp4"
+}
+
+# The AV1 copy of a rendition, <name>-<rendition>.av1.mp4, which browsers that can play AV1 take instead of the
+# H.264 file (src/lib/film.ts). Its CRF is searched per film: the highest (smallest file) whose VMAF against the
+# source cut is at least the H.264 file's, so no film looks worse than it does in H.264. Over all 105 files that
+# came to 55% fewer bytes (91 MB to 41 MB). HEVC was tried on four films and saved 32–44% where AV1 saved 46–67%.
+# av1 <name> <rendition> <filters> <input options...>   (the input options select the source cut)
+av1() {
+  local name=$1 rend=$2 vf=$3 tmp target lo=0 hi=15 mid crf best="" score
+  shift 3
+  tmp=$(mktemp -d -t av1)
+  ffmpeg -nostdin -v error "$@" -vf "$vf,format=yuv420p" -an -c:v libx264 -preset ultrafast -crf 0 -y "$tmp/ref.mkv"
+  target=$(vmaf "$OUT/$name-$rend.mp4" "$tmp/ref.mkv")
+  # Even CRFs from 32 to 62.
+  while ((lo <= hi)); do
+    mid=$(((lo + hi) / 2))
+    crf=$((32 + 2 * mid))
+    ffmpeg -nostdin -v error -i "$tmp/ref.mkv" -an $AV1 -crf $crf -y "$tmp/$crf.mp4"
+    score=$(vmaf "$tmp/$crf.mp4" "$tmp/ref.mkv")
+    if python3 -c "import sys; sys.exit(0 if $score >= $target else 1)"; then
+      best=$crf lo=$((mid + 1))
+    else
+      hi=$((mid - 1))
+    fi
+  done
+  if [[ -z $best ]]; then
+    best=32
+    echo "  $name-$rend: even CRF 32 is under the H.264 file's VMAF ($target); kept 32" >&2
+  fi
+  # A short keeps the H.264 file's sound.
+  if [[ $name == short-* ]]; then
+    ffmpeg -nostdin -v error -i "$tmp/$best.mp4" -i "$OUT/$name-$rend.mp4" -map 0:v -map 1:a -c copy -movflags +faststart -y "$OUT/$name-$rend.av1.mp4"
+  else
+    mv "$tmp/$best.mp4" "$OUT/$name-$rend.av1.mp4"
+  fi
+  rm -rf "$tmp"
+  echo "  $name-$rend.av1.mp4 (CRF $best, VMAF ≥ $target)"
+}
+
+# The mean VMAF of a film against its reference: vmaf <film> <reference>
+vmaf() {
+  local log
+  log=$(mktemp -t vmaf)
+  ffmpeg -nostdin -v error -i "$1" -i "$2" -lavfi "[0:v]setpts=PTS-STARTPTS[d];[1:v]setpts=PTS-STARTPTS[r];[d][r]libvmaf=n_threads=8:log_fmt=json:log_path=$log" -f null -
+  python3 -c "import json, sys; print(round(json.load(open(sys.argv[1]))['pooled_metrics']['vmaf']['mean'], 2))" "$log"
+  rm -f "$log"
 }
 
 # pote-home walks in: the front door, the living room, the master bedroom, five seconds each, with 0.6 s crossfades.
@@ -158,12 +220,17 @@ while IFS=$'\t' read -r name rends in dur c src; do
   else
     src="assets/$src"
   fi
-  for r in ${rends//,/ }; do encode "$name" "$r" "$src" "$in" "$dur" "$c"; done
-  poster "$name" "$src" "$c" "$in" "$rends"
+  for r in ${rends//,/ }; do
+    [[ $AV1_ONLY ]] || encode "$name" "$r" "$src" "$in" "$dur" "$c"
+    av1 "$name" "$r" "$(norm "$src")$(chain "$r" "$c")" -ss "$in" -i "$src" -t "$dur"
+  done
+  [[ $AV1_ONLY ]] || poster "$name" "$src" "$c" "$in" "$rends"
 done <<< "$FILMS"
 
 while IFS=$'\t' read -r name at src; do
   [[ $# -gt 0 && ! " $* " =~ " $name " ]] && continue
   echo "$name"
-  short "$name" "$at" "assets/$src"
+  [[ $AV1_ONLY ]] || short "$name" "$at" "assets/$src"
+  av1 "$name" 1080 "scale=1920:1080:flags=lanczos" -i "assets/$src"
+  av1 "$name" 720 "scale=1280:720:flags=lanczos" -i "assets/$src"
 done <<< "$SHORTS"

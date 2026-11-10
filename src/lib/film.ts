@@ -2,8 +2,8 @@
  * Silent films across the site: which encoding suits the screen, whether one may start by itself, and the
  * visitor's one switch that pauses them all. Every film is encoded several ways from the client's renders
  * (scripts/encode-films.sh): a 1920 and a 1280 wide cut, a 540 × 960 portrait cut for phones held upright,
- * and a 640 × 800 cut for the amenity cards. A film is named by its path without the ending, e.g.
- * "/media/elements/hero-towers", and lists the cuts it has.
+ * and a 640 × 800 cut for the amenity cards, each in AV1 and in H.264. A film is named by its path without the
+ * ending, e.g. "/media/elements/hero-towers", and lists the cuts it has.
  */
 export type Rendition = "1080" | "720" | "p" | "card";
 export type Film = { src: string; renditions: readonly Rendition[] };
@@ -21,7 +21,7 @@ export function filmMayAutoplay() {
 /* The cut for a frame of this size: the portrait cut for an upright frame on a phone, the full-HD cut only for a
  * big frame on a fast connection, and the 1280 cut otherwise. The portrait cut stops at 768 px, where the stills
  * switch from their phone framing to the wide one, so a film always lines up with the still it replaces. */
-export function filmUrl(film: Film, frame: { width: number; height: number }) {
+export function filmCut(film: Film, frame: { width: number; height: number }) {
   const has = (r: Rendition) => film.renditions.includes(r);
   const px = frame.width * Math.min(window.devicePixelRatio || 1, 2);
   const fast = (connection()?.effectiveType ?? "4g") === "4g";
@@ -34,7 +34,20 @@ export function filmUrl(film: Film, frame: { width: number; height: number }) {
         : has("720")
           ? "720"
           : (film.renditions[0] ?? "720");
-  return `${film.src}-${pick}.mp4`;
+  return `${film.src}-${pick}`;
+}
+
+/*
+ * A cut's files, for the <source>s of its <video>, best first: the browser plays the first it can. AV1 is about
+ * half the bytes for the same picture (Chrome, Edge, Firefox, Android, and Apple devices with an AV1 decoder);
+ * H.264, last and with no codec named so that nothing turns it down, plays everywhere else. Should the AV1 file
+ * fail to load, the browser moves on to the H.264 one.
+ */
+export function filmSources(cut: string, sound = false) {
+  return [
+    { src: `${cut}.av1.mp4`, type: `video/mp4; codecs="av01.0.08M.08${sound ? ", mp4a.40.2" : ""}"` },
+    { src: `${cut}.mp4`, type: "video/mp4" },
+  ];
 }
 
 /*

@@ -59,7 +59,8 @@ for text. The logo is drawn from the guideline’s own vector paths (`components
 play in a full-screen player only when pressed (`components/brand/WatchFilm.tsx`). All live in `public/media/elements/`
 and are rebuilt by `scripts/encode-films.sh`. None is fetched before the page has loaded. Each starts when it nears the screen and stops
 when it leaves. `src/lib/film.ts` picks a cut to suit the frame and connection, including an upright cut for phones.
-Reduced motion, Save-Data and 2G/3G keep the still picture instead. One pause button stops every film for the rest of
+Each cut is in AV1 and H.264: the browser plays the AV1 file if it can (about half the bytes for the same picture,
+matched film by film on VMAF) and the H.264 one otherwise. Reduced motion, Save-Data and 2G/3G keep the still picture instead. One pause button stops every film for the rest of
 the visit (`components/media/LoopFilm.tsx`).
 
 **Interaction.** Every WhatsApp or email action opens a short form that shows the exact message before the visitor

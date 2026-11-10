@@ -3,10 +3,10 @@
 import { type ReactNode, useRef, useState } from "react";
 import type { Img } from "@/lib/content";
 import { CloseIcon } from "@/components/showroom/Icons";
-import { filmsPaused } from "@/lib/film";
+import { filmSources, filmsPaused } from "@/lib/film";
 import s from "./WatchFilm.module.css";
 
-/* One of the client's edited films with music: "<src>-1080.mp4" and "<src>-720.mp4", and its poster. */
+/* One of the client's edited films with music: "<src>-1080" and "<src>-720", each in AV1 and H.264, and its poster. */
 export type Short = { src: string; poster: Img; title: string };
 
 /*
@@ -17,13 +17,12 @@ export type Short = { src: string; poster: Img; title: string };
 export function WatchFilm({ short, className, children }: { short: Short; className?: string; children: ReactNode }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLButtonElement>(null);
-  const [src, setSrc] = useState<string>();
+  const [cut, setCut] = useState<string>();
   const loopsWerePaused = useRef(false);
 
   const open = () => {
     const wide = window.matchMedia("(min-width: 1024px) and (min-resolution: 1.5dppx), (min-width: 1600px)").matches;
-    // Each film opens on 2.5 s of a white "Disha Habitat presents" card; start just after it, on the first picture.
-    setSrc(`${short.src}-${wide ? "1080" : "720"}.mp4#t=2.8`);
+    setCut(`${short.src}-${wide ? "1080" : "720"}`);
     loopsWerePaused.current = filmsPaused.get();
     filmsPaused.set(true);
     dialog.current?.showModal();
@@ -39,7 +38,7 @@ export function WatchFilm({ short, className, children }: { short: Short; classN
         className={s.player}
         aria-label={short.title}
         onClose={() => {
-          setSrc(undefined);
+          setCut(undefined);
           filmsPaused.set(loopsWerePaused.current);
           opener.current?.focus();
         }}
@@ -52,8 +51,12 @@ export function WatchFilm({ short, className, children }: { short: Short; classN
               <CloseIcon />
             </button>
           </div>
-          {src && (
-            <video className={s.video} src={src} poster={short.poster.src} controls autoPlay playsInline preload="auto">
+          {cut && (
+            <video className={s.video} poster={short.poster.src} controls autoPlay playsInline preload="auto">
+              {/* Each film opens on 2.5 s of a white "Disha Habitat presents" card; start just after it, on the first picture. */}
+              {filmSources(cut, true).map((f) => (
+                <source key={f.src} src={`${f.src}#t=2.8`} type={f.type} />
+              ))}
               <track kind="captions" />
             </video>
           )}
