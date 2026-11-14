@@ -141,6 +141,90 @@
   color: #fff;
 }
 
+.fold {
+  list-style: none;
+}
+
+.fold::-webkit-details-marker {
+  display: none;
+}
+
+.chevron {
+  display: none;
+}
+
+/*
+ * On a phone the four columns are four rows, each opening on a tap (the footer was nearly two screens long with
+ * every link showing). From 768 px every column stands open and its heading is just a heading.
+ */
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 16px;
+  }
+
+  .col {
+    border-bottom: 1px solid var(--ink-line);
+  }
+
+  .fold {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 56px;
+    cursor: pointer;
+  }
+
+  .fold .head {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+  }
+
+  .chevron {
+    display: block;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    color: rgb(255 255 255 / 0.74);
+    transition: transform 0.3s var(--ease);
+  }
+
+  .col[open] .chevron {
+    transform: rotate(180deg);
+  }
+
+  .col ul {
+    padding-bottom: 16px;
+  }
+
+  /* The last row's rule closes the columns; the notes follow without a second one. */
+  .notes {
+    margin-top: 32px;
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .col::details-content {
+    content-visibility: visible;
+  }
+
+  .fold {
+    pointer-events: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}
+
 .col ul {
   display: grid;
   gap: 2px;
@@ -251,10 +335,9 @@
     gap: 0;
   }
 
+  /* Inline, so the comma after "MyGate" stays with it; the padding reaches above and below without moving a line. */
   .notes a {
-    display: inline-block;
     padding-block: 12px;
-    margin-block: -12px;
   }
 
   .links {

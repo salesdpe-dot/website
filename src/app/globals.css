@@ -371,6 +371,19 @@ html.consent-pending {
     text-decoration-color: var(--ink);
   }
 
+  /* On a touchscreen the link takes a 44 px tap, reaching past its 30 px box without moving anything. */
+  @media (pointer: coarse) {
+    .text-link {
+      position: relative;
+    }
+
+    .text-link::after {
+      content: "";
+      position: absolute;
+      inset: -7px 0;
+    }
+  }
+
   .text-link:disabled {
     opacity: 0.45;
     cursor: not-allowed;

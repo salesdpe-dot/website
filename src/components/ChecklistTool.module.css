@@ -225,6 +225,13 @@
   text-underline-offset: 4px;
 }
 
+/* On a touchscreen the title takes a 44 px tap; the padding reaches above and below without moving the line. */
+@media (pointer: coarse) {
+  .title h2 a {
+    padding-block: 10px;
+  }
+}
+
 .item[data-done] .title h2 {
   color: var(--text-2);
 }

@@ -3,6 +3,7 @@ import { CookieSettingsLink } from "@/components/consent/ConsentBanner";
 import { SlashBreak } from "@/components/ds/SlashBreak";
 import { communities, communityHref, company, links } from "@/lib/content";
 import { company as site } from "@/lib/site";
+import { ChevronDown } from "./Icons";
 import { Logo } from "./Logo";
 import s from "./SiteFooter.module.css";
 
@@ -30,6 +31,16 @@ const columns = [
     ],
   },
 ] as const;
+
+/* A column's heading, which opens and closes the column on a phone. */
+function Fold({ title }: { title: string }) {
+  return (
+    <summary className={s.fold}>
+      <h2 className={s.head}>{title}</h2>
+      <ChevronDown className={s.chevron} />
+    </summary>
+  );
+}
 
 /*
  * Every page ends on the brand: the guideline's navy field with the white lock-up on it (page 5), "come home"
@@ -62,21 +73,24 @@ export function SiteFooter() {
         </div>
       </div>
 
+      {/* On a phone each column is a row that opens, as on apple.com; from 768 px they stand open side by side. */}
       <div className={s.grid}>
         {columns.map((col) => (
-          <nav key={col.title} className={s.col} aria-label={col.title}>
-            <h2 className={s.head}>{col.title}</h2>
-            <ul>
-              {col.links.map((l) => (
-                <li key={l.label}>
-                  {l.href.startsWith("/") ? <Link href={l.href}>{l.label}</Link> : <a href={l.href}>{l.label}</a>}
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <details key={col.title} className={s.col}>
+            <Fold title={col.title} />
+            <nav aria-label={col.title}>
+              <ul>
+                {col.links.map((l) => (
+                  <li key={l.label}>
+                    {l.href.startsWith("/") ? <Link href={l.href}>{l.label}</Link> : <a href={l.href}>{l.label}</a>}
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </details>
         ))}
-        <div className={s.col}>
-          <h2 className={s.head}>Talk to us</h2>
+        <details className={s.col}>
+          <Fold title="Talk to us" />
           <ul>
             <li>
               <a href={company.sales.tel}>Sales <span className="whitespace-nowrap">{company.sales.display}</span></a>
@@ -96,7 +110,7 @@ export function SiteFooter() {
               <a href={site.office.mapUrl}>{company.office}</a>
             </li>
           </ul>
-        </div>
+        </details>
       </div>
 
       <div className={s.notes}>

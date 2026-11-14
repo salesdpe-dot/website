@@ -201,8 +201,8 @@
   bottom: 4px;
   left: 4px;
   padding: 0 5px;
-  font-size: 0.625rem;
-  line-height: 0.9375rem;
+  font-size: 0.6875rem;
+  line-height: 1rem;
 }
 
 .cards[data-compact] .title {

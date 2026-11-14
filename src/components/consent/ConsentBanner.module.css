@@ -96,6 +96,19 @@
   text-decoration-color: var(--ink);
 }
 
+/* On a touchscreen the two words take a 44 px tap, reaching above and below without moving the line. */
+@media (pointer: coarse) {
+  .link {
+    position: relative;
+  }
+
+  .link::after {
+    content: "";
+    position: absolute;
+    inset: -12px -4px;
+  }
+}
+
 .actions {
   display: flex;
   align-items: stretch;

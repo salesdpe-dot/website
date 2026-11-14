@@ -37,7 +37,8 @@
 
 .unit {
   margin-left: 4px;
-  font-size: 0.45em;
+  /* Never under 12 px, where a small figure would leave "sq ft" too small to read on a phone. */
+  font-size: max(0.45em, 0.75rem);
   font-weight: 600;
   letter-spacing: 0;
 }
