@@ -25,7 +25,7 @@
   padding: 10px var(--gutter);
   background: var(--surface);
   color: var(--text-2);
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -65,8 +65,8 @@
 }
 
 .strip strong {
-  font-size: 1.5rem;
-  line-height: 2rem;
+  font-size: var(--fs-d5);
+  line-height: var(--fs-d5-lh);
   font-weight: 500;
   color: var(--ink);
   font-variant-numeric: tabular-nums;
@@ -136,7 +136,7 @@
   background: none;
   color: var(--ink);
   font: inherit;
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   font-weight: 500;
   cursor: pointer;
 }
@@ -189,26 +189,26 @@
 }
 
 .label {
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   line-height: 1.25rem;
   font-weight: 500;
   color: var(--ink);
 }
 
 .note {
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   color: var(--text-2);
   font-variant-numeric: tabular-nums;
 }
 
 .hint {
-  font-size: 0.8125rem;
+  font-size: var(--fs-14);
   line-height: 1.125rem;
   color: var(--text-2);
 }
 
 .error {
-  font-size: 0.8125rem;
+  font-size: var(--fs-14);
   line-height: 1.125rem;
   color: var(--error);
 }
@@ -253,7 +253,7 @@
 }
 
 .input::placeholder {
-  font-size: 1rem;
+  font-size: var(--fs-16);
   font-weight: 400;
   color: var(--text-2);
 }
@@ -277,7 +277,7 @@
   background: var(--surface);
   color: var(--ink);
   font: inherit;
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   font-weight: 500;
   cursor: pointer;
   transition:
@@ -406,7 +406,7 @@
 }
 
 .resultLabel {
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   line-height: 1.25rem;
   font-weight: 500;
   color: var(--text-2);
@@ -415,7 +415,7 @@
 .emi {
   margin-top: 8px;
   min-height: 1.1em;
-  font-size: clamp(2.5rem, 6.4vw, 3.625rem);
+  font-size: var(--fs-d2);
   line-height: 1.1;
   color: var(--ink);
   font-variant-numeric: tabular-nums;
@@ -429,7 +429,7 @@
 .emiNote {
   margin-top: 8px;
   min-height: 3rem;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   line-height: 1.5rem;
   color: var(--text-2);
 }
@@ -479,7 +479,7 @@
   }
 
   .sum dt {
-    font-size: 0.875rem;
+    font-size: var(--fs-14);
   }
 
   .sum dd {
@@ -524,7 +524,7 @@
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   color: var(--text-2);
 }
 
@@ -549,7 +549,7 @@
 }
 
 .income {
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   line-height: 1.5rem;
   color: var(--text);
 }
@@ -577,7 +577,7 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.8125rem;
+  font-size: var(--fs-14);
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
@@ -613,7 +613,7 @@
 @media (min-width: 480px) {
   .table {
     min-width: 22rem;
-    font-size: 0.875rem;
+    font-size: var(--fs-14);
   }
 }
 
@@ -622,7 +622,7 @@
 }
 
 .fine {
-  font-size: 0.8125rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   color: var(--text-2);
 }

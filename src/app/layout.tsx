@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { ViewTransition } from "react";
 import { Hanken_Grotesk, Montserrat } from "next/font/google";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
+import { ConsentedAnalytics } from "@/components/consent/ConsentedAnalytics";
 import { MessageComposer } from "@/components/MessageComposer";
 import { FeedbackWidget } from "@/components/feedback/FeedbackWidget";
 import { SiteFooter } from "@/components/showroom/SiteFooter";
@@ -98,6 +99,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {process.env.NEXT_PUBLIC_FEEDBACK === "on" || process.env.NODE_ENV !== "production" ? <FeedbackWidget /> : null}
         <MessageComposer />
         <ConsentBanner />
+        <ConsentedAnalytics />
       </body>
     </html>
   );

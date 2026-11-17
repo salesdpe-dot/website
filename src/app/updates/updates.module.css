@@ -1,0 +1,391 @@
+/* The newsletter's pages: the updates index and an issue. Sizes are the site's type steps (globals.css). */
+
+/* Index: the latest issue as one large card, its photograph beside its words from 900 px. */
+.latest {
+  display: grid;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: #fff;
+  color: var(--ink);
+}
+
+@media (min-width: 900px) {
+  .latest {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+}
+
+.latestPicture {
+  position: relative;
+  aspect-ratio: 16 / 9;
+}
+
+.cover {
+  object-fit: cover;
+}
+
+.latestText {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 12px;
+  padding: 24px 20px 28px;
+}
+
+@media (min-width: 768px) {
+  .latestText {
+    padding: 40px;
+  }
+}
+
+.latestTitle {
+  font-size: var(--fs-d3);
+  line-height: var(--fs-d3-lh);
+}
+
+.latestLine {
+  font-size: var(--fs-16);
+  line-height: 1.5rem;
+  color: var(--text-2);
+}
+
+.latest:hover .latestTitle {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+/* Index: the earlier issues, a row each. */
+.archive {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: 0 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.archiveLink {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-16);
+  color: var(--ink);
+}
+
+.archiveQuarter {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.archiveMonth {
+  color: var(--text-2);
+}
+
+.archiveKind {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-14);
+  color: var(--text-2);
+}
+
+.archiveKind svg {
+  width: 16px;
+  height: 16px;
+}
+
+.archiveLink:hover .archiveMonth {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Issue: the row of links to its parts, under the title. */
+.parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin-top: 28px;
+  font-size: var(--fs-16);
+}
+
+.parts a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.4);
+  text-underline-offset: 5px;
+}
+
+.parts a:hover {
+  text-decoration-color: #fff;
+}
+
+/* Photographs with captions: one, two or three across. */
+.photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: 20px 16px;
+}
+
+/* Two across on a phone, so a group of eight is four rows, not eight screens. */
+@media (max-width: 599px) {
+  .photos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 12px;
+  }
+}
+
+.photo,
+.photoLead,
+.wide,
+.cardPicture {
+  margin: 0;
+}
+
+.photoLead {
+  grid-column: 1 / -1;
+}
+
+.photo img,
+.photoLead img,
+.wide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.photo img {
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.photoLead img {
+  max-height: 34rem;
+  object-fit: cover;
+}
+
+.photo figcaption,
+.photoLead figcaption,
+.wide figcaption {
+  margin-top: 8px;
+  font-size: var(--fs-14);
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.wide {
+  margin-bottom: 24px;
+}
+
+.wide img {
+  max-height: 36rem;
+  object-fit: cover;
+}
+
+/* Towers and villa rows: a card each, its photograph beside its list. */
+.phase + .phase {
+  margin-top: 40px;
+}
+
+.phaseHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-size: var(--fs-d5);
+  line-height: var(--fs-d5-lh);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.rera {
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.towers,
+.rows {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .towers,
+  .rows {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: #fff;
+}
+
+@media (min-width: 600px) {
+  .card {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .card {
+    grid-template-columns: 11rem minmax(0, 1fr);
+  }
+}
+
+.cardPicture img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 11rem;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+@media (min-width: 600px) {
+  .cardPicture img {
+    max-height: 16rem;
+  }
+}
+
+.cardText {
+  min-width: 0;
+}
+
+.cardTitle {
+  font-size: var(--fs-d5);
+  line-height: var(--fs-d5-lh);
+  color: var(--ink);
+}
+
+.cardMeta {
+  margin-top: 2px;
+  font-size: var(--fs-14);
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.updates {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding-left: 18px;
+  font-size: var(--fs-14);
+  line-height: 1.375rem;
+  color: var(--text);
+}
+
+.updates li::marker {
+  color: var(--accent);
+}
+
+/* The clubhouse: its list beside its photographs. */
+.split {
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    align-items: start;
+  }
+
+  .split > .updates {
+    margin-top: 0;
+    font-size: var(--fs-16);
+    line-height: 1.5rem;
+  }
+}
+
+/* The work in pictures, a group at a time. */
+.group + .group {
+  margin-top: 40px;
+}
+
+.groupTitle {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-size: var(--fs-d5);
+  line-height: var(--fs-d5-lh);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* The close: which homes are sold out, and the buttons. */
+.homes {
+  display: grid;
+  gap: 32px;
+}
+
+@media (min-width: 900px) {
+  .homes {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+}
+
+.homesTitle {
+  font-size: var(--fs-d3);
+  line-height: var(--fs-d3-lh);
+}
+
+.sold {
+  display: grid;
+  max-width: 36rem;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sold li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--ink-line);
+  font-size: var(--fs-16);
+  line-height: 1.5rem;
+}
+
+.sold strong {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.next {
+  margin-top: 16px;
+  font-size: var(--fs-14);
+  color: rgb(255 255 255 / 0.74);
+}
+
+.homesActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+}
+
+.homesActions > :global(.btn) {
+  min-height: 48px;
+}

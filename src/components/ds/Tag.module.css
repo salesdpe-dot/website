@@ -4,7 +4,7 @@
   gap: 4px;
   padding: 2px 8px;
   border-radius: var(--radius);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   line-height: 1.125rem;
   font-weight: 500;
   white-space: nowrap;

@@ -104,7 +104,7 @@ export const elements = {
    * poster's phone position matches where that cut was taken from the frame. */
   films: {
     hero: reel("pote-hero", ["1080", "720", "p"], "the central gardens, courts and villa rows from high up beside a tower", "The gardens from above", undefined, "65% 50%"),
-    home: reel("pote-home", ["720", "p"], "a front door opening onto a living room", "Front door, living room, master bedroom", undefined, "47% 50%"),
+    home: reel("pote-home", ["720", "p"], "a front door opening onto a living room", "The door. The living room. The bedroom.", undefined, "47% 50%"),
     overVillas: reel("out-balcony", ["720", "p"], "the villa rows, lawns, courts and a pool from the tower side, from above", "From the towers: villa rows, lawns and courts"),
     towers: reel("hero-towers", ["1080", "720", "p"], "the towers rising above the central gardens", "The towers"),
     villas: reel("pote-villas", ["720", "p"], "the villa rows from above, the camera pulling back over their gardens", "The villas"),
@@ -291,5 +291,4 @@ export const elements = {
   website: { label: "dishapursuitoftheelements.com", href: "https://www.dishapursuitoftheelements.com/" },
   updates: "https://www.dishapursuitoftheelements.com/project-updates",
   /* The project site publishes quarterly construction newsletters; the latest is Q4 (October) 2026, issue 12 of 16. */
-  latestUpdate: "Q4 2026",
 } as const;

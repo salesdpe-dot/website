@@ -46,7 +46,7 @@
   padding: 8px 18px;
   border-radius: 999px;
   color: rgb(255 255 255 / 0.8);
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   line-height: 1.25rem;
   font-weight: 500;
   white-space: nowrap;
@@ -64,7 +64,7 @@
   .tab {
     flex: 1 1 auto;
     padding-inline: 9px;
-    font-size: 0.875rem;
+    font-size: var(--fs-14);
   }
 }
 

@@ -130,13 +130,13 @@
 }
 
 .tabName {
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   line-height: 1.25rem;
   font-weight: 500;
 }
 
 .where {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   line-height: 1rem;
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -200,7 +200,7 @@
 }
 
 .count {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   line-height: 1rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -210,13 +210,13 @@
 }
 
 .name {
-  font-size: clamp(1.75rem, 0.9rem + 1.5vw, 2.5rem);
+  font-size: var(--fs-d4);
   line-height: 1.1;
 }
 
 .line {
   max-width: 36rem;
-  font-size: 1.0625rem;
+  font-size: var(--fs-18);
   line-height: 1.5rem;
   color: rgb(255 255 255 / 0.92);
 }
@@ -230,7 +230,7 @@
   border-radius: var(--radius);
   background: rgb(0 0 0 / 0.55);
   color: #fff;
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   line-height: 1.125rem;
   pointer-events: none;
 }
@@ -350,12 +350,12 @@
 }
 
 .cardName {
-  font-size: 1.5rem;
-  line-height: 1.875rem;
+  font-size: var(--fs-d5);
+  line-height: var(--fs-d5-lh);
 }
 
 .cardLine {
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   line-height: 1.375rem;
   color: rgb(255 255 255 / 0.92);
 }

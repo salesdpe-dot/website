@@ -48,7 +48,7 @@
 .note {
   grid-area: note;
   margin-top: 4px;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   color: rgb(255 255 255 / 0.74);
 }
@@ -128,7 +128,7 @@
 }
 
 .count {
-  font-size: 0.8125rem;
+  font-size: var(--fs-14);
   line-height: 1.125rem;
   font-weight: 500;
   letter-spacing: 0.08em;

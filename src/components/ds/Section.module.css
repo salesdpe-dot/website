@@ -97,7 +97,7 @@
 }
 
 .line {
-  font-size: 1.0625rem;
+  font-size: var(--fs-18);
   line-height: 1.5rem;
   color: var(--text-2);
 }

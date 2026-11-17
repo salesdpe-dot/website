@@ -43,9 +43,9 @@ function Fold({ title }: { title: string }) {
 }
 
 /*
- * Every page ends on the brand: the guideline's navy field with the white lock-up on it (page 5), "come home"
- * across the width in sky blue at poster size (page 6), the sales line and a button, then the pages in three
- * short columns, every way to reach Disha, the footnotes, and one line of small print.
+ * Every page ends on the brand, the same footer everywhere: the guideline's navy field with the white lock-up on it
+ * (page 5; the lock-up already carries "come home"), the sales line and a button, then the pages in three short
+ * columns, every way to reach Disha, the footnotes, and one line of small print.
  */
 export function SiteFooter() {
   return (
@@ -55,7 +55,6 @@ export function SiteFooter() {
         <Link href="/" prefetch={false} className={s.brand} aria-label="Disha Habitat, home">
           <Logo className={s.logo} monochrome title="Disha Habitat" />
         </Link>
-        <p className={`come-home sky ${s.sign}`}>come home</p>
       </div>
 
       <div className={s.call}>

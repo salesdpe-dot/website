@@ -35,18 +35,18 @@
 }
 
 .from {
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   color: var(--text-2);
 }
 
 .ask {
-  font-size: 1.5625rem;
-  line-height: 1.9375rem;
+  font-size: var(--fs-d5);
+  line-height: var(--fs-d5-lh);
   color: var(--ink);
 }
 
 .hint {
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   line-height: 1.5rem;
   color: var(--text);
 }
@@ -73,7 +73,7 @@
 }
 
 .small {
-  font-size: 0.8125rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   color: var(--text-2);
 }
@@ -105,7 +105,7 @@
   gap: 12px;
   border-bottom: 1px solid var(--line);
   color: var(--ink);
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   font-weight: 500;
 }
 

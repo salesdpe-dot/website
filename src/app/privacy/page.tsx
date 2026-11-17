@@ -24,8 +24,9 @@ export default function PrivacyPage() {
       title: "Cookies and analytics",
       body: (
         <p>
-          This website runs no analytics and no advertising or tracking tools. If we ever add one, it will stay switched off until you accept it
-          in the notice at the bottom of the page. Your choice is saved in your browser, and you can change it at any time.{" "}
+          If you accept analytics in the notice at the bottom of the page, the site counts page views with Vercel Web Analytics, so we can see
+          which pages are read. It sets no cookies and does not identify you: visits are counted in aggregate. Until you accept, it does not
+          load. The site runs no advertising or tracking tools. Your choice is saved in your browser, and you can change it at any time.{" "}
           <CookieSettingsLink className="text-link" />
         </p>
       ),
@@ -134,10 +135,10 @@ export default function PrivacyPage() {
       {/* On a computer the short version on the left, each part in full on the right; one under the other on a phone. */}
       <Section space="tight" split>
         <div>
-          <p className={s.updated}>Last updated 27 October 2026.</p>
+          <p className={s.updated}>Last updated 17 November 2026.</p>
           <h2 className={`display ${s.h2}`}>In short</h2>
           <ul className={s.short}>
-            <li>No analytics and no advertising or tracking tools. If we ever add one, it stays switched off until you accept it.</li>
+            <li>Page views are counted (Vercel Web Analytics, no cookies, nothing that identifies you) only if you accept analytics. No advertising or tracking tools.</li>
             <li>
               Two small items are saved in your browser, and neither is sent to us. If you leave a feedback note, a random number is saved too,
               and sent only with your notes.

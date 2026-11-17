@@ -67,7 +67,7 @@
   align-items: center;
   height: 100%;
   padding-inline: 12px;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   font-weight: 500;
   white-space: nowrap;

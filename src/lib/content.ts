@@ -39,7 +39,7 @@ export const links = {
   emi: "/plan",
   /* Karnataka RERA's list of registered projects, searchable by number, name or promoter. */
   rera: reraSearch,
-  updates: elements.updates,
+  updates: "/updates",
   mygate: "https://mygate.com/bengaluru/disha-central-park-499.html",
 } as const;
 

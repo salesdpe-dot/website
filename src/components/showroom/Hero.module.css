@@ -103,7 +103,7 @@
 }
 
 .eyebrow {
-  font-size: 0.8125rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -115,7 +115,7 @@
 .title {
   max-width: 16ch;
   margin-top: 8px;
-  font-size: clamp(2.375rem, 1.4rem + 3.9vw, 5.25rem);
+  font-size: var(--fs-d2);
   line-height: 1.04;
   letter-spacing: -0.03em;
   color: #fff;
@@ -133,7 +133,7 @@
 .line {
   max-width: 30ch;
   margin-top: 12px;
-  font-size: 1.0625rem;
+  font-size: var(--fs-18);
   line-height: 1.5rem;
   color: #fff;
   text-wrap: balance;
@@ -142,8 +142,8 @@
 @media (min-width: 768px) {
   .line {
     max-width: 44ch;
-    font-size: 1.375rem;
-    line-height: 1.9rem;
+    font-size: var(--fs-d6);
+    line-height: var(--fs-d6-lh);
   }
 }
 
@@ -186,7 +186,7 @@
 .trust {
   max-width: 34rem;
   text-align: center;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   font-weight: 500;
   color: #fff;
@@ -224,7 +224,7 @@
   padding: 1px 6px;
   border-radius: 4px;
   background: rgb(0 0 0 / 0.4);
-  font-size: 0.6875rem;
+  font-size: var(--fs-12);
   line-height: 1rem;
   color: #fff;
 }
@@ -300,7 +300,7 @@
 
   .tabLabel {
     display: block;
-    font-size: 0.8125rem;
+    font-size: var(--fs-14);
     line-height: 1rem;
     font-weight: 500;
     color: rgb(255 255 255 / 0.72);

@@ -243,7 +243,7 @@ export default function StoryPage() {
 
       <CtaBand
         title="Bring every question."
-        line="Meet us at the site in Gunjur or at the office on Whitefield Main Road, over coffee."
+        line="Visit the site in Gunjur, or ask the sales team for a call. They will answer every question."
         actions={[
           { label: "Book a visit", href: links.bookVisit },
           { label: "See our homes", href: links.homes },

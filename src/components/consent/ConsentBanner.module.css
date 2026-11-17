@@ -69,12 +69,12 @@
 }
 
 .body {
-  font-size: 0.8125rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   color: var(--text-2);
 }
 
-/* "Privacy" and "Choose" are part of the sentence: same size, underlined. */
+/* "Privacy policy" and "Settings" are part of the sentence: same size, underlined. */
 .link {
   display: inline;
   padding: 0;
@@ -122,7 +122,7 @@
   min-width: 76px;
   min-height: 40px;
   padding: 0 12px;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
 }
 
 .actions > :global(.btn)::after {
@@ -142,7 +142,7 @@
 }
 
 .always {
-  font-size: 0.8125rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   color: var(--text-2);
 }
@@ -168,12 +168,12 @@
 .toggle span {
   display: grid;
   gap: 2px;
-  font-size: 0.8125rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   color: var(--text-2);
 }
 
 .toggle strong {
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   color: var(--ink);
 }

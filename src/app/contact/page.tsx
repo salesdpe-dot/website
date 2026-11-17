@@ -28,9 +28,8 @@ export default function ContactPage() {
     <>
       <PageIntro
         above={<Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Contact" }]} />}
-        eyebrow="Gunaranjan J, founder"
-        title="“Let’s meet for coffee.”"
-        line="Come to the site in Gunjur, sit down with us at the office on Whitefield Main Road, or ask the sales team to call you."
+        title="Visit, call or write."
+        line="See the homes at the site in Gunjur, or ask the sales team to call you. Every request reaches our sales office."
       >
         <div className={s.hero}>
           <a href="#book" className="btn btn-primary">

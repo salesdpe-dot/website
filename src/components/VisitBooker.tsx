@@ -1,20 +1,19 @@
 "use client";
 
 import { type FocusEvent, type ReactNode, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { Building2, Coffee, PhoneCall } from "lucide-react";
+import { Building2, PhoneCall } from "lucide-react";
 import { ChoiceCards, SelectField, TextField } from "@/components/ds";
 import { fieldClasses } from "@/components/ds/Field";
 import { elements } from "@/lib/elements";
 import { recordLead } from "@/lib/leads";
 import { mailtoUrl, parsePhone, phoneHelp, shownPhone } from "@/lib/messaging";
-import { company } from "@/lib/site";
 import { PhoneField } from "./PhoneField";
 import { SuccessTick } from "./SuccessTick";
 import s from "./VisitBooker.module.css";
 
 /*
- * Book a site visit in four short steps. The request goes to Disha's published sales WhatsApp (or
- * email) with every detail filled in, is recorded so the team can reply (src/lib/leads.ts), and the
+ * Book a site visit (or ask for a call) in four short steps. Every request goes to the sales team at Disha's
+ * marketing office, on its published sales WhatsApp (or email), with every detail filled in, is recorded so the team can reply (src/lib/leads.ts), and the
  * visitor can save a calendar reminder. Times are preferences for the sales team to confirm, not
  * guaranteed slots.
  */
@@ -26,13 +25,6 @@ const places: Place[] = [
     detail: `${elements.locality}. See the towers, villas and the master plan.`,
     Icon: Building2,
     where: `${elements.name}, ${elements.locality}`,
-  },
-  {
-    id: "office",
-    title: "Coffee at our office",
-    detail: `${company.office.lines.join(", ")}. Talk through any community with us.`,
-    Icon: Coffee,
-    where: `${company.legalName}, ${company.office.lines.join(", ")}`,
   },
   {
     id: "call",
@@ -314,7 +306,7 @@ export function VisitBooker({ compact = false }: { compact?: boolean }) {
               name="visit-place"
               value={place}
               onChange={setPlace}
-              columns={3}
+              columns={2}
               error={tried && !canNext ? "Choose where you’d like to meet us to continue." : undefined}
               options={places.map((x) => ({ value: x.id, title: x.title, detail: x.detail, icon: <x.Icon aria-hidden strokeWidth={1.5} /> }))}
             />

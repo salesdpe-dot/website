@@ -1,19 +1,16 @@
-import Image from "next/image";
 import { ComposeButton } from "@/components/ComposeButton";
 import { Section } from "@/components/ds";
 import { AskForCallButton, VisitBooker } from "@/components/VisitBooker";
 import { elements } from "@/lib/elements";
-import { homemakers } from "@/lib/site";
 import s from "./EnquirySection.module.css";
 
 /*
- * The visit section of the project page: Guna's invitation, then the same four-step booker as /contact (where,
+ * The visit section of the project page: one line, then the same four-step booker as /contact (where,
  * when, who, then send it on WhatsApp or by email, with a calendar file for a visit), and beside it the call for
  * buyers abroad and the quieter ways to reach the sales team. Kept to about a screen: the heading beside its line
  * on a computer, and the booker in its compact form.
  */
 export function EnquirySection() {
-  const guna = homemakers[0];
   return (
     <Section id="enquire" tone="surface" space="tight" labelledBy="enquire-title">
       <div className={s.intro}>
@@ -22,15 +19,8 @@ export function EnquirySection() {
         </h2>
         <div className={s.introText}>
           <p className={s.line}>
-            At the site in Gunjur, or over coffee at our office on Whitefield Main Road: choose where, then a day and a time.
-            The sales team confirms it with you.
-          </p>
-          <p className={s.byline}>
-            <Image src={guna.portrait} alt="" width={96} height={96} sizes="48px" className={s.face} />
-            <span>
-              {guna.name}
-              <small>{guna.role}</small>
-            </span>
+            See the towers, the villas and the master plan at the site in Gunjur: choose a day and a time, and the sales team
+            confirms it with you.
           </p>
         </div>
       </div>

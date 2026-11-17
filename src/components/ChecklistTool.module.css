@@ -47,14 +47,14 @@
   align-items: baseline;
   flex-wrap: wrap;
   gap: 4px 12px;
-  font-size: 1.0625rem;
+  font-size: var(--fs-18);
   line-height: 1.5rem;
   color: rgb(255 255 255 / 0.86);
 }
 
 .count strong {
   font-family: var(--font-display);
-  font-size: clamp(2.75rem, 2rem + 2.4vw, 4.5rem);
+  font-size: var(--fs-d2);
   line-height: 1;
   font-weight: 500;
   color: var(--accent);
@@ -116,15 +116,15 @@
 
 .readyInner p {
   font-family: var(--font-display);
-  font-size: 1.375rem;
-  line-height: 1.875rem;
+  font-size: var(--fs-d6);
+  line-height: var(--fs-d6-lh);
   color: var(--accent);
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 
 .points {
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   line-height: 1.375rem;
   color: rgb(255 255 255 / 0.74);
 }
@@ -149,7 +149,7 @@
   border: 0;
   padding: 0 8px;
   font: inherit;
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   cursor: pointer;
 }
 
@@ -160,7 +160,7 @@
 
 .notes {
   min-height: 0;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   color: rgb(255 255 255 / 0.8);
 }
 
@@ -213,7 +213,7 @@
 
 .title h2 {
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  font-size: var(--fs-d5);
   line-height: 1.25;
   font-weight: 600;
   color: var(--ink);
@@ -238,7 +238,7 @@
 
 .summary {
   margin-top: 2px;
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   line-height: 1.375rem;
   color: var(--text-2);
 }
@@ -256,7 +256,7 @@
   background: none;
   color: var(--ink);
   font: inherit;
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   cursor: pointer;
@@ -342,7 +342,7 @@
 .checks legend {
   margin-bottom: 4px;
   padding: 0;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   font-weight: 500;
   color: var(--ink);
 }
@@ -467,7 +467,7 @@ input:focus-visible + .box {
 .printNote {
   display: none;
   margin-top: 16px;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
 }
 
 @media print {

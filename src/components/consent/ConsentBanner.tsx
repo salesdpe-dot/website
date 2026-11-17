@@ -16,8 +16,8 @@ const useChoice = (): Consent | "none" | "unknown" =>
 
 /*
  * A quiet notice at the bottom of the page. It never blocks anything: the site works the same
- * whichever button is pressed. No analytics or marketing tool exists on the site yet, so the choice
- * is recorded for when one does (see src/lib/consent.ts).
+ * whichever button is pressed. "Analytics" turns on Vercel Web Analytics (ConsentedAnalytics); no marketing tool
+ * exists on the site yet, so that choice is recorded for when one does (see src/lib/consent.ts).
  */
 export function ConsentBanner() {
   const choice = useChoice();
@@ -98,16 +98,16 @@ export function ConsentBanner() {
   return (
     <section ref={bar} className={s.bar} aria-label="Cookie notice" data-leaving={leaving || undefined}>
       <p className={s.body}>
-        No tracking unless you accept.{" "}
+        We use cookies to improve your experience.{" "}
         <span className={s.nowrap}>
           <Link href="/privacy" className={s.link}>
-            Privacy
+            Privacy policy
           </Link>
           {!choosing && (
             <>
               {" · "}
               <button type="button" className={s.link} onClick={() => setChoosing(true)}>
-                Choose
+                Settings
               </button>
             </>
           )}

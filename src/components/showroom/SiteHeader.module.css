@@ -130,7 +130,7 @@
   min-height: 32px;
   padding: 4px 16px;
   border-radius: var(--radius);
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   font-weight: 500;
   transition: background-color 0.33s var(--ease);
@@ -233,7 +233,7 @@
   background: rgb(0 0 0 / 0.26);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   font-weight: 500;
 }
 
@@ -319,7 +319,7 @@
   padding: 0 5px;
   border-radius: 4px;
   background: rgb(0 0 0 / 0.5);
-  font-size: 0.6875rem;
+  font-size: var(--fs-12);
   line-height: 1rem;
   color: #fff;
 }
@@ -333,7 +333,7 @@
   border-radius: 4px;
   background: var(--accent);
   color: var(--on-accent);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   line-height: 1.125rem;
   font-weight: 600;
 }
@@ -346,7 +346,7 @@
   display: block;
   margin-top: 10px;
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: var(--fs-16);
   line-height: 1.375rem;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -354,15 +354,15 @@
 
 .featured .tileName {
   margin-top: 14px;
-  font-size: 1.5rem;
-  line-height: 1.875rem;
+  font-size: var(--fs-d5);
+  line-height: var(--fs-d5-lh);
   letter-spacing: -0.02em;
 }
 
 .tileMeta {
   display: block;
   margin-top: 2px;
-  font-size: 0.8125rem;
+  font-size: var(--fs-14);
   line-height: 1.125rem;
   color: var(--text-2);
 }
@@ -371,7 +371,7 @@
   display: inline-block;
   margin-top: 8px;
   padding-block: 2px;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   font-weight: 500;
   color: var(--ink);
@@ -415,13 +415,13 @@
 
 .allName {
   font-family: var(--font-display);
-  font-size: 1.0625rem;
+  font-size: var(--fs-18);
   line-height: 1.375rem;
   font-weight: 600;
 }
 
 .allMeta {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   line-height: 1rem;
   color: rgb(255 255 255 / 0.76);
 }
@@ -438,7 +438,7 @@
 .side a {
   display: block;
   padding-block: 6px;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   line-height: 1.25rem;
   font-weight: 500;
 }
@@ -531,8 +531,8 @@
   padding: 12px;
   border-radius: var(--radius);
   font-family: var(--font-display);
-  font-size: 1.375rem;
-  line-height: 1.75rem;
+  font-size: var(--fs-d6);
+  line-height: var(--fs-d6-lh);
   font-weight: 600;
   letter-spacing: -0.02em;
   text-align: left;
@@ -568,7 +568,7 @@
   min-height: 44px;
   padding: 10px 12px;
   border-radius: var(--radius);
-  font-size: 0.9375rem;
+  font-size: var(--fs-16);
   line-height: 1.375rem;
 }
 
@@ -577,7 +577,7 @@
 }
 
 .sheetSub span {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   color: var(--text-2);
   white-space: nowrap;
 }

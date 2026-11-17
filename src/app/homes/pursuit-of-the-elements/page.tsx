@@ -15,7 +15,8 @@ import { communities, links, pricesAndPlans, trust } from "@/lib/content";
 import { elements as e, type Reel } from "@/lib/elements";
 import { focusPoint } from "@/lib/focus";
 import { pageMeta } from "@/lib/launch";
-import { award, delivered } from "@/lib/proof";
+import { issueHref, latestIssue } from "@/lib/newsletter";
+import { award, delivered, mapsSearchUrl, nearbySearches, siteDirectionsUrl } from "@/lib/proof";
 import { formatIndian } from "@/lib/site";
 import { SubNav } from "../SubNav";
 import { ActionDock } from "./ActionDock";
@@ -40,6 +41,7 @@ export const metadata: Metadata = pageMeta({
 });
 
 const NEW_TAB = <span className="sr-only">(opens in a new tab)</span>;
+const MAPS_TAB = <span className="sr-only">(opens Google Maps in a new tab)</span>;
 
 /* The bar's sections, in the page's order. On a phone the ones marked go, so the rest fit across a 390 px screen. */
 const nav = [
@@ -324,7 +326,7 @@ export default function ElementsPage() {
       {/* Step inside: the walk through a home large, a bedroom and the balcony beside it. */}
       <section id="inside" className={s.band} aria-labelledby="inside-title">
         <div className={s.inner}>
-          <Head id="inside-title" title="Front door to master bedroom." />
+          <Head id="inside-title" title="The door opens. Welcome home." line="One walk through a home, from the front door to the master bedroom." />
           <div className={s.insideGrid}>
             <figure className={s.walk}>
               <LoopFilm film={home.film} poster={home.poster} sizes="(min-width: 1024px) 66vw, 100vw" />
@@ -381,10 +383,9 @@ export default function ElementsPage() {
                   </li>
                 ))}
               </ul>
-              <a className={`text-link ${s.onNavy}`} href={e.updates} target="_blank" rel="noopener noreferrer">
-                Construction updates, latest {e.latestUpdate} <ArrowRight />
-                {NEW_TAB}
-              </a>
+              <Link className={`text-link ${s.onNavy}`} href={issueHref(latestIssue)}>
+                Construction updates, latest {latestIssue.quarter} <ArrowRight />
+              </Link>
             </div>
             <figure className={s.award}>
               <Image
@@ -409,6 +410,23 @@ export default function ElementsPage() {
       <section id="location" className={`${s.band} ${s.surface}`} aria-labelledby="location-title">
         <div className={s.inner}>
           <Head id="location-title" title="Gunjur, East Bengaluru." line="Pick your office, and Google Maps shows today’s drive from the site." />
+          {/* Directions to the gate, and the schools and hospitals round it: live Google Maps, so no name or distance is ours to vouch for. */}
+          <ul className={s.places} aria-label="Around the site, in Google Maps">
+            <li>
+              <a className="text-link" href={siteDirectionsUrl} target="_blank" rel="noopener noreferrer">
+                Directions to the site <ArrowRight />
+                {MAPS_TAB}
+              </a>
+            </li>
+            {nearbySearches.slice(0, 2).map((n) => (
+              <li key={n.label}>
+                <a className="text-link" href={mapsSearchUrl(n.query)} target="_blank" rel="noopener noreferrer">
+                  {n.label} <ArrowRight />
+                  {MAPS_TAB}
+                </a>
+              </li>
+            ))}
+          </ul>
           <div className={s.where}>
             <ProjectMap items={mapItems} start={mapStart} />
             <CommuteDisclosure label="Check your commute">
@@ -444,7 +462,7 @@ export default function ElementsPage() {
         </div>
       </section>
 
-      {/* The visit: Guna's invitation and the booker. The phone's action bar goes once this is reached. */}
+      {/* The visit: the booker. The phone's action bar goes once this is reached. */}
       <div id="visit">
         <EnquirySection />
       </div>
