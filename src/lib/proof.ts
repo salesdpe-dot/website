@@ -5,7 +5,10 @@
  * is deliberately absent: see docs/RESEARCH-BRIEF.md and the client launch checklist.
  */
 import { elements } from "@/lib/elements";
+import { siteQuery } from "@/lib/nearby";
 import { projectsByHandover } from "@/lib/projects";
+
+export { directionsUrl } from "@/lib/nearby";
 
 export const delivered = projectsByHandover.map((p) => ({
   slug: p.slug,
@@ -40,7 +43,7 @@ export const reraSearch = "https://rera.karnataka.gov.in/viewAllProjects";
  */
 export const commuteFrom = {
   label: elements.shortName,
-  query: "Disha Pursuit of the Elements, Gunjur, Bengaluru",
+  query: siteQuery,
 };
 
 export const commuteDestinations = [
@@ -52,21 +55,14 @@ export const commuteDestinations = [
   { label: "Kempegowda International Airport", query: "Kempegowda International Airport, Bengaluru" },
 ];
 
-/* What's around the site, as live Google Maps searches: no distances or names are claimed by us. */
+/* What else is around the site, as live Google Maps searches: no distances or names are claimed by us. */
 export const nearbySearches = [
-  { label: "Schools nearby", query: "schools near Gunjur, Bengaluru" },
-  { label: "Hospitals nearby", query: "hospitals near Gunjur, Bengaluru" },
   { label: "Temples nearby", query: "temples near Gunjur, Bengaluru" },
   { label: "Supermarkets nearby", query: "supermarkets near Gunjur, Bengaluru" },
 ];
 export const mapsSearchUrl = (query: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 /* Directions to the site from wherever the visitor is. */
 export const siteDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(commuteFrom.query)}`;
-
-export function directionsUrl(destination: string, origin = commuteFrom.query) {
-  const q = new URLSearchParams({ api: "1", origin, destination, travelmode: "driving" });
-  return `https://www.google.com/maps/dir/?${q.toString()}`;
-}
 
 /* The ET Business Awards 2025 citation, exactly as printed on the certificate. */
 export const award = {

@@ -270,6 +270,124 @@
   }
 }
 
+/* Schools and hospitals: a round marker on the spot, its name beside it where there is room, a link to directions. */
+.poi {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  pointer-events: auto;
+  transition:
+    opacity 0.3s var(--ease),
+    visibility 0.3s;
+}
+
+.poiMark {
+  display: block;
+  width: 20px;
+  height: 20px;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.25));
+}
+
+.poiMark circle {
+  fill: #082032;
+  stroke: #fff;
+  stroke-width: 1.6;
+}
+
+.poiMark[data-kind="hospital"] circle {
+  fill: #d93a3a;
+}
+
+.poiName {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 3px);
+  font-size: var(--fs-12);
+  line-height: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink);
+  text-shadow:
+    0 0 2px #f2f2f2,
+    0 0 2px #f2f2f2,
+    0 0 4px #f2f2f2,
+    0 0 6px #f2f2f2;
+  translate: 0 -50%;
+  transition: opacity 0.3s var(--ease);
+}
+
+.poi[data-side="left"] .poiName {
+  right: calc(100% + 3px);
+  left: auto;
+}
+
+.poi[data-side="none"] .poiName,
+.map[data-moving] .poiName {
+  opacity: 0;
+}
+
+/* With no room for its name, the name shows while the marker is pointed at. */
+.poi[data-side="none"]:hover .poiName {
+  z-index: 1;
+  padding: 2px 6px;
+  border-radius: var(--radius);
+  background: #fff;
+  text-shadow: none;
+  opacity: 1;
+}
+
+.poi:hover .poiName {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.poi[data-hidden="true"],
+.poi[data-far="true"] {
+  opacity: 0;
+  visibility: hidden;
+  transition-duration: 0.15s;
+}
+
+.legend {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  gap: 12px;
+  padding: 4px 10px;
+  border-top-right-radius: var(--radius);
+  background: rgb(255 255 255 / 0.9);
+  font-size: var(--fs-12);
+  line-height: 1rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* Where a picture's frame takes the foot of the map (the home page, below 900 px), the key moves to the top. */
+@media (max-width: 899px) {
+  .map[data-framed] .legend {
+    top: 0;
+    bottom: auto;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: var(--radius);
+  }
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend .poiMark {
+  width: 14px;
+  height: 14px;
+  filter: none;
+}
+
 .credit a {
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -284,6 +402,7 @@
   .place,
   .pin,
   .edge,
+  .poi,
   .leader {
     transition: none;
   }

@@ -75,7 +75,7 @@ export function CommuteChecker() {
           </ul>
         </section>
 
-        {/* For the rest of the family: schools, a hospital, a temple, the shops. Live searches, so we claim no names or distances. */}
+        {/* For the rest of the family: a temple, the shops. Live searches, so we claim no names or distances. The schools and hospitals are listed on the page. */}
         <section aria-labelledby="around-site" className={s.chips}>
           <h3 id="around-site" className="eyebrow">
             Around Gunjur

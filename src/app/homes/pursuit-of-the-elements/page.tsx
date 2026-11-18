@@ -16,7 +16,8 @@ import { elements as e, type Reel } from "@/lib/elements";
 import { focusPoint } from "@/lib/focus";
 import { pageMeta } from "@/lib/launch";
 import { issueHref, latestIssue } from "@/lib/newsletter";
-import { award, delivered, mapsSearchUrl, nearbySearches, siteDirectionsUrl } from "@/lib/proof";
+import { award, delivered, siteDirectionsUrl } from "@/lib/proof";
+import { directionsUrl, nearby, nearbyCheckedOn } from "@/lib/nearby";
 import { formatIndian } from "@/lib/site";
 import { SubNav } from "../SubNav";
 import { ActionDock } from "./ActionDock";
@@ -410,29 +411,19 @@ export default function ElementsPage() {
       <section id="location" className={`${s.band} ${s.surface}`} aria-labelledby="location-title">
         <div className={s.inner}>
           <Head id="location-title" title="Gunjur, East Bengaluru." line="Pick your office, and Google Maps shows today’s drive from the site." />
-          {/* Directions to the gate, and the schools and hospitals round it: live Google Maps, so no name or distance is ours to vouch for. */}
-          <ul className={s.places} aria-label="Around the site, in Google Maps">
-            <li>
-              <a className="text-link" href={siteDirectionsUrl} target="_blank" rel="noopener noreferrer">
-                Directions to the site <ArrowRight />
-                {MAPS_TAB}
-              </a>
-            </li>
-            {nearbySearches.slice(0, 2).map((n) => (
-              <li key={n.label}>
-                <a className="text-link" href={mapsSearchUrl(n.query)} target="_blank" rel="noopener noreferrer">
-                  {n.label} <ArrowRight />
-                  {MAPS_TAB}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <p className={s.places}>
+            <a className="text-link" href={siteDirectionsUrl} target="_blank" rel="noopener noreferrer">
+              Directions to the site <ArrowRight />
+              {MAPS_TAB}
+            </a>
+          </p>
           <div className={s.where}>
             <ProjectMap items={mapItems} start={mapStart} />
             <CommuteDisclosure label="Check your commute">
               <CommuteLazy />
             </CommuteDisclosure>
           </div>
+          <Nearby />
         </div>
       </section>
 
@@ -489,6 +480,55 @@ function Head({ id, kicker, title, line, tone = "light" }: { id: string; kicker?
         {title}
       </h2>
       {line && <p className={s.lede}>{line}</p>}
+    </div>
+  );
+}
+
+/*
+ * The schools and hospitals round the site, with Disha's distances: the nearest four of each in view, the rest a
+ * tap away. Each row opens Google Maps directions from the site to that place.
+ */
+const NEARBY_SHOWN = 4;
+function Nearby() {
+  const row = (p: (typeof nearby)[number]["places"][number]) => (
+    <li key={p.name}>
+      <a className={s.nearbyRow} href={directionsUrl(p.place)} target="_blank" rel="noopener noreferrer">
+        <span className={s.nearbyName}>{p.name}</span>
+        <span className={s.nearbyDrive}>
+          {p.km} km · {p.minutes} min
+        </span>
+        {MAPS_TAB}
+      </a>
+    </li>
+  );
+  return (
+    <div className={s.nearby}>
+      {nearby.map((g) => {
+        const rest = g.places.slice(NEARBY_SHOWN);
+        return (
+          <section key={g.title} className={s.nearbyGroup} aria-labelledby={`nearby-${g.title.toLowerCase()}`}>
+            <h3 id={`nearby-${g.title.toLowerCase()}`} className={s.nearbyTitle}>
+              {g.title} nearby
+            </h3>
+            <ul className={s.nearbyList}>{g.places.slice(0, NEARBY_SHOWN).map(row)}</ul>
+            {rest.length > 0 && (
+              <details className={s.nearbyMore}>
+                <summary>
+                  <span className={s.showMore}>
+                    {rest.length} more {g.title.toLowerCase()}
+                  </span>
+                  <span className={s.showLess}>Show fewer</span>
+                </summary>
+                <ul className={s.nearbyList}>{rest.map(row)}</ul>
+              </details>
+            )}
+          </section>
+        );
+      })}
+      <p className={s.nearbyNote}>
+        Distance and drive by road from the site, as Disha&rsquo;s sales team measured them in {nearbyCheckedOn}. The drive changes with the traffic: each
+        place opens today&rsquo;s directions in Google Maps.
+      </p>
     </div>
   );
 }

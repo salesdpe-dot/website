@@ -60,6 +60,7 @@ room-games	720,card	0	5	0.5	assets 2/Clubhouse Individual shots/Indoor Games 1.m
 room-banquet	720,card	0	5	0.5	assets 2/Clubhouse Individual shots/Banquet Hall 1.mp4
 room-guest	720,card	0	5	0.62	assets 2/Clubhouse Individual shots/Guest room .mp4
 room-senior	720,card	0	5	0.5	assets 2/Clubhouse Individual shots/senior lounge 1.mp4
+room-association	720,card	0	6	0.62	assets 2/Clubhouse Individual shots/Updated Shots 21.10.2026/Association room 1.mp4
 room-classroom	720,card	0	6	0.5	assets 2/Clubhouse Individual shots/Updated Shots 21.10.2026/Classroom 1 - Revise.mp4
 room-yoga	720,card	0	6	0.55	assets 2/Clubhouse Individual shots/1st Floor Yoga deck.mp4
 room-terrace	720,card	0	6	0.5	assets 2/Clubhouse Individual shots/2nd Floor Terrace Seating.mp4

@@ -2,6 +2,7 @@
 
 import { type CSSProperties, type RefObject, useEffect, useRef, useState } from "react";
 import { area, base, mapLabels, mapPlots, tiles } from "@/lib/map.generated";
+import { nearbyPins } from "@/lib/nearby";
 import { MOTION_OK, useMedia } from "@/lib/useMedia";
 import s from "./CommunityMap.module.css";
 
@@ -37,6 +38,9 @@ const NAVY = "#082032";
 const FOCUS_SPAN = 3600; // metres across the clear part of the map when it rests on a community
 const ZOOM = { min: 0.06, max: 0.11 }; // px per metre at rest: the tiles are drawn at 0.2
 const MAX_DPR = 2;
+/* Schools and hospitals: a marker's radius in px, and the closest zoom out (px per metre) at which they show. */
+const POI_R = 10;
+const POI_ZOOM = 0.045;
 
 const plotBySlug = new Map(mapPlots.map((p) => [p.slug, p]));
 const plotBox = new Map(
@@ -194,6 +198,43 @@ function pinRect(side: Side, a: { x: number; y: number }, w: number, h: number) 
 }
 
 type Rect = { x: number; y: number; w: number; h: number };
+
+/*
+ * The line from a plot (its box on screen) to the picture's frame: across to a frame on its right, or down to one
+ * below it; none when the frame is too close. With it, the room it takes, as one box per stretch of the line.
+ */
+function leaderLine(F: Rect, b: { x0: number; y0: number; x1: number; y1: number }) {
+  const within = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+  const cx = (b.x0 + b.x1) / 2;
+  const cy = (b.y0 + b.y1) / 2;
+  if (F.x > b.x1 + 16) {
+    const sx = b.x1 + 6;
+    const ex = F.x - 6;
+    const mx = (sx + ex) / 2;
+    const ey = within(cy, F.y + 24, F.y + F.h - 24);
+    return {
+      d: `M${sx} ${cy}H${mx}L${ex} ${ey}`,
+      boxes: [
+        { x: sx, y: cy - 3, w: mx - sx, h: 6 },
+        { x: mx, y: Math.min(cy, ey) - 3, w: ex - mx, h: Math.abs(ey - cy) + 6 },
+      ],
+    };
+  }
+  if (F.y > b.y1 + 16) {
+    const sy = b.y1 + 6;
+    const ey = F.y - 6;
+    const my = (sy + ey) / 2;
+    const ex = within(cx, F.x + 24, F.x + F.w - 24);
+    return {
+      d: `M${cx} ${sy}V${my}L${ex} ${ey}`,
+      boxes: [
+        { x: cx - 3, y: sy, w: 6, h: my - sy },
+        { x: Math.min(cx, ex) - 3, y: my, w: Math.abs(ex - cx) + 6, h: ey - my },
+      ],
+    };
+  }
+  return null;
+}
 /* The upright box round a name of w x h turned by deg degrees about its centre (x, y). */
 function turned(x: number, y: number, w: number, h: number, deg: number): Rect {
   const a = (deg * Math.PI) / 180;
@@ -210,6 +251,8 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
   const pins = useRef<(HTMLButtonElement | null)[]>([]);
   const names = useRef<(HTMLSpanElement | null)[]>([]);
   const edges = useRef<(HTMLButtonElement | null)[]>([]);
+  const pois = useRef<(HTMLAnchorElement | null)[]>([]);
+  const legend = useRef<HTMLParagraphElement>(null);
   const note = useRef<HTMLParagraphElement>(null);
   const credit = useRef<HTMLParagraphElement>(null);
   const leader = useRef<SVGPathElement>(null);
@@ -421,6 +464,15 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
         const { x, y } = pinAnchor(it.slug, left, top, z, side);
         pin.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) ${SHIFT[side]}`;
       });
+
+      // Schools and hospitals, each where it is; out of sight while the map is too far out to tell them apart.
+      const far = z < POI_ZOOM ? "true" : "false";
+      nearbyPins.forEach((p, i) => {
+        const a = pois.current[i];
+        if (!a) return;
+        a.dataset.far = far;
+        a.style.transform = `translate3d(${((p.x - left) * z).toFixed(1)}px, ${((p.y - top) * z).toFixed(1)}px, 0) translate(-50%, -50%)`;
+      });
     };
 
     /* At rest: decide which names fit, nearest the shown community first, and hide the rest. */
@@ -433,7 +485,7 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
       const taken: Rect[] = [];
       const view = { x: 4, y: 4, w: W - 8, h: H - 8 };
       // the note, the map credit and whatever is laid over the map (the list, the picture's frame) are never covered
-      const fixed: Rect[] = [...rectsOf([note.current, credit.current]), ...covers()];
+      const fixed: Rect[] = [...rectsOf([note.current, credit.current, legend.current]), ...covers()];
       taken.push(...fixed);
       const inside = (r: Rect) =>
         r.x >= view.x && r.y >= view.y && r.x + r.w <= view.x + view.w && r.y + r.h <= view.y + view.h;
@@ -466,6 +518,44 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
         if (side) pinRects.push(pinRect(side, pinAnchor(slug, left, top, z, side), w, h));
       }
       taken.push(...pinRects);
+      // the line from the community on show to its picture is never crossed by a name
+      const [F] = rectsOf([frame?.current]);
+      const shownBox = plotBox.get(items[S.target]?.slug ?? "");
+      if (F && shownBox) {
+        const run = leaderLine(F, {
+          x0: (shownBox.x0 - left) * z,
+          y0: (shownBox.y0 - top) * z,
+          x1: (shownBox.x1 - left) * z,
+          y1: (shownBox.y1 - top) * z,
+        });
+        if (run) taken.push(...run.boxes);
+      }
+      // Schools and hospitals: every marker in view first, so no name covers one (a community's name wins over a
+      // marker), then each one's name to its right or its left where there is room, the nearest to the site first.
+      const marks = nearbyPins.map((p, i) => {
+        const a = pois.current[i];
+        const x = (p.x - left) * z;
+        const y = (p.y - top) * z;
+        const r = { x: x - POI_R, y: y - POI_R, w: POI_R * 2, h: POI_R * 2 };
+        const show = !!a && inside(r) && !pinRects.some((q) => overlaps(q, r, 2)) && !fixed.some((q) => overlaps(q, r, 2));
+        if (a) a.dataset.hidden = show ? "false" : "true";
+        if (show) taken.push(r);
+        return { a, x, y, r, km: p.km, show };
+      });
+      marks
+        .filter((m) => m.show)
+        .sort((m, n) => m.km - n.km)
+        .forEach(({ a, x, y, r: own }) => {
+          const name = a?.lastElementChild as HTMLElement | null;
+          if (!a || !name) return;
+          const w = name.offsetWidth;
+          const h = name.offsetHeight;
+          const right = { x: x + POI_R + 3, y: y - h / 2, w, h };
+          const leftSide = { x: x - POI_R - 3 - w, y: y - h / 2, w, h };
+          const side = [right, leftSide].find((q) => inside(q) && !taken.some((o) => o !== own && overlaps(o, q, 3)));
+          a.dataset.side = side === right ? "right" : side ? "left" : "none";
+          if (side) taken.push(side);
+        });
       // Communities out of view (or at its edge, unnamed): a tag at the edge of the map, on the line towards each, nearest first.
       const cx = W / 2;
       const cy = H / 2;
@@ -603,19 +693,9 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
       // The line: from the plot's edge across (or down) to the frame.
       const line = leader.current;
       if (line) {
-        const within = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
-        let d = "";
-        if (F.x > b.x1 + 16) {
-          const sx = b.x1 + 6;
-          const ex = F.x - 6;
-          d = `M${sx} ${cy}H${(sx + ex) / 2}L${ex} ${within(cy, F.y + 24, F.y + F.h - 24)}`;
-        } else if (F.y > b.y1 + 16) {
-          const sy = b.y1 + 6;
-          const ey = F.y - 6;
-          d = `M${cx} ${sy}V${(sy + ey) / 2}L${within(cx, F.x + 24, F.x + F.w - 24)} ${ey}`;
-        }
-        if (d) line.setAttribute("d", d);
-        line.dataset.on = d ? "true" : "false";
+        const run = leaderLine(F, b);
+        if (run) line.setAttribute("d", run.d);
+        line.dataset.on = run ? "true" : "false";
       }
 
       if (!animate) {
@@ -760,7 +840,7 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
     : `Map of East Bengaluru showing Disha’s communities. ${shown?.name ?? ""} is not marked on this map.`;
 
   return (
-    <div ref={root} className={s.map} data-ready={ready || undefined} data-intro={intro || undefined}>
+    <div ref={root} className={s.map} data-ready={ready || undefined} data-intro={intro || undefined} data-framed={frame ? "" : undefined}>
       <div className={s.picture} role="img" aria-label={label}>
         <canvas ref={canvas} className={s.canvas} aria-hidden="true" />
       </div>
@@ -826,7 +906,36 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
             </button>
           ) : null,
         )}
+        {/* Out of the tab order: the same places are listed under the map, each with the same link. */}
+        {nearbyPins.map((p, i) => (
+          <a
+            key={p.name}
+            ref={(n) => {
+              pois.current[i] = n;
+            }}
+            href={p.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            tabIndex={-1}
+            className={s.poi}
+            data-kind={p.kind}
+            data-hidden="true"
+            data-side="none"
+            title={`${p.name}: ${p.km} km, ${p.minutes} min by road. Directions in Google Maps.`}
+          >
+            <PoiMark kind={p.kind} />
+            <span className={s.poiName}>{p.name}</span>
+          </a>
+        ))}
       </div>
+      <p ref={legend} className={s.legend} aria-hidden="true">
+        <span>
+          <PoiMark kind="school" /> Schools
+        </span>
+        <span>
+          <PoiMark kind="hospital" /> Hospitals
+        </span>
+      </p>
       {shown && !mapped && (
         <p ref={note} className={s.note}>
           {shown.name} is not marked on this map.
@@ -839,5 +948,22 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
         </a>
       </p>
     </div>
+  );
+}
+
+/* A school's mortarboard on navy, or a hospital's cross on red, in a round white-edged marker. */
+function PoiMark({ kind }: { kind: "school" | "hospital" }) {
+  return (
+    <svg className={s.poiMark} data-kind={kind} viewBox="0 0 20 20" aria-hidden="true">
+      <circle cx="10" cy="10" r="9" />
+      {kind === "school" ? (
+        <>
+          <path d="M10 5.2 3.4 8.4 10 11.6l6.6-3.2Z" fill="#fff" />
+          <path d="M6 10.2v2.7c1.1.9 2.5 1.4 4 1.4s2.9-.5 4-1.4v-2.7" fill="none" stroke="#fff" strokeWidth="1.3" />
+        </>
+      ) : (
+        <path d="M8.6 5h2.8v3.6H15v2.8h-3.6V15H8.6v-3.6H5V8.6h3.6Z" fill="#fff" />
+      )}
+    </svg>
   );
 }

@@ -143,6 +143,7 @@ export const elements = {
     spot("room-banquet", ["720", "card"], "Banquet hall", "Round tables and white-covered chairs.", "the banquet hall laid for a dinner"),
     spot("room-guest", ["720", "card"], "Guest rooms", "A bed, a TV wall and botanical wallpaper, for family who come to stay.", "a guest room in the clubhouse"),
     spot("room-senior", ["720", "card"], "Senior citizens’ lounge", "Lounge seating by the windows.", "the senior citizens’ lounge"),
+    spot("room-association", ["720", "card"], "Association office", "A front desk, two cane armchairs and the Disha name on the wall.", "the association office’s front desk and armchairs"),
     spot("room-yoga", ["720", "card"], "Yoga deck", "Open-air mats and a meditation mural.", "the open-air yoga deck", "1st floor"),
     spot("room-terrace", ["720", "card"], "Terrace seating", "Café tables beside a lily-pond water channel and green walls.", "the terrace seating", "2nd floor"),
     spot("room-cafe", ["720"], "Rooftop terrace café", "Tables on the roof at sunset.", "the rooftop terrace café at sunset", "3rd floor"),
