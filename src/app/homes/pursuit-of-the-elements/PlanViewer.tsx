@@ -76,13 +76,13 @@ export function PlanViewer({ src, alt, width, height, children }: Props) {
       <div className={s.card}>
         <button type="button" className={s.thumb} onClick={show} aria-haspopup="dialog">
           <Image src={src} alt={alt} width={width} height={height} sizes="(min-width: 768px) 520px, 100vw" quality={82} loading="lazy" className={s.thumbImg} />
-          <span className="sr-only">Open the master plan full size</span>
+          <span className="sr-only">View the master plan full size</span>
         </button>
         <div className={s.text}>
           {children}
           <div className={s.actions}>
             <button type="button" className="btn btn-dark" onClick={show} aria-haspopup="dialog">
-              Open the master plan
+              View the master plan
             </button>
             <a className="text-link" href={src} target="_blank" rel="noopener noreferrer">
               Open in a new tab <ArrowRight />

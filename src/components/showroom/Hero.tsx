@@ -8,7 +8,7 @@ import { LoopFilm } from "@/components/media/LoopFilm";
 import { type Slide, trust } from "@/lib/content";
 import { focusPoint } from "@/lib/focus";
 import { MOTION_OK, useMedia } from "@/lib/useMedia";
-import { ChevronLeft, ChevronRight, PauseIcon, PlayIcon } from "./Icons";
+import { ArrowRight, ChevronLeft, ChevronRight, PauseIcon, PlayIcon } from "./Icons";
 import s from "./Hero.module.css";
 
 /*
@@ -158,7 +158,7 @@ export function Hero({ slides }: { slides: Slide[] }) {
               <div className={`photo-foot ${s.foot}`}>
                 <div className={s.ctas}>
                   <Link className="btn btn-primary" href={slide.primary.href}>
-                    {slide.primary.label}
+                    {slide.primary.label} <ArrowRight />
                   </Link>
                   {"compose" in slide.secondary ? (
                     <ComposeButton channel="whatsapp" topic={slide.secondary.compose} className="btn btn-ghost">

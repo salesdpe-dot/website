@@ -198,8 +198,8 @@ function View({ communities, rows, picks, onPick }: Props & { picks: string[]; o
                     <td key={c.slug} className={s.cell}>
                       {c.selling ? (
                         <>
-                          <Link className={s.act} href={links.bookVisit} aria-label={`Book a visit: ${c.name}`}>
-                            Book a visit
+                          <Link className={s.act} href={links.bookVisit} aria-label={`Book your visit: ${c.name}`}>
+                            Book your visit
                           </Link>
                           <Link className={s.actSoft} href={c.href} aria-label={`Explore ${c.name}`}>
                             Explore

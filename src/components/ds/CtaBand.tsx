@@ -3,6 +3,7 @@ import type { Img } from "@/lib/content";
 import { focusPoint } from "@/lib/focus";
 import { type Cta, CtaLink } from "./CtaLink";
 import s from "./CtaBand.module.css";
+import { ArrowRight } from "@/components/showroom/Icons";
 
 type Props = {
   title: string;
@@ -33,6 +34,7 @@ export function CtaBand({ title, line, actions, id = "cta-title", image, note }:
             {actions.map((a, i) => (
               <CtaLink key={a.label} href={a.href} className={`btn ${i === 0 ? "btn-dark" : "btn-white"}`}>
                 {a.label}
+                {i === 0 && <ArrowRight />}
               </CtaLink>
             ))}
           </div>

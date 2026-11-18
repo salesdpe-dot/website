@@ -3,6 +3,7 @@ import { type Spec, SpecRow } from "@/components/brand/SpecRow";
 import { HomeMark } from "@/components/showroom/Logo";
 import { type Cta, CtaLink } from "./CtaLink";
 import s from "./PageIntro.module.css";
+import { ArrowRight } from "@/components/showroom/Icons";
 
 type Props = {
   title: string;
@@ -43,6 +44,7 @@ export function PageIntro({ title, line, above, eyebrow, actions, specs, size = 
             {actions.map((a, i) => (
               <CtaLink key={a.label} href={a.href} className={`btn ${i === 0 ? "btn-primary" : "btn-line"}`}>
                 {a.label}
+                {i === 0 && <ArrowRight />}
               </CtaLink>
             ))}
           </div>

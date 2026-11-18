@@ -63,12 +63,12 @@ export const company = {
   rera: elements.rera,
 } as const;
 
-const bookVisit: Cta = { label: "Book a visit", href: links.bookVisit };
+const bookVisit: Cta = { label: "Book your site visit", href: links.bookVisit };
 /*
  * Price is a buyer's first question, and the site can't print one yet: this opens the WhatsApp message form with
  * prices and floor plans already asked for. "Ask for" says it's a request, not a download.
  */
-export const pricesAndPlans: Compose = { label: "Ask for prices and plans", compose: "Prices and floor plans" };
+export const pricesAndPlans: Compose = { label: "Get prices & floor plans", compose: "Prices and floor plans" };
 
 /* The one quiet line at the foot of every hero slide. "verify" goes to the RERA strip on the project page. */
 export const trust = {
@@ -133,7 +133,7 @@ export const heroSlides: Slide[] = [
     image: still("hero-clubhouse", 1920, 1080, "the clubhouse, raised on angled columns above an amphitheatre"),
     film: film("hero-clubhouse", ["1080", "720", "p"]),
     primary: bookVisit,
-    secondary: { label: "See the clubhouse", href: `${links.elements}#clubhouse` },
+    secondary: { label: "Tour the clubhouse", href: `${links.elements}#clubhouse` },
     note: "Artist’s impression",
   },
   {
@@ -145,7 +145,7 @@ export const heroSlides: Slide[] = [
     image: still("hero-outdoors", 1920, 1080, "pickleball courts, a skate park and a lawn beside an outdoor café, from above"),
     film: film("hero-outdoors", ["1080", "720", "p"]),
     primary: bookVisit,
-    secondary: { label: "See the grounds", href: `${links.elements}#outdoors` },
+    secondary: { label: "Explore the 20 acres", href: `${links.elements}#outdoors` },
     note: "Artist’s impression",
   },
   {
@@ -157,7 +157,7 @@ export const heroSlides: Slide[] = [
     image: still("pote-home", 1920, 1080, "a front door opening onto a living room", "50% 50%", "47% 50%"),
     film: film("pote-home", ["720", "p"]),
     primary: bookVisit,
-    secondary: { label: "See the homes", href: `${links.elements}#homes` },
+    secondary: { label: "Explore the homes", href: `${links.elements}#homes` },
     note: "Artist’s impression",
   },
 ];
@@ -236,7 +236,7 @@ export type Amenity = { name: string; place: string; tags: AmenityTag[]; image: 
 export const amenitiesHead = {
   title: "40+ amenities",
   line: "Inside the 1,35,000+\u00a0sq\u00a0ft clubhouse, on its roof, and out on the 20\u00a0acres.",
-  link: { label: "See every amenity", href: `${links.elements}#amenities` },
+  link: { label: "Explore all 40+ amenities", href: `${links.elements}#amenities` },
 } as const;
 
 const clubhouseHref = `${links.elements}#clubhouse`;
@@ -398,9 +398,9 @@ export const amenities: Amenity[] = [
   },
 ];
 
-/* The brand band, straight from the guideline: navy, a huge sky "come home", and the record in figures. */
+/* The record band: navy, a section title like every other on the page, and the record in figures. */
 export const brand = {
-  tagline: "come home",
+  title: "A record you can check.",
   /* The figures follow, so the line says how to check them rather than repeating them. */
   line: "Every figure here can be checked: each community has its own page, and the rating is MyGate’s.",
   figures: [

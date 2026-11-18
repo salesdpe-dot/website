@@ -7,25 +7,19 @@ import { HomeMark } from "./Logo";
 import s from "./ProofPanel.module.css";
 
 /*
- * The brand band, as the guideline's own Color Palette page: a navy field, "come home" huge in sky blue, the house
- * icon on its own as a graphic. Under it, how to check the record, then the record as three equal figures (homes
- * handed over, communities, the residents' rating), and the ET award with its certificate: beside "come home" on
- * a wide screen, so the whole band fits one screen; under the figures otherwise.
+ * The record, on the navy field: a section title like every other on the page, how to check the record and the
+ * way to the story, the award beside them on a computer, then the record as three equal figures (homes handed
+ * over, communities, the residents' rating). The house icon, very large and faint, sits behind.
  */
 export function ProofPanel() {
   return (
     <section id="record" className={s.band} data-tone="dark" aria-labelledby="brand-title">
       <HomeMark className={s.watermark} />
       <div className={s.inner}>
-        <div className={`${s.brand} reveal`}>
-          <HomeMark className={s.mark} />
-          <h2 id="brand-title" className={s.tagline}>
-            {brand.tagline}
-            <span className="sr-only">: Disha Habitat since 2014</span>
+        <div className={`${s.head} reveal`}>
+          <h2 id="brand-title" className={`display ${s.title}`}>
+            {brand.title}
           </h2>
-        </div>
-
-        <div className={s.sub}>
           <p className={s.line}>{brand.line}</p>
           <Link className={s.link} href={brand.link.href}>
             {brand.link.label} <ArrowRight />

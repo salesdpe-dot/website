@@ -503,7 +503,7 @@ export function AffordabilityExplorer({ notes = [] }: { notes?: readonly Note[] 
         />
 
         <Link href={links.bookVisit} className={`btn btn-primary ${s.cta}`}>
-          Book a visit
+          Book your site visit
         </Link>
         <p className={s.fine}>
           An estimate for planning only, using the standard reducing-balance method with monthly rests. It is not an offer of

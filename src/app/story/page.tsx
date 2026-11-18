@@ -64,7 +64,7 @@ export default function StoryPage() {
           { value: String(projectsByHandover.length), label: "Communities handed over" },
           { value: formatIndian(homesHandedOver), label: "Homes handed over" },
         ]}
-        actions={[{ label: "Book a visit", href: links.bookVisit }]}
+        actions={[{ label: "Book your site visit", href: links.bookVisit }]}
       />
 
       {/* The company's own poem, sky blue on navy as the guideline sets its headlines, beside how we began. */}
@@ -245,8 +245,8 @@ export default function StoryPage() {
         title="Bring every question."
         line="Visit the site in Gunjur, or ask the sales team for a call. They will answer every question."
         actions={[
-          { label: "Book a visit", href: links.bookVisit },
-          { label: "See our homes", href: links.homes },
+          { label: "Book your site visit", href: links.bookVisit },
+          { label: "Explore our homes", href: links.homes },
         ]}
       />
     </>

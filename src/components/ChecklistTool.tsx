@@ -188,7 +188,7 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
           <div className={s.readyInner}>
             <p>You’re ready to visit.</p>
             <Link href={links.bookVisit} className="btn btn-primary">
-              Book a visit
+              Book your site visit
             </Link>
           </div>
         </div>
@@ -197,10 +197,10 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
             Send to myself<span className="sr-only"> on WhatsApp (opens in a new tab)</span>
           </a>
           <button type="button" onClick={() => window.print()} className="btn btn-line">
-            Print or save PDF
+            Print or save as PDF
           </button>
           <ComposeButton channel="whatsapp" topic="Something else" className="btn btn-soft">
-            Ask Disha
+            Ask our sales team
           </ComposeButton>
           <button
             type="button"

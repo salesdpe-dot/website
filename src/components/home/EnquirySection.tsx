@@ -34,10 +34,10 @@ export function EnquirySection() {
               Buying from abroad?
             </h3>
             <p className={s.note}>
-              Ask for a video call instead. Choose a morning, afternoon or evening in India time and add your own time zone; the
+              Start with a video call instead. Choose a morning, afternoon or evening in India time and add your own time zone; the
               sales team will confirm the time with you.
             </p>
-            <AskForCallButton className="btn btn-dark">Ask for a video call</AskForCallButton>
+            <AskForCallButton className="btn btn-dark">Start with a video call</AskForCallButton>
           </section>
           <ul className={s.reach}>
             <li>

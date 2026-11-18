@@ -234,7 +234,7 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
           /* These homes are all sold: a visit is to the project on sale now, and the button says so. */
           actions={[
             { label: `Visit ${elements.shortName}`, href: links.bookVisit },
-            { label: "See the homes on sale", href: elements.href },
+            { label: "Explore the homes on sale", href: elements.href },
           ]}
         />
       </ViewTransition>
@@ -242,7 +242,7 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
       <SubNav
         items={nav}
         label="On this page"
-        cta={{ label: "Book a visit", href: links.bookVisit }}
+        cta={{ label: "Book your visit", href: links.bookVisit }}
       />
 
       {/* What it is in one line, and beside it every fact the hero has not given. */}
@@ -379,10 +379,10 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
           </p>
           <div className={s.saleActions}>
             <Link className="btn btn-primary" href={links.bookVisit}>
-              Book a visit
+              Book your site visit <ArrowRight />
             </Link>
             <Link className="btn btn-ghost" href={elements.href}>
-              See {elements.shortName}
+              Explore {elements.shortName}
             </Link>
           </div>
         </div>

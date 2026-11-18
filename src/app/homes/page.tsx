@@ -13,6 +13,7 @@ import { projectsByHandover, projectsNewestFirst } from "@/lib/projects";
 import { homesHandedOver } from "@/lib/proof";
 import { formatIndian } from "@/lib/site";
 import s from "./page.module.css";
+import { ArrowRight } from "@/components/showroom/Icons";
 
 export const metadata: Metadata = pageMeta({
   title: "Our homes",
@@ -85,10 +86,10 @@ export default function HomesPage() {
           />
           <div className={s.nowActions}>
             <Link href={links.bookVisit} className="btn btn-primary">
-              Book a visit
+              Book your site visit <ArrowRight />
             </Link>
             <Link href={elements.href} className="btn btn-ghost">
-              See the project
+              Explore the project
             </Link>
           </div>
         </div>

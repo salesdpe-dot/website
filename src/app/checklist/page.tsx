@@ -62,8 +62,8 @@ export default function ChecklistPage() {
         title="Ask us about any document."
         line="Our team will explain the khata, the OC or the RERA registration for any Disha home, as plainly as you need."
         actions={[
-          { label: "Book a visit", href: links.bookVisit },
-          { label: "Call sales", href: elements.phone.href },
+          { label: "Book your site visit", href: links.bookVisit },
+          { label: "Call the sales team", href: elements.phone.href },
         ]}
       />
     </>

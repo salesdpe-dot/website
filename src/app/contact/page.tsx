@@ -33,10 +33,10 @@ export default function ContactPage() {
       >
         <div className={s.hero}>
           <a href="#book" className="btn btn-primary">
-            Book a site visit
+            Book your site visit
           </a>
           <ComposeButton channel="whatsapp" className="btn btn-line">
-            WhatsApp us
+            Chat on WhatsApp
           </ComposeButton>
         </div>
       </PageIntro>

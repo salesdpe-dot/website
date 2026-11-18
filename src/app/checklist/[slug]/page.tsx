@@ -90,7 +90,7 @@ export default async function ChecklistItemPage({ params }: PageProps<"/checklis
       <CtaBand
         title={`Ask about the ${c.title.toLowerCase()} for any Disha home.`}
         line="Our team will explain it as plainly as you need."
-        actions={[{ label: "Book a visit", href: links.bookVisit }]}
+        actions={[{ label: "Book your site visit", href: links.bookVisit }]}
       />
     </>
   );

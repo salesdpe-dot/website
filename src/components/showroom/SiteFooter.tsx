@@ -67,7 +67,7 @@ export function SiteFooter() {
             Book a visit
           </Link>
           <a href={company.whatsapp} className="btn btn-line">
-            WhatsApp us
+            Chat on WhatsApp
           </a>
         </div>
       </div>

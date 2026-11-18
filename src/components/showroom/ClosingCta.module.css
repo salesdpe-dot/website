@@ -37,20 +37,12 @@
   min-width: 0;
 }
 
-.mark {
-  display: block;
-  width: clamp(56px, 6vw, 80px);
-  margin: 0 auto 20px;
-  color: var(--accent);
-  filter: drop-shadow(0 2px 12px rgb(0 0 0 / 0.35));
-}
-
 .title {
   max-width: 18ch;
   margin-inline: auto;
-  font-size: var(--fs-d1);
-  line-height: 1;
-  letter-spacing: -0.035em;
+  font-size: var(--fs-d2);
+  line-height: var(--fs-d2-lh);
+  letter-spacing: -0.03em;
   color: #fff;
   text-wrap: balance;
   overflow-wrap: anywhere;

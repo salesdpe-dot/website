@@ -286,7 +286,7 @@ export default function ElementsPage() {
             { value: "1,35,000+", unit: "sq ft", label: "Clubhouse" },
             { value: "40+", label: "Amenities" },
           ]}
-          actions={[{ label: "Book a visit", href: BOOK }]}
+          actions={[{ label: "Book your site visit", href: BOOK }]}
           trust={[
             trust.record,
             <>
@@ -303,7 +303,7 @@ export default function ElementsPage() {
         </PhotoHero>
       </ViewTransition>
 
-      <SubNav items={nav} label="On this page" cta={{ label: "Book a visit", href: BOOK }} />
+      <SubNav items={nav} label="On this page" cta={{ label: "Book your visit", href: BOOK }} />
 
       <section id="homes" className={`${s.band} ${s.surface}`} aria-labelledby="homes-title">
         <div className={s.inner}>

@@ -1,13 +1,12 @@
 /*
- * The brand band, after page 6 of the Disha Habitat guideline: a full navy field, the tagline set huge in sky blue
- * and lower case, the white house icon above it, and the same icon very large and faint, cropped by the corner.
- * Then how to check the record beside the link to the story, the record in three equal figures between hairlines,
- * and the award, its certificate small beside the words. "come home" is capped so that all of it fits one screen.
+ * The record band: a full navy field, its title the size of every section title on the page, how to check the
+ * record and the link to the story under it, the award beside them on a computer, then the record in three equal
+ * figures between hairlines. The house icon, very large and faint, is cropped by the corner.
  */
 .band {
   position: relative;
   overflow: hidden;
-  padding-block: clamp(56px, 6vw, 88px) clamp(40px, 4.5vw, 64px);
+  padding-block: clamp(56px, 6vw, 88px);
   background: var(--ink);
   color: #fff;
   isolation: isolate;
@@ -23,78 +22,49 @@
   pointer-events: none;
 }
 
-/* One column; on a wide screen the award moves up beside "come home", level with its foot. */
+/* One column; from 1024 px the award stands beside the title, level with its foot. */
 .inner {
   display: grid;
-  grid-template-areas: "brand" "sub" "figures" "award";
+  grid-template-areas: "head" "figures" "award";
   padding-inline: var(--edge);
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .inner {
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "brand award" "sub sub" "figures figures";
-    column-gap: 48px;
+    grid-template-areas: "head award" "figures figures";
+    column-gap: 64px;
   }
 }
 
-.brand {
-  grid-area: brand;
+.head {
+  grid-area: head;
+  display: grid;
+  justify-items: start;
+  gap: 12px;
   min-width: 0;
 }
 
-/* Beside the award, "come home" takes the width left over and stays on one line. */
-@media (min-width: 1280px) {
-  .brand {
-    container-type: inline-size;
-  }
-
-  .brand .tagline {
-    font-size: min(10.5rem, 16.5cqi);
-  }
-}
-
-.mark {
-  display: block;
-  width: clamp(44px, 4.5vw, 68px);
-  margin-bottom: clamp(12px, 1.4vw, 20px);
+.title {
+  font-size: var(--fs-d3);
+  line-height: var(--fs-d3-lh);
   color: #fff;
-}
-
-/* Sky on navy is 6.9:1, so the tagline can be as large as the field allows, up to the cap. */
-.tagline {
-  font-family: var(--font-display);
-  font-size: clamp(4rem, 0.5rem + 11vw, 10.5rem);
-  line-height: 0.88;
-  font-weight: 600;
-  letter-spacing: -0.045em;
-  color: var(--accent);
   text-wrap: balance;
 }
 
-/* The line and the link share one row on a computer, so the space beside the line is used. */
-.sub {
-  grid-area: sub;
-  display: grid;
-  gap: 8px;
-  justify-items: start;
-  margin-top: clamp(16px, 2vw, 28px);
+.line {
+  max-width: 44ch;
+  font-size: var(--fs-16);
+  line-height: 1.5rem;
+  color: rgb(255 255 255 / 0.8);
+  text-wrap: pretty;
 }
 
 @media (min-width: 1024px) {
-  .sub {
-    grid-template-columns: minmax(0, 40rem) auto;
-    justify-content: space-between;
-    align-items: end;
-    gap: 48px;
+  .line {
+    font-size: var(--fs-18);
+    line-height: 1.625rem;
   }
-}
-
-.line {
-  font-size: var(--fs-d6);
-  line-height: 1.45;
-  color: rgb(255 255 255 / 0.9);
-  text-wrap: pretty;
 }
 
 .link {
@@ -204,11 +174,11 @@
   margin: 28px 0 0;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .award {
     align-self: end;
     max-width: 26rem;
-    margin: 0 0 4px;
+    margin: 0 0 6px;
   }
 }
 

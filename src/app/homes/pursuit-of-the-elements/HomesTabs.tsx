@@ -117,10 +117,10 @@ export function HomesTabs({ families, place, aside }: { families: Family[]; plac
               <SpecRow items={f.figures} tone="light" className={s.figures} />
               <div className={s.actions}>
                 <ComposeButton channel="whatsapp" topic={`Floor plans and carpet areas: ${f.name}`} className="btn btn-dark">
-                  Ask for floor plans
+                  Get floor plans
                 </ComposeButton>
                 <ComposeButton channel="whatsapp" topic={`Current prices: ${f.name}`} className="btn btn-outline">
-                  Ask for prices
+                  Get prices
                 </ComposeButton>
               </div>
               <div className={s.foot}>

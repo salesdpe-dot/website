@@ -9,6 +9,7 @@ import { focusPoint } from "@/lib/focus";
 import { RailArrows, RailHead, useRail } from "./Rail";
 import r from "./Rail.module.css";
 import s from "./ModelRow.module.css";
+import { ArrowRight } from "@/components/showroom/Icons";
 
 const SIZES = "(min-width: 1024px) 50vw, (min-width: 768px) 70vw, 88vw";
 
@@ -48,7 +49,8 @@ export function ModelRow() {
               </div>
               <div className={s.actions}>
                 <Link className="btn btn-primary" href={links.bookVisit}>
-                  Book a visit<span className="sr-only">: {m.name}</span>
+                  Book your visit<span className="sr-only">: {m.name}</span>
+                  <ArrowRight />
                 </Link>
                 <ComposeButton channel="whatsapp" topic={`${pricesAndPlans.compose}: ${m.name}`} className="btn btn-ghost">
                   {pricesAndPlans.label}

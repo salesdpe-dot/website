@@ -226,7 +226,7 @@ function Availability({ issue: i }: { issue: Issue }) {
           {pricesAndPlans.label}
         </ComposeButton>
         <Link href={links.bookVisit} className="btn btn-line">
-          Book a site visit
+          Book your site visit
         </Link>
         <Link href="/updates" className="text-link">
           Earlier issues <ArrowRight />

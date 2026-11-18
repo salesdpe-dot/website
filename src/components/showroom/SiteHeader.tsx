@@ -213,7 +213,7 @@ export function SiteHeader() {
                         </NavLink>
                         {c.ctas.some((cta) => cta.href === links.bookVisit) && (
                           <NavLink className={s.tileExtra} href={links.bookVisit}>
-                            Book a visit
+                            Book your visit
                           </NavLink>
                         )}
                       </li>
@@ -333,7 +333,7 @@ export function SiteHeader() {
         </nav>
         <div className={s.sheetActions}>
           <NavLink className="btn btn-primary" href={links.bookVisit}>
-            Book a visit
+            Book your visit
           </NavLink>
           <a className="btn btn-soft" href={company.sales.tel}>
             Call <span className="whitespace-nowrap">{company.sales.display}</span>

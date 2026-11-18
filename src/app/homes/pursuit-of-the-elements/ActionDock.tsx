@@ -63,7 +63,7 @@ export function ActionDock({ until, book }: { until: string; book: string }) {
           WhatsApp
         </ComposeButton>
         <a href={book} className={`btn btn-primary ${s.book}`}>
-          Book a visit
+          Book your visit
         </a>
       </nav>
     </div>

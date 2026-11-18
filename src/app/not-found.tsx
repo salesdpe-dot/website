@@ -19,13 +19,13 @@ export default function NotFound() {
         <p className={s.line}>The address may have a typo, or the page has moved. Every community is one click below.</p>
         <div className={s.links}>
           <Link href="/" className="btn btn-primary">
-            Back to home
+            Go to the home page
           </Link>
           <Link href="/homes" className="btn btn-line">
-            All our homes
+            Explore our homes
           </Link>
           <Link href="/contact" className="btn btn-line">
-            Contact us
+            Talk to us
           </Link>
         </div>
         <ul className={s.list} aria-label="Our communities">

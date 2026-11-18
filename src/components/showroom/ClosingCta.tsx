@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { FilmToggle, LoopFilm } from "@/components/media/LoopFilm";
 import { closing, company, links } from "@/lib/content";
-import { HomeMark } from "./Logo";
+import { ArrowRight } from "./Icons";
 import s from "./ClosingCta.module.css";
 
-/* The page ends on its one action, over the community at night, under the house icon: book a visit, or call. */
+/* The page ends on its one action, over the community at night: book a site visit, or call. */
 export function ClosingCta() {
   return (
     <section className={s.section} data-tone="dark" aria-labelledby="closing-title">
@@ -13,7 +13,6 @@ export function ClosingCta() {
       <FilmToggle className={s.toggle} />
       <div className={`photo-foot ${s.inner} reveal`}>
         <div>
-          <HomeMark className={s.mark} />
           <h2 id="closing-title" className={`display ${s.title}`}>
             {closing.title}
           </h2>
@@ -21,7 +20,7 @@ export function ClosingCta() {
         </div>
         <div className={s.buttons}>
           <Link className="btn btn-primary" href={links.bookVisit}>
-            Book a visit
+            Book your site visit <ArrowRight />
           </Link>
           <a className="btn btn-ghost" href={company.sales.tel}>
             Call <span className="whitespace-nowrap">{company.sales.display}</span>
@@ -29,7 +28,7 @@ export function ClosingCta() {
         </div>
         {/* The booker's third choice is a call or video call, for family abroad or a first look from home. */}
         <p className={s.abroad}>
-          Buying from abroad? <Link href={links.bookVisit}>Ask for a video call</Link>
+          Buying from abroad? <Link href={links.bookVisit}>Start with a video call</Link>
         </p>
       </div>
       <p className={s.note}>Artist’s impression</p>
