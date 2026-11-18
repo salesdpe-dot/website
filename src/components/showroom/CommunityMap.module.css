@@ -270,7 +270,7 @@
   }
 }
 
-/* Schools and hospitals: a round marker on the spot, its name beside it where there is room, a link to directions. */
+/* Landmarks: a round marker on the spot, its name beside it where there is room, a link to directions. */
 .poi {
   position: absolute;
   top: 0;
@@ -299,6 +299,23 @@
 
 .poiMark[data-kind="hospital"] circle {
   fill: #d93a3a;
+}
+
+.poiMark[data-kind="station"] circle {
+  fill: #7b3fa0;
+}
+
+.poiMark[data-kind="mall"] circle {
+  fill: #b26d12;
+}
+
+.poiMark[data-kind="tech"] circle {
+  fill: #2c6e72;
+}
+
+/* The train's windows, cut out in its own colour. */
+.poiCut {
+  fill: #7b3fa0;
 }
 
 .poiName {
@@ -356,7 +373,9 @@
   bottom: 0;
   left: 0;
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  max-width: calc(100% - 9rem);
   padding: 4px 10px;
   border-top-right-radius: var(--radius);
   background: rgb(255 255 255 / 0.9);

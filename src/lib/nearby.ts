@@ -7,6 +7,8 @@
  *
  * Kept apart from proof.ts so the map can use it without loading the projects.
  */
+import { type LandmarkKind, landmarks, plotCentres } from "@/lib/landmarks.generated";
+
 export const siteQuery = "Disha Pursuit of the Elements, Gunjur, Bengaluru";
 
 /* Driving directions in Google Maps, from the site unless another start is given. */
@@ -62,12 +64,45 @@ export function toMap([lat, lng]: [number, number]): [number, number] {
   return [(lng - 77.55) * KX - AREA_X0, (13.11 - lat) * 110574];
 }
 
-/* Every pinned place, nearest first within its kind, in the map's metres. */
-export const nearbyPins = nearby.flatMap((g) =>
+/*
+ * Every pin on the communities map, in the map's metres: Disha's schools and hospitals round Pursuit of the
+ * Elements, with their distances, and the landmarks OpenStreetMap gives round every mapped community
+ * (scripts/fetch-landmarks.py), each opening directions from its community. `rank` orders whose name is placed
+ * first; `near` is the community it belongs to.
+ */
+export type PinKind = LandmarkKind;
+export type MapPin = { kind: PinKind; name: string; near: string; rank: number; href: string; note: string; x: number; y: number };
+
+const ELEMENTS = "pursuit-of-the-elements";
+const fromDisha: MapPin[] = nearby.flatMap((g) =>
   g.places
     .filter((p): p is Nearby & { at: [number, number] } => !!p.at)
     .map((p) => {
       const [x, y] = toMap(p.at);
-      return { kind: g.kind, name: p.name, km: p.km, minutes: p.minutes, href: directionsUrl(p.place), x, y };
+      return {
+        kind: g.kind,
+        name: p.name,
+        near: ELEMENTS,
+        rank: p.km,
+        href: directionsUrl(p.place),
+        note: `${p.km} km, ${p.minutes} min by road from Pursuit of the Elements.`,
+        x,
+        y,
+      };
     }),
 );
+const fromOsm: MapPin[] = landmarks.map((l) => {
+  const [x, y] = toMap(l.at);
+  const start = plotCentres[l.near] ?? l.at;
+  return {
+    kind: l.kind,
+    name: l.name,
+    near: l.near,
+    rank: l.rank,
+    href: directionsUrl(l.at.join(","), start.join(",")),
+    note: "",
+    x,
+    y,
+  };
+});
+export const mapPins: MapPin[] = [...fromDisha, ...fromOsm];

@@ -2,7 +2,7 @@
 
 import { type CSSProperties, type RefObject, useEffect, useRef, useState } from "react";
 import { area, base, mapLabels, mapPlots, tiles } from "@/lib/map.generated";
-import { nearbyPins } from "@/lib/nearby";
+import { type PinKind, mapPins } from "@/lib/nearby";
 import { MOTION_OK, useMedia } from "@/lib/useMedia";
 import s from "./CommunityMap.module.css";
 
@@ -38,7 +38,7 @@ const NAVY = "#082032";
 const FOCUS_SPAN = 3600; // metres across the clear part of the map when it rests on a community
 const ZOOM = { min: 0.06, max: 0.11 }; // px per metre at rest: the tiles are drawn at 0.2
 const MAX_DPR = 2;
-/* Schools and hospitals: a marker's radius in px, and the closest zoom out (px per metre) at which they show. */
+/* Landmarks: a marker's radius in px, and the furthest zoom out (px per metre) at which they show. */
 const POI_R = 10;
 const POI_ZOOM = 0.045;
 
@@ -465,9 +465,9 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
         pin.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) ${SHIFT[side]}`;
       });
 
-      // Schools and hospitals, each where it is; out of sight while the map is too far out to tell them apart.
+      // Landmarks, each where it is; out of sight while the map is too far out to tell them apart.
       const far = z < POI_ZOOM ? "true" : "false";
-      nearbyPins.forEach((p, i) => {
+      mapPins.forEach((p, i) => {
         const a = pois.current[i];
         if (!a) return;
         a.dataset.far = far;
@@ -530,9 +530,9 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
         });
         if (run) taken.push(...run.boxes);
       }
-      // Schools and hospitals: every marker in view first, so no name covers one (a community's name wins over a
-      // marker), then each one's name to its right or its left where there is room, the nearest to the site first.
-      const marks = nearbyPins.map((p, i) => {
+      // Landmarks: every marker in view first, so no name covers one (a community's name wins over a marker), then
+      // each one's name to its right or its left where there is room.
+      const marks = mapPins.map((p, i) => {
         const a = pois.current[i];
         const x = (p.x - left) * z;
         const y = (p.y - top) * z;
@@ -540,11 +540,13 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
         const show = !!a && inside(r) && !pinRects.some((q) => overlaps(q, r, 2)) && !fixed.some((q) => overlaps(q, r, 2));
         if (a) a.dataset.hidden = show ? "false" : "true";
         if (show) taken.push(r);
-        return { a, x, y, r, km: p.km, show };
+        // the community on show names its own landmarks first, nearest first; the rest follow
+        const order = (p.near === items[S.target]?.slug ? 0 : 100) + p.rank;
+        return { a, x, y, r, order, show };
       });
       marks
         .filter((m) => m.show)
-        .sort((m, n) => m.km - n.km)
+        .sort((m, n) => m.order - n.order)
         .forEach(({ a, x, y, r: own }) => {
           const name = a?.lastElementChild as HTMLElement | null;
           if (!a || !name) return;
@@ -906,8 +908,9 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
             </button>
           ) : null,
         )}
-        {/* Out of the tab order: the same places are listed under the map, each with the same link. */}
-        {nearbyPins.map((p, i) => (
+        {/* Out of the tab order: a pointer's shortcut to directions; the map is a picture to a screen reader, and
+            Pursuit of the Elements lists its schools and hospitals under it with the same links. */}
+        {mapPins.map((p, i) => (
           <a
             key={p.name}
             ref={(n) => {
@@ -921,7 +924,11 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
             data-kind={p.kind}
             data-hidden="true"
             data-side="none"
-            title={`${p.name}: ${p.km} km, ${p.minutes} min by road. Directions in Google Maps.`}
+            title={
+              p.note
+                ? `${p.name}: ${p.note} Directions in Google Maps.`
+                : `${p.name}. Directions from ${items.find((it) => it.slug === p.near)?.name ?? "the community"} in Google Maps.`
+            }
           >
             <PoiMark kind={p.kind} />
             <span className={s.poiName}>{p.name}</span>
@@ -929,12 +936,11 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
         ))}
       </div>
       <p ref={legend} className={s.legend} aria-hidden="true">
-        <span>
-          <PoiMark kind="school" /> Schools
-        </span>
-        <span>
-          <PoiMark kind="hospital" /> Hospitals
-        </span>
+        {LEGEND.map(([kind, label]) => (
+          <span key={kind}>
+            <PoiMark kind={kind} /> {label}
+          </span>
+        ))}
       </p>
       {shown && !mapped && (
         <p ref={note} className={s.note}>
@@ -951,19 +957,40 @@ export function CommunityMap({ items, active, onPick, onLand, frame, cover }: Ma
   );
 }
 
-/* A school's mortarboard on navy, or a hospital's cross on red, in a round white-edged marker. */
-function PoiMark({ kind }: { kind: "school" | "hospital" }) {
+const LEGEND: [PinKind, string][] = [
+  ["school", "Schools"],
+  ["hospital", "Hospitals"],
+  ["station", "Metro & rail"],
+  ["mall", "Malls"],
+  ["tech", "Tech parks"],
+];
+
+/* A landmark's round, white-edged marker: a mortarboard, a cross, a train, a bag or an office, each in its colour. */
+function PoiMark({ kind }: { kind: PinKind }) {
   return (
     <svg className={s.poiMark} data-kind={kind} viewBox="0 0 20 20" aria-hidden="true">
       <circle cx="10" cy="10" r="9" />
-      {kind === "school" ? (
+      {kind === "school" && (
         <>
           <path d="M10 5.2 3.4 8.4 10 11.6l6.6-3.2Z" fill="#fff" />
           <path d="M6 10.2v2.7c1.1.9 2.5 1.4 4 1.4s2.9-.5 4-1.4v-2.7" fill="none" stroke="#fff" strokeWidth="1.3" />
         </>
-      ) : (
-        <path d="M8.6 5h2.8v3.6H15v2.8h-3.6V15H8.6v-3.6H5V8.6h3.6Z" fill="#fff" />
       )}
+      {kind === "hospital" && <path d="M8.6 5h2.8v3.6H15v2.8h-3.6V15H8.6v-3.6H5V8.6h3.6Z" fill="#fff" />}
+      {kind === "station" && (
+        <>
+          <path d="M7 4.8h6a1.6 1.6 0 0 1 1.6 1.6v5.8a1.6 1.6 0 0 1-1.6 1.6H7a1.6 1.6 0 0 1-1.6-1.6V6.4A1.6 1.6 0 0 1 7 4.8Z" fill="#fff" />
+          <path d="M6.9 6.6h6.2v2.6H6.9Z" className={s.poiCut} />
+          <path d="m7.6 13.8-1.4 1.8M12.4 13.8l1.4 1.8" fill="none" stroke="#fff" strokeWidth="1.3" strokeLinecap="round" />
+        </>
+      )}
+      {kind === "mall" && (
+        <>
+          <path d="M5.8 7.8h8.4l-.8 7.4H6.6Z" fill="#fff" />
+          <path d="M8 8V6.9a2 2 0 0 1 4 0V8" fill="none" stroke="#fff" strokeWidth="1.3" />
+        </>
+      )}
+      {kind === "tech" && <path d="M5.3 15.2V8.6h3.9v6.6Zm5.2 0V4.8h4.2v10.4Z" fill="#fff" />}
     </svg>
   );
 }
