@@ -5,6 +5,7 @@ import { ClosingCta } from "@/components/showroom/ClosingCta";
 import { Hero } from "@/components/showroom/Hero";
 import { MapSection } from "@/components/showroom/MapSection";
 import { ProofPanel } from "@/components/showroom/ProofPanel";
+import { ReviewsBand } from "@/components/showroom/Reviews";
 import { communities, heroSlides, mapHead } from "@/lib/content";
 import { pageMeta } from "@/lib/launch";
 import s from "./page.module.css";
@@ -21,8 +22,8 @@ export const metadata: Metadata = {
 
 /*
  * As tesla.com's home page: the hero's four films; the homes as tesla.com's row of models; then the proof while
- * the visitor is still deciding (the brand band with the record, and the six communities on one map, each
- * one's picture rising out of its plot); the amenities, filtered; and the closing step over the
+ * the visitor is still deciding (the brand band with the record, four buyers in their own words, and the six
+ * communities on one map, each one's picture rising out of its plot); the amenities, filtered; and the closing step over the
  * community at night. The clubhouse and the five elements have their full pages on the project page.
  * The page ends on that film, so it is marked to meet the footer edge to edge (SiteFooter.module.css).
  */
@@ -33,6 +34,7 @@ export default function Home() {
       <Hero slides={heroSlides} />
       <ModelRow />
       <ProofPanel />
+      <ReviewsBand />
       <MapSection
         title={mapHead.title}
         line={mapHead.line}

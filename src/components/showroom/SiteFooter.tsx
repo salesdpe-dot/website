@@ -17,6 +17,7 @@ const columns = [
     links: [
       { label: "Our story", href: links.story },
       { label: "The founders", href: "/story#homemakers" },
+      { label: "Buyer reviews", href: links.reviews },
       { label: "Contact", href: links.contact },
     ],
   },
@@ -117,7 +118,8 @@ export function SiteFooter() {
           <sup>1</sup> From 29 reviews of Disha Central Park on <a href={links.mygate}>MyGate</a>, checked October 2026.
         </p>
         <p>
-          Images marked “Artist’s impression” are computer renders; all other images are photographs.
+          Images and films marked “Artist’s impression” are computer renders; all others are photographs or real footage.
+          The reviews are filmed with Disha’s own buyers, in their own words.
         </p>
         <p>
           Pursuit of the Elements is registered with Karnataka RERA:{" "}

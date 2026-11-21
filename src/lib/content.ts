@@ -40,6 +40,8 @@ export const links = {
   /* Karnataka RERA's list of registered projects, searchable by number, name or promoter. */
   rera: reraSearch,
   updates: "/updates",
+  /* The buyers' own films, on the project page. */
+  reviews: `${elements.href}#reviews`,
   mygate: "https://mygate.com/bengaluru/disha-central-park-499.html",
 } as const;
 

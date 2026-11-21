@@ -1,0 +1,168 @@
+/*
+ * The buyers' films: a row to swipe on a phone (running to the screen's edges), two across from 600 px and four
+ * from 1024 px. Each card is one button: the frame of the family, then their words.
+ */
+.cards {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(72vw, 300px);
+  gap: 12px;
+  margin: 24px calc(-1 * var(--edge)) 0;
+  padding: 4px var(--edge) 8px;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--edge);
+  scrollbar-width: none;
+}
+
+.cards::-webkit-scrollbar {
+  display: none;
+}
+
+.cards > li {
+  display: flex;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 600px) {
+  .cards {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 20px;
+    margin: 40px 0 0;
+    padding: 0;
+    overflow: visible;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 0;
+  border-radius: var(--radius-card);
+  background: none;
+  color: var(--ink);
+  text-align: left;
+}
+
+.card:focus-visible {
+  outline-offset: 4px;
+}
+
+.thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+}
+
+.img {
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+
+/* The play button: a sky-blue disc with a navy arrow, as on the walkthrough films. */
+.play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--ink);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.3);
+  transform: translate(-50%, -50%);
+  transition: transform 0.4s var(--ease);
+}
+
+.play svg {
+  width: 22px;
+  height: 22px;
+  margin-left: 2px;
+}
+
+.time {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.6);
+  color: #fff;
+  font-size: var(--fs-12);
+  line-height: 1.125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.text {
+  display: grid;
+  gap: 6px;
+  padding-inline: 2px;
+}
+
+.quote {
+  margin-bottom: 6px;
+  font-family: var(--font-display);
+  font-size: var(--fs-18);
+  line-height: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+.who {
+  font-size: var(--fs-16);
+  line-height: 1.375rem;
+  font-weight: 600;
+}
+
+.home {
+  font-size: var(--fs-14);
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+@media (hover: hover) {
+  .card:hover .img {
+    transform: scale(1.04);
+  }
+
+  .card:hover .play {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img,
+  .play {
+    transition: none;
+  }
+}
+
+/* On the home page: white, spaced as the amenity row is, the cards inside the page's edges. */
+.band {
+  padding-block: clamp(48px, 6vw, 88px) clamp(40px, 4.5vw, 64px);
+  background: #fff;
+}
+
+.bandCards {
+  padding-inline: var(--edge);
+}

@@ -18,7 +18,7 @@ OUT=$ROOT/public/media/elements
 POSTERS=$ROOT/public/images/pursuit-of-the-elements
 mkdir -p "$OUT"
 
-# Batch one used preset veryslow. Batch two (room-*, club-*, out-*, short-*) used slow: the same picture at the
+# Batch one used preset veryslow. Batch two (room-*, club-*, out-*, short-*, review-*) used slow: the same picture at the
 # same CRF for about 4% more bytes, three times quicker.
 X264="-c:v libx264 -profile:v high -pix_fmt yuv420p -movflags +faststart -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv"
 # SVT-AV1 preset 4: about 3% fewer bytes than preset 6 at the same VMAF, for 2.5 times the encoding time.
@@ -26,7 +26,7 @@ AV1="-c:v libsvtav1 -preset 4 -pix_fmt yuv420p -movflags +faststart -colorspace 
 export SVT_LOG=1 # the encoder's errors only
 AV1_ONLY=
 [[ ${1:-} == --av1 ]] && AV1_ONLY=1 && shift
-preset() { [[ $1 == room-* || $1 == club-* || $1 == out-* || $1 == short-* ]] && echo slow || echo veryslow; }
+preset() { [[ $1 == room-* || $1 == club-* || $1 == out-* || $1 == short-* || $1 == review-* ]] && echo slow || echo veryslow; }
 
 # name  renditions  in(s)  length(s)  centre  source (under assets/)
 FILMS='hero-towers	1080,720,p	0	10	0.5	assets 2/Exterior Individual shots /Individual Shot/Individual shots set 1/1.MP4
@@ -106,6 +106,34 @@ short() {
   rm -f "$png"
 }
 
+# The buyers' reviews: the client's own upright edits (about 50 s, 9:16, captions burned in, with sound), kept whole
+# for the same click-to-play player, as 1080 × 1920 and 720 × 1280 cuts with AAC 128k stereo, at the shorts' CRFs.
+# Two stills each: <name>.webp, the title card at 2 s (the player's poster, as the film opens on it), and
+# <name>-card.webp, 864 × 1080, a frame of the family cropped clear of the burned-in captions: <width> wide from
+# the 1080 × 1920 frame, centred, from <top> down.
+# name  card at (s)  width  top  source (under assets/)
+REVIEWS='review-abhilash	14	1080	420	assets 2/Testimonials/Clips/Abhilash Deshpande.mp4
+review-madhusudhan	5.6	900	150	assets 2/Testimonials/Clips/Madhusudhan.mp4
+review-tony	5	1080	150	assets 2/Testimonials/Clips/Tony.mp4
+review-veena	4	1080	200	assets 2/Testimonials/Clips/Veena Abhilash.mp4'
+
+review() {
+  local name=$1 at=$2 w=$3 top=$4 src=$5 png
+  ffmpeg -nostdin -v error -i "$src" -map 0:v:0 -map 0:a:0 -vf "scale=1080:1920:flags=lanczos,format=yuv420p" \
+    -c:a aac -b:a 128k -ac 2 $X264 -preset "$(preset "$name")" -crf $SHORT_CRF_1080 -y "$OUT/$name-1080.mp4"
+  echo "  $name-1080.mp4"
+  ffmpeg -nostdin -v error -i "$src" -map 0:v:0 -map 0:a:0 -vf "scale=720:1280:flags=lanczos,format=yuv420p" \
+    -c:a aac -b:a 128k -ac 2 $X264 -preset "$(preset "$name")" -crf $SHORT_CRF_720 -y "$OUT/$name-720.mp4"
+  echo "  $name-720.mp4"
+  png=$(mktemp -t poster).png
+  ffmpeg -nostdin -v error -ss 2 -i "$src" -frames:v 1 -vf "scale=720:1280:flags=lanczos:in_color_matrix=bt709:in_range=tv:out_range=pc,format=rgb24" -y "$png"
+  webp "$png" "$name"
+  ffmpeg -nostdin -v error -ss "$at" -i "$src" -frames:v 1 \
+    -vf "scale=1080:1920:flags=lanczos:in_color_matrix=bt709:in_range=tv:out_range=pc,crop=$w:$w*5/4:(1080-$w)/2:$top,scale=864:1080:flags=lanczos,format=rgb24" -y "$png"
+  webp "$png" "$name-card"
+  rm -f "$png"
+}
+
 # A source that is not 1920×1080 (two are not) is centre-cropped to 16:9 and scaled to 1920×1080 first.
 norm() {
   [[ $(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0:s=x "$1") == 1920x1080 ]] ||
@@ -163,8 +191,8 @@ av1() {
     best=32
     echo "  $name-$rend: even CRF 32 is under the H.264 file's VMAF ($target); kept 32" >&2
   fi
-  # A short keeps the H.264 file's sound.
-  if [[ $name == short-* ]]; then
+  # A short or a review keeps the H.264 file’s sound.
+  if [[ $name == short-* || $name == review-* ]]; then
     ffmpeg -nostdin -v error -i "$tmp/$best.mp4" -i "$OUT/$name-$rend.mp4" -map 0:v -map 1:a -c copy -movflags +faststart -y "$OUT/$name-$rend.av1.mp4"
   else
     mv "$tmp/$best.mp4" "$OUT/$name-$rend.av1.mp4"
@@ -235,3 +263,11 @@ while IFS=$'\t' read -r name at src; do
   av1 "$name" 1080 "scale=1920:1080:flags=lanczos" -i "assets/$src"
   av1 "$name" 720 "scale=1280:720:flags=lanczos" -i "assets/$src"
 done <<< "$SHORTS"
+
+while IFS=$'\t' read -r name at w top src; do
+  [[ $# -gt 0 && ! " $* " =~ " $name " ]] && continue
+  echo "$name"
+  [[ $AV1_ONLY ]] || review "$name" "$at" "$w" "$top" "assets/$src"
+  av1 "$name" 1080 "scale=1080:1920:flags=lanczos" -i "assets/$src"
+  av1 "$name" 720 "scale=720:1280:flags=lanczos" -i "assets/$src"
+done <<< "$REVIEWS"

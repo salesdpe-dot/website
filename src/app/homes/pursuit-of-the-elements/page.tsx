@@ -11,6 +11,7 @@ import { EnquirySection } from "@/components/home/EnquirySection";
 import { FilmToggle, LoopFilm } from "@/components/media/LoopFilm";
 import { ArrowRight } from "@/components/showroom/Icons";
 import { HomeMark } from "@/components/showroom/Logo";
+import { Reviews } from "@/components/showroom/Reviews";
 import { communities, links, pricesAndPlans, trust } from "@/lib/content";
 import { elements as e, type Reel } from "@/lib/elements";
 import { focusPoint } from "@/lib/focus";
@@ -18,6 +19,7 @@ import { pageMeta } from "@/lib/launch";
 import { issueHref, latestIssue } from "@/lib/newsletter";
 import { award, delivered, siteDirectionsUrl } from "@/lib/proof";
 import { directionsUrl, nearby, nearbyCheckedOn } from "@/lib/nearby";
+import { reviewsHead } from "@/lib/reviews";
 import { formatIndian } from "@/lib/site";
 import { SubNav } from "../SubNav";
 import { ActionDock } from "./ActionDock";
@@ -49,6 +51,7 @@ const nav = [
   { id: "homes", label: "Homes" },
   { id: "inside", label: "Inside", phoneHidden: true },
   { id: "check", label: "RERA" },
+  { id: "reviews", label: "Reviews", phoneHidden: true },
   { id: "location", label: "Map" },
   { id: "amenities", label: "Amenities" },
   { id: "gallery", label: "Gallery" },
@@ -404,6 +407,14 @@ export default function ElementsPage() {
               </figcaption>
             </figure>
           </div>
+        </div>
+      </section>
+
+      {/* Four buyers here in their own words, each a film to open with sound. */}
+      <section id="reviews" className={s.band} aria-labelledby="reviews-title">
+        <div className={s.inner}>
+          <Head id="reviews-title" title={reviewsHead.title} line={reviewsHead.line} />
+          <Reviews />
         </div>
       </section>
 

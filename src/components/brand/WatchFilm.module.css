@@ -1,4 +1,4 @@
-/* The player fills the screen on the navy of the brand; the film keeps its 16:9 and fits inside. */
+/* The player fills the screen on the navy of the brand; the film keeps its 16:9 (an upright one its 9:16) and fits inside. */
 .player {
   width: 100vw;
   max-width: none;
@@ -26,6 +26,12 @@
   gap: 12px;
   height: 100%;
   padding: 16px var(--edge) 24px;
+  --ratio: 16 / 9;
+  --fit: min(100%, calc((100dvh - 140px) * var(--ratio)));
+}
+
+.player[data-upright] .frame {
+  --ratio: 9 / 16;
 }
 
 .bar {
@@ -33,7 +39,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  width: min(100%, calc((100dvh - 140px) * 16 / 9));
+  width: var(--fit);
   margin-inline: auto;
 }
 
@@ -66,15 +72,15 @@
 }
 
 .video {
-  width: min(100%, calc((100dvh - 140px) * 16 / 9));
-  aspect-ratio: 16 / 9;
+  width: var(--fit);
+  aspect-ratio: var(--ratio);
   margin-inline: auto;
   border-radius: var(--radius-card);
   background: #000;
 }
 
 .note {
-  width: min(100%, calc((100dvh - 140px) * 16 / 9));
+  width: var(--fit);
   margin-inline: auto;
   font-size: var(--fs-12);
   line-height: 1rem;
