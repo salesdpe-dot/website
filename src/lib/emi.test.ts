@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { calculateLoan, formatINR, formatINRShort, monthlyEmi, validateLoan, yearlySchedule } from "./emi.ts";
+import { calculateLoan, formatINR, formatINRShort, monthlyEmi, validateLoan } from "./emi.ts";
 
 const close = (actual: number, expected: number, tolerance = 0.01) =>
   assert.ok(Math.abs(actual - expected) <= tolerance, `${actual} should be within ${tolerance} of ${expected}`);
@@ -47,7 +47,7 @@ test("schedule repays exactly the principal and sums to the totals", () => {
     close(r.schedule.reduce((s, row) => s + row.principalPaid, 0), p, 0.001);
     close(r.schedule.reduce((s, row) => s + row.interestPaid, 0), r.totalInterest, 0.001);
   }
-  const rows = yearlySchedule(60_00_000, 8.5, 20);
+  const rows = calculateLoan({ price: 60_00_000, downPayment: 0, annualRate: 8.5, years: 20 }).schedule;
   assert.ok(rows[0].interestPaid > rows[0].principalPaid, "early years are interest-heavy");
 });
 

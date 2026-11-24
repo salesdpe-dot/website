@@ -1,4 +1,4 @@
-import { company, socialHandle } from "@/lib/site";
+import { company } from "@/lib/site";
 import s from "./Socials.module.css";
 
 /* Disha Habitat's social channels (from the dishahabitat.com footer), with simple drawn marks. */
@@ -38,13 +38,6 @@ function Mark({ label, className = "size-5" }: { label: string; className?: stri
   }
 }
 
-const notes: Record<string, string> = {
-  Instagram: "Life in our communities",
-  Facebook: "News and events",
-  LinkedIn: "The company and careers",
-  YouTube: "Films and walkthroughs",
-};
-
 /* A row of round icon links, for a footer or a corner of a page. */
 export function SocialIcons({ className = "", itemClassName = "" }: { className?: string; itemClassName?: string }) {
   return (
@@ -53,28 +46,6 @@ export function SocialIcons({ className = "", itemClassName = "" }: { className?
         <li key={l.href}>
           <a href={l.href} target="_blank" rel="noopener noreferrer" aria-label={`${l.label} (opens in a new tab)`} className={`${s.icon} ${itemClassName}`}>
             <Mark label={l.label} />
-          </a>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-/* The four channels as grey tiles: the mark, the name, and what is posted there. */
-export function SocialCards() {
-  return (
-    <ul className={s.cards}>
-      {company.socials.map((l) => (
-        <li key={l.href}>
-          <a href={l.href} target="_blank" rel="noopener noreferrer" className={s.card}>
-            <Mark label={l.label} className={s.mark} />
-            <span>
-              <strong>{l.label}</strong>
-              <span>
-                {l.label === "YouTube" || l.label === "LinkedIn" ? "Disha Habitat" : socialHandle} · {notes[l.label]}
-              </span>
-            </span>
-            <span className="sr-only">(opens in a new tab)</span>
           </a>
         </li>
       ))}

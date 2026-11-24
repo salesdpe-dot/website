@@ -20,31 +20,6 @@ export const feedbackStatuses = [
   { id: "wont_fix", label: "Won’t change" },
 ] as const;
 
-export type FeedbackStatus = (typeof feedbackStatuses)[number]["id"];
-
-/* What the widget sends: the note, and where on which page it points. */
-export type FeedbackInput = {
-  kind: FeedbackKind;
-  message: string;
-  name?: string;
-  email?: string;
-  page_path: string;
-  page_title?: string;
-  section?: string;
-  target_label?: string;
-  target_kind?: string;
-  target_text?: string;
-  selector?: string;
-  whole_page: boolean;
-  rect?: { x: number; y: number; width: number; height: number };
-  viewport?: { width: number; height: number; dpr: number; scrollY: number };
-  device?: "phone" | "tablet" | "computer";
-  language?: string;
-  visitor_id?: string;
-  /* A field people never see; anything in it means a bot filled the form. */
-  website?: string;
-};
-
 export const LIMITS = {
   message: 4000,
   name: 120,

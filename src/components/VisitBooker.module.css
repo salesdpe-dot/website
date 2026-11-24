@@ -268,16 +268,6 @@
   margin-top: 20px;
 }
 
-.send .btn {
-  min-height: 48px;
-}
-
-@media (max-width: 479px) {
-  .send .btn {
-    flex: 1 1 100%;
-  }
-}
-
 .fine {
   margin-top: 16px;
   font-size: var(--fs-14);

@@ -120,11 +120,6 @@ export function calculateLoan(input: LoanInput): LoanResult {
   };
 }
 
-/* Kept for callers that only need the yearly rows. */
-export function yearlySchedule(principal: number, annualRate: number, years: number): YearRow[] {
-  return calculateLoan({ price: principal, downPayment: 0, annualRate, years }).schedule;
-}
-
 const inr = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
 
 /* ₹52,069, Indian digit grouping. */

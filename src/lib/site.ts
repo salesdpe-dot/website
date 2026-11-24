@@ -36,9 +36,6 @@ export const company = {
 
 /* "This is us" figures, published on dishahabitat.com/the-core. */
 export const stats = [
-  { value: 5, suffix: "", label: "Communities created" },
-  { value: 1000, suffix: "+", label: "Happy families" },
-  { value: 20000, suffix: "+", label: "Site visits" },
   { value: 2025000, suffix: "+", label: "Sq ft delivered" },
   { value: 3200000, suffix: "+", label: "Sq ft in the making" },
 ] as const;
@@ -123,13 +120,6 @@ export const poem = {
   closing: "I dream of a place we can call home.",
 } as const;
 
-/* "This is us", dishahabitat.com/the-core (verbatim, lightly edited). */
-export const thisIsUs = [
-  "We have been in the business since 2014, operating largely in East Bengaluru. Our first four properties were fully sold out without any concentrated brand marketing. Our home buyers have been our brand ambassadors thus far.",
-  "Our build quality and mindfulness have been our biggest strengths. We have a resident community of 1,000-plus members, which grows with each new project.",
-  "Our homes are mindful living spaces that are priced mindfully too. From apartments to independent villas, every home is created with the same care. We understand what a huge deal it is to invest yourself in a home of your own.",
-] as const;
-
 /* The founders' fuller profiles, from dishahabitat.com/homemakers (condensed, in their words). */
 export const homemakerProfiles: Record<string, string[]> = {
   "Gunaranjan J": [
@@ -150,7 +140,7 @@ export const dishaFamily = [
   { src: "/images/people/family-2-1600.webp", alt: "Three generations of a Disha homeowner family together in their living room", kind: "Homeowners" },
   { src: "/images/people/team-1-1600.webp", alt: "Women of the Disha Habitat team standing together outdoors", kind: "The team" },
   { src: "/images/people/family-3-1600.webp", alt: "A Disha homeowner family of six gathered together", kind: "Homeowners" },
-  { src: "/images/people/team-2-1600.webp", alt: "The Disha Habitat site team seated together outdoors", kind: "The team" },
+  { src: "/images/community/site-team-1600.webp", alt: "The Disha Habitat site team seated together outdoors", kind: "The team" },
   { src: "/images/people/family-4-1600.webp", alt: "A Disha homeowner family with a newborn and a toddler", kind: "Homeowners" },
   { src: "/images/people/team-4-1600.webp", alt: "Members of the Disha Habitat team looking over plans together", kind: "The team" },
   { src: "/images/people/team-3-1600.webp", alt: "The Disha Habitat team standing on the giant chessboard at a Disha community", kind: "The team" },

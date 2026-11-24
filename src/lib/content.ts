@@ -25,7 +25,6 @@ export type Compose = { label: string; compose: string };
 export type Action = Cta | Compose;
 
 /* A figure in a SpecRow: the number large, its unit small beside it, what it measures underneath. */
-export type Figure = { value: string; unit?: string; label: string };
 
 export const links = {
   /* The site-visit booker on the contact page. */

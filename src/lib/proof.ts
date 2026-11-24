@@ -21,7 +21,6 @@ export const delivered = projectsByHandover.map((p) => ({
 }));
 
 export const homesHandedOver = delivered.reduce((n, d) => n + d.homes, 0);
-export const quickestBuild = delivered.reduce((a, b) => (b.months < a.months ? b : a));
 
 /* A third-party view of life after handover. Checked October 2026; link so anyone can verify. */
 export const residentRating = {

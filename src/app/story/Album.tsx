@@ -20,7 +20,7 @@ const captions: Record<string, string> = {
   "/images/people/family-3-1600.webp": "The whole gang",
   "/images/people/family-4-1600.webp": "Welcome home, little one",
   "/images/people/team-1-1600.webp": "All smiles at Disha",
-  "/images/people/team-2-1600.webp": "The site team",
+  "/images/community/site-team-1600.webp": "The site team",
   "/images/people/team-4-1600.webp": "Going over the plans",
   "/images/people/team-3-1600.webp": "Checkmate!",
 };

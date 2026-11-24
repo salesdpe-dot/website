@@ -289,7 +289,6 @@ export const elements = {
   phone: { display: "+91 95053 33333", href: "tel:+919505333333" },
   whatsapp: "https://api.whatsapp.com/send?phone=919505333333",
   email: "info@dishapursuitoftheelements.com",
-  website: { label: "dishapursuitoftheelements.com", href: "https://www.dishapursuitoftheelements.com/" },
   updates: "https://www.dishapursuitoftheelements.com/project-updates",
   /* The project site publishes quarterly construction newsletters; the latest is Q4 (October) 2026, issue 12 of 16. */
 } as const;
