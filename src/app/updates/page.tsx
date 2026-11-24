@@ -32,7 +32,7 @@ export default function UpdatesPage() {
           </span>
           <span className={s.latestText}>
             <span className="eyebrow">
-              Latest issue · {issue.quarter} · {issue.number} of {issue.of}
+              Latest issue · {issue.quarter} · Issue {issue.number} of {issue.of} planned
             </span>
             <span id="latest-title" className={`display ${s.latestTitle}`}>
               {issue.month}.

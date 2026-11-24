@@ -12,12 +12,12 @@ import s from "./page.module.css";
 
 export const metadata: Metadata = {
   ...pageMeta({
-    title: "Disha Habitat | Homes in East Bengaluru",
+    title: "Disha Habitat · Homes in East Bengaluru",
     description:
-      "Pursuit of the Elements, now selling in Gunjur: 2, 3 & 4 BHK apartments and 4 & 5 BHK villas on 20 acres. 1,102 homes handed over across five Disha Habitat communities since 2015.",
+      "Pursuit of the Elements, now selling in Gunjur: 2, 3 & 4 BHK apartments and villas on 20 acres. 1,102 homes handed over across five communities since 2015.",
     path: "/",
   }),
-  title: { absolute: "Disha Habitat | Homes in East Bengaluru" },
+  title: { absolute: "Disha Habitat · Homes in East Bengaluru" },
 };
 
 /*

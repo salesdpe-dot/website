@@ -16,17 +16,17 @@ import s from "./page.module.css";
 
 export const metadata: Metadata = pageMeta({
   title: "Our story",
-  description: `How two homebuyers became builders: Disha Habitat since 2014, five communities and ${formatIndian(homesHandedOver)} homes handed over in East Bengaluru.`,
+  description: `How two homebuyers became builders: Disha Habitat since 2014, ${formatIndian(homesHandedOver)} homes across five communities handed over in East Bengaluru, and a sixth selling now.`,
   path: "/story",
 });
 
 const promises = [
   ["Explain everything.", "No question is too small. If something needs explaining, we sit down and explain it."],
-  ["Build it properly.", `Our residents are the ones who tell people so: ${rating.community} is rated ${rating.score} out of ${rating.outOf} by ${rating.reviews} residents on ${rating.source}.`],
+  ["Build it properly.", `Our residents are the ones who tell people so: ${rating.community} is rated ${rating.score} out of ${rating.outOf} in ${rating.reviews} reviews on ${rating.source}.`],
   ["Price it mindfully.", "Every home, from an apartment to an independent villa, is planned and priced with the same care."],
 ] as const;
 
-const artists = ["Shankar Ehsaan Loy", "Shreya Ghoshal", "Armaan Malik", "Piyush Mishra", "K S Chithra", "Sunil Grover"];
+const artists = ["Shankar–Ehsaan–Loy", "Shreya Ghoshal", "Armaan Malik", "Piyush Mishra", "K S Chithra", "Sunil Grover"];
 
 const homesOf = (p: (typeof projects)[number]) => p.facts.find((f) => f.label === "Homes")?.value;
 const year = (date: string) => date.split(" ")[1];
@@ -51,7 +51,7 @@ export default function StoryPage() {
     <>
       <PhotoHero
         title="Our story"
-        line={`Two homebuyers who became builders. Since ${company.founded}: five communities and ${formatIndian(homesHandedOver)} homes in East Bengaluru.`}
+        line={`Two homebuyers who became builders. Since ${company.founded}: ${formatIndian(homesHandedOver)} homes across five communities handed over in East Bengaluru, and a sixth selling now.`}
         image={{
           src: "/images/community/site-team-1600.webp",
           width: 1600,

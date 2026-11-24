@@ -29,7 +29,7 @@ export default function ContactPage() {
       <PageIntro
         above={<Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Contact" }]} />}
         title="Visit, call or write."
-        line="See the homes at the site in Gunjur, or ask the sales team to call you. Every request reaches our sales office."
+        line="See the homes at the site in Gunjur, or ask the sales team to call you. Every request is recorded, and the sales team replies."
       >
         <div className={s.hero}>
           <a href="#book" className="btn btn-primary">
@@ -52,7 +52,7 @@ export default function ContactPage() {
           <div className={s.booker}>
             <VisitBooker />
           </div>
-          <aside className={s.side} aria-label="Other ways to reach us">
+          <div role="group" className={s.side} aria-label="Other ways to reach us">
             <div className={s.block}>
               <h3 className={s.blockTitle}>Call or write</h3>
               <ul className={s.reach}>
@@ -111,7 +111,7 @@ export default function ContactPage() {
               </p>
               <SocialIcons />
             </div>
-          </aside>
+          </div>
         </div>
       </Section>
     </>

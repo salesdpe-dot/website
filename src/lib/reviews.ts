@@ -43,17 +43,17 @@ export const reviews: Review[] = [
     54,
   ),
   review(
-    "review-tony",
-    "Tony & family",
-    "Bought a 2,495 sq ft 4 BHK with a staff room",
-    "I am impressed with the quality, extremely impressed with the offer of amenities.",
-    49,
-  ),
-  review(
     "review-veena",
     "Veena & Abhilash",
     "Bought a 2,103 sq ft 3 BHK with a staff room",
     "Something that you are investing and something that you want to build for a very long term, transparency is very important.",
+    49,
+  ),
+  review(
+    "review-tony",
+    "Tony & family",
+    "Bought a 2,495 sq ft 4 BHK with a staff room",
+    "I am impressed with the quality, extremely impressed with the offer of amenities.",
     49,
   ),
   review(

@@ -38,7 +38,7 @@ import s from "./page.module.css";
 
 export const metadata: Metadata = pageMeta({
   title: e.name,
-  description: `${e.name}, Gunjur, East Bengaluru: 2, 3 & 4 BHK apartments in seven towers and 4 & 5 BHK villas on 20 acres, with a 1,35,000+ sq ft clubhouse. RERA registered.`,
+  description: `${e.name}, Gunjur: 2, 3 & 4 BHK apartments in seven towers and 4 & 5 BHK villas on 20 acres, with a 1,35,000+ sq ft clubhouse. RERA registered.`,
   path: e.href,
   image: { url: "/images/og/pursuit-of-the-elements.jpg", width: 1200, height: 630, alt: "The towers, villas, clubhouse and gardens from above, artist’s impression" },
 });
@@ -83,7 +83,7 @@ const families: Family[] = [
     line: "The tallest of the seven: 29 floors over 2 basements and 2 parking levels.",
     figures: [
       { value: "29", label: "Floors" },
-      { value: "2", label: "Towers, D and E" },
+      { value: "2", label: "Towers, D\u00a0and\u00a0E" },
       { value: "2 + 2", label: "Basements + parking levels" },
     ],
     views: [film(towers), still("towers-sky"), still("aerial-day"), still("aerial-arena")],
@@ -237,7 +237,7 @@ const life = [
         <MoreDialog
           label={`See every zone (${e.zones.length})`}
           title="The Aqua Park to the vegetable garden."
-          line="Pet park, mini golf, skate park, pickleball court, beach volleyball, cricket pitch, jogging track, and a camping zone with picnic tents round a fire pit."
+          line="Pet park, mini golf, skate park, pickleball court, beach volleyball, futsal, cricket pitch, jogging track, and a camping zone with picnic tents round a fire pit."
         >
           <MediaBrowser id="zones" label="Outdoor zones" items={e.zones} />
         </MoreDialog>

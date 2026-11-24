@@ -14,7 +14,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/checklist/[slug]">): Promise<Metadata> {
   const c = getChecklistItem((await params).slug);
-  return c ? pageMeta({ title: `${c.title} | The checklist`, description: `${c.title}: ${c.summary.toLowerCase()}. A plain guide from Disha Habitat’s homebuyer checklist.`, path: `/checklist/${c.slug}` }) : {};
+  return c ? pageMeta({ title: `${c.title}, the checklist`, description: `${c.title}: ${c.summary.toLowerCase()}. A plain guide from Disha Habitat’s homebuyer checklist.`, path: `/checklist/${c.slug}` }) : {};
 }
 
 export default async function ChecklistItemPage({ params }: PageProps<"/checklist/[slug]">) {

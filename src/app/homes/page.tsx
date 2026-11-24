@@ -80,7 +80,7 @@ export default function HomesPage() {
             items={[
               { value: "20", unit: "acres", label: "Land" },
               { value: towers, label: "Towers" },
-              { value: "29", label: "Floors, Towers D and E" },
+              { value: "29", label: "Floors, Towers D\u00a0and\u00a0E" },
               { value: "40+", label: "Amenities" },
             ]}
           />

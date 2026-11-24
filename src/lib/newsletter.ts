@@ -74,7 +74,7 @@ export const issues: Issue[] = [
           src: "/images/newsletter/2026-q4/barbeque-pit.webp",
           width: 971,
           height: 449,
-          caption: "Barbeque pit",
+          caption: "Barbecue pit",
         },
         {
           src: "/images/newsletter/2026-q4/pergola.webp",

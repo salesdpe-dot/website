@@ -108,8 +108,9 @@ export default function PrivacyPage() {
       body: (
         <p>
           Other services are contacted only when you tap a link to them: Google Maps (directions and the commute checker), WhatsApp, your email
-          app, Instagram, Facebook, LinkedIn, YouTube, MyGate, the Pursuit of the Elements project website and the Karnataka RERA website. They open in a new tab or app and have their own
-          privacy policies. Nothing from them loads on this site until you follow the link.
+          app, Instagram, Facebook, LinkedIn, YouTube, MyGate and the Karnataka RERA website. They open in a new tab or app and have their own
+          privacy policies. Nothing from them loads on this site until you follow the link. The newsletter PDFs open from Webflow’s file store
+          (cdn.prod.website-files.com).
         </p>
       ),
     },
