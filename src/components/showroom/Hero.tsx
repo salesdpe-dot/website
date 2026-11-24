@@ -70,11 +70,13 @@ export function Hero({ slides }: { slides: Slide[] }) {
     return () => io.disconnect();
   }, []);
 
-  /* Slides two and three are fetched a few seconds in, after the first screen has settled. */
+  /* Slides two and three are fetched a few seconds in, after the first screen has settled. A phone never moves on by
+     itself, so there the next slide loads only when the visitor swipes or taps to it (about 480 KB saved a visit). */
   useEffect(() => {
+    if (!roomy) return;
     const t = window.setTimeout(() => setRest(true), 4000);
     return () => window.clearTimeout(t);
-  }, []);
+  }, [roomy]);
 
   const go = (i: number, focus = false) => {
     const next = (i + n) % n;
@@ -215,16 +217,15 @@ export function Hero({ slides }: { slides: Slide[] }) {
             </button>
           ))}
         </div>
-        {motionOk && (
-          <button
-            type="button"
-            className={s.pause}
-            onClick={() => setPaused((p) => !p)}
-            aria-label={paused ? "Play the slideshow" : "Pause the slideshow"}
-          >
-            {paused ? <PlayIcon /> : <PauseIcon />}
-          </button>
-        )}
+        {/* Rendered from the first paint, so the controls never widen after load; hidden by CSS under reduced motion. */}
+        <button
+          type="button"
+          className={s.pause}
+          onClick={() => setPaused((p) => !p)}
+          aria-label={paused ? "Play the slideshow" : "Pause the slideshow"}
+        >
+          {paused ? <PlayIcon /> : <PauseIcon />}
+        </button>
       </div>
 
       <button type="button" className={`${s.arrow} ${s.prev}`} onClick={() => go(index - 1)} aria-label="Previous slide">

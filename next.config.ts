@@ -7,7 +7,7 @@ import type { NextConfig } from "next";
  */
 const moved: [string, string][] = [
   ["/our-journey", "/story"],
-  ["/the-core", "/story#this-is-us"],
+  ["/the-core", "/story#begin-title"],
   ["/homemakers", "/story#homemakers"],
   ["/our-homes", "/homes"],
   ["/contact-us", "/contact"],
@@ -69,6 +69,12 @@ const nextConfig: NextConfig = {
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=()" },
         ],
       },
+      /* Films and pictures: kept a day in the browser, then served from cache while a fresh copy is checked, so a
+         return visit makes no round trip per file. A day, not a year, as a re-encoded file keeps its name. */
+      ...["/media/:path*", "/images/:path*"].map((source) => ({
+        source,
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
+      })),
     ];
   },
 };

@@ -339,6 +339,13 @@
   height: 16px;
 }
 
+/* Nothing moves under reduced motion, so there is nothing to pause. */
+@media (prefers-reduced-motion: reduce) {
+  .pause {
+    display: none;
+  }
+}
+
 /* On a touch screen the dots and the pause are 44 px targets; the marks themselves stay where they were. */
 @media (pointer: coarse) {
   .controls {

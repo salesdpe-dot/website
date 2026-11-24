@@ -52,7 +52,7 @@ export function ProofPanel() {
             alt={brand.award.image.alt}
             width={brand.award.image.width}
             height={brand.award.image.height}
-            sizes="160px"
+            sizes="(min-width: 1600px) 128px, 96px"
             quality={82}
             className={s.certificate}
           />

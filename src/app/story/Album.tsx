@@ -8,7 +8,7 @@ import { dishaFamily } from "@/lib/site";
 import s from "./Album.module.css";
 
 /* The handwriting on the prints, loaded only on this page. */
-const hand = Caveat({ subsets: ["latin"], weight: ["500"], display: "swap" });
+const hand = Caveat({ subsets: ["latin"], weight: ["500"], display: "swap", preload: false });
 
 /*
  * Two piles of prints, like an album left open on the coffee table: one of homeowners, one of the team. Tap the
