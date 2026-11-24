@@ -267,3 +267,23 @@
     display: block;
   }
 }
+
+/* The label's second home, under the words: shown only in a compact card, where the thumbnail can't hold it. */
+.noteText {
+  display: none;
+  font-size: var(--fs-12);
+  line-height: 1rem;
+  color: var(--text-2);
+}
+
+.cards[data-compact] .note {
+  display: none;
+}
+
+.cards[data-compact] .noteText {
+  display: block;
+}
+
+.dark .noteText {
+  color: rgb(255 255 255 / 0.7);
+}

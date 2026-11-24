@@ -47,6 +47,8 @@ export function TextField({ label, hint, error, optional, id: given, className, 
         id={id}
         className={`${s.control} ${className ?? ""}`}
         aria-invalid={error ? true : undefined}
+        /* Only optional fields say so on screen, so every other one is required: say that to a screen reader too. */
+        aria-required={optional ? undefined : true}
         aria-describedby={described(id, hint, error)}
         {...input}
       />
@@ -63,6 +65,8 @@ export function TextArea({ label, hint, error, optional, id: given, className, .
         id={id}
         className={`${s.control} ${s.area} ${className ?? ""}`}
         aria-invalid={error ? true : undefined}
+        /* Only optional fields say so on screen, so every other one is required: say that to a screen reader too. */
+        aria-required={optional ? undefined : true}
         aria-describedby={described(id, hint, error)}
         {...input}
       />

@@ -373,7 +373,7 @@ export function AffordabilityExplorer({ notes = [] }: { notes?: readonly Note[] 
         </div>
       </form>
 
-      <aside className={s.result} aria-label="Your estimate">
+      <div role="group" className={s.result} aria-label="Your estimate">
         <div>
           <h2 className={s.resultLabel}>Your monthly EMI</h2>
           <p className={`display ${s.emi}`} data-empty={result ? undefined : true} aria-live="polite" aria-atomic="true">
@@ -510,7 +510,7 @@ export function AffordabilityExplorer({ notes = [] }: { notes?: readonly Note[] 
           finance or an eligibility check by Disha Habitat or any lender. Fees, insurance and floating-rate changes are not
           included.
         </p>
-      </aside>
+      </div>
     </div>
   );
 }

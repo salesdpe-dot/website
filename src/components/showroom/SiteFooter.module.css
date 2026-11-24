@@ -16,8 +16,14 @@
   }
 }
 
-:global(body:has(main > [data-flush-end]:last-child)) .footer {
+:global(body:has(main > [data-flush-end]:last-child)) .footer,
+:global(body:has(main > .band-navy:last-child)) .footer {
   margin-top: 0;
+}
+
+/* Navy meeting navy: a hairline keeps the page's last band and the footer apart. */
+:global(body:has(main > .band-navy:last-child)) .footer {
+  border-top: 1px solid var(--ink-line);
 }
 
 .footer > * {
@@ -186,13 +192,6 @@
   .col ul {
     padding-bottom: 16px;
   }
-
-  /* The last row's rule closes the columns; the notes follow without a second one. */
-  .notes {
-    margin-top: 32px;
-    padding-top: 0;
-    border-top: 0;
-  }
 }
 
 @media (min-width: 768px) {
@@ -247,6 +246,16 @@
   font-size: var(--fs-12);
   line-height: 1.125rem;
   color: rgb(255 255 255 / 0.66);
+}
+
+/* On a phone the last fold's rule closes the columns; the notes follow without a second rule. (After the rule
+   above, so it wins.) */
+@media (max-width: 767px) {
+  .notes {
+    margin-top: 24px;
+    padding-top: 0;
+    border-top: 0;
+  }
 }
 
 .notes p {

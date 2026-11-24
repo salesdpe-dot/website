@@ -41,14 +41,21 @@ export function useRail(items?: unknown) {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(measure);
     };
+    /* A card reached with the keyboard comes fully into view: Chrome leaves a half-shown one where it is (WCAG 2.4.11). */
+    const onFocus = (e: FocusEvent) => {
+      const card = e.target instanceof Element && e.target.matches(":focus-visible") ? e.target.closest("li") : null;
+      card?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: motionOk ? "smooth" : "auto" });
+    };
     el.addEventListener("scroll", onScroll, { passive: true });
+    el.addEventListener("focusin", onFocus);
     window.addEventListener("resize", onScroll);
     return () => {
       cancelAnimationFrame(frame);
+      el.removeEventListener("focusin", onFocus);
       el.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [measure, items]);
+  }, [measure, items, motionOk]);
 
   /* One screenful at a time, less one card, so the visitor keeps their place. */
   const step = (dir: 1 | -1) => {

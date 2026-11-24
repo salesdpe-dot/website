@@ -200,6 +200,8 @@
 .marks {
   display: grid;
   grid-template-columns: repeat(var(--marks, 3), minmax(0, 1fr));
+  /* One row for the labels and one for the dates, shared by every mark, so a label that wraps keeps the dates level. */
+  grid-template-rows: auto auto;
   gap: 0;
   view-timeline: --tl block;
 }
@@ -207,6 +209,8 @@
 .marks li {
   position: relative;
   display: grid;
+  grid-row: span 2;
+  grid-template-rows: subgrid;
   align-content: start;
   gap: 4px;
   padding: 36px 16px 0 0;
@@ -223,6 +227,7 @@
 }
 
 .markLabel {
+  align-self: end;
   font-size: var(--fs-14);
   line-height: 1.125rem;
   color: rgb(255 255 255 / 0.74);
@@ -630,9 +635,10 @@
   margin-top: 8px;
 }
 
+/* As wide as the words, a row each when both don't fit: "Explore Pursuit of the Elements" never wraps. */
 .saleActions > :global(.btn) {
-  flex: 1 1 160px;
-  max-width: 240px;
+  flex: 0 1 auto;
+  white-space: nowrap;
 }
 
 .nextWrap {
@@ -678,7 +684,8 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(0deg, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.3) 55%, rgb(0 0 0 / 0.1) 100%);
+  /* Dark enough at the top too: on a phone the short card puts the small eyebrow over the brightest part of the photo. */
+  background: linear-gradient(0deg, rgb(0 0 0 / 0.78) 0%, rgb(0 0 0 / 0.5) 60%, rgb(0 0 0 / 0.38) 100%);
 }
 
 .nextText {
@@ -688,6 +695,7 @@
 }
 
 .nextEyebrow {
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.5);
   font-size: var(--fs-14);
   line-height: 1.25rem;
   font-weight: 500;

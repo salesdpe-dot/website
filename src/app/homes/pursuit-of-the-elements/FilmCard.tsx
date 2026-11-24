@@ -22,6 +22,8 @@ export function FilmCard({ short, tone = "light" }: { short: Short; tone?: "ligh
         <span className={s.title}>{short.title}</span>
         <span className={s.line}>{short.line}</span>
         <span className={s.cue}>Watch the film, with sound</span>
+        {/* In a compact card the thumbnail is too small for the label, so it sits here instead (CSS picks one). */}
+        <span className={s.noteText}>Artist’s impression</span>
       </span>
     </WatchFilm>
   );

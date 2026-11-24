@@ -178,11 +178,14 @@ function View({ communities, rows, picks, onPick }: Props & { picks: string[]; o
                       <td key={c.slug} className={s.cell} data-empty={c.values[r] ? undefined : ""}>
                         {c.values[r] ??
                           c.pending?.[r] ??
-                          (dashed(c, r) && (
+                          (dashed(c, r) ? (
                             <>
                               <span aria-hidden="true">—</span>
                               <span className="sr-only">Not published</span>
                             </>
+                          ) : (
+                            /* The one on sale has not published this figure yet: say so, so the cell doesn't read as missing. */
+                            c.selling && "On request"
                           ))}
                       </td>
                     ))}

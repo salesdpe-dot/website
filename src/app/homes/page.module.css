@@ -97,8 +97,10 @@
   gap: 12px;
 }
 
+/* Each button as wide as its words, sharing the row when both fit and taking a row each when not: never two lines. */
 .nowActions > :global(.btn) {
-  flex: 1 1 160px;
+  flex: 1 1 auto;
+  white-space: nowrap;
   min-height: 48px;
   padding-inline: 28px;
 }

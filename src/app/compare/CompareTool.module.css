@@ -101,6 +101,21 @@
   line-height: 1rem;
 }
 
+/* In a phone's third of the screen the label would wrap over the picture: a strip along the foot instead, one line. */
+@media (max-width: 599px) {
+  .tag {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    max-width: none;
+    padding: 2px 4px;
+    border-radius: 0;
+    font-size: 0.6875rem;
+    text-align: center;
+    white-space: nowrap;
+  }
+}
+
 /* The names again, in a bar under the header, once the pickers have scrolled away (the tool sets data-show). */
 .stuck {
   position: fixed;
@@ -246,12 +261,15 @@
 /* Book a visit: a compact sky-blue button under each column, the same action as everywhere else. */
 .act {
   justify-content: center;
+  text-align: center;
   margin-bottom: 4px;
   padding: 0 16px;
-  border-radius: var(--radius);
+  /* Rounded and semibold, as every other button on the site; in a narrow phone column the words may take two lines. */
+  border-radius: 22px;
   background: var(--accent);
   color: var(--on-accent);
-  font-weight: 500;
+  font-size: var(--fs-14);
+  font-weight: 600;
   text-decoration: none;
 }
 

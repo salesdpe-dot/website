@@ -3,6 +3,7 @@ import { CookieSettingsLink } from "@/components/consent/ConsentBanner";
 import { SlashBreak } from "@/components/ds/SlashBreak";
 import { communities, communityHref, company, links } from "@/lib/content";
 import { company as site } from "@/lib/site";
+import { FooterFolds } from "./FooterFolds";
 import { ChevronDown } from "./Icons";
 import { Logo } from "./Logo";
 import s from "./SiteFooter.module.css";
@@ -51,6 +52,7 @@ function Fold({ title }: { title: string }) {
 export function SiteFooter() {
   return (
     <footer className={`band-navy ${s.footer}`} data-tone="dark">
+      <FooterFolds />
       <div className={s.top}>
         {/* The guideline's white lock-up on navy, with its clear space (the height of the home icon) kept around it. */}
         <Link href="/" prefetch={false} className={s.brand} aria-label="Disha Habitat, home">

@@ -28,7 +28,7 @@ export function EnquirySection() {
         <div className={s.booker}>
           <VisitBooker compact />
         </div>
-        <aside className={s.side} aria-label="Other ways to reach the sales team">
+        <div role="group" className={s.side} aria-label="Other ways to reach the sales team">
           <section className={s.abroad} aria-labelledby="abroad-title">
             <h3 id="abroad-title" className={`display ${s.sideTitle}`}>
               Buying from abroad?
@@ -53,7 +53,7 @@ export function EnquirySection() {
               </a>
             </li>
           </ul>
-        </aside>
+        </div>
       </div>
     </Section>
   );

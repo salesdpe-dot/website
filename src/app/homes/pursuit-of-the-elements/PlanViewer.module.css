@@ -4,7 +4,8 @@
   gap: 20px;
 }
 
-@media (min-width: 768px) {
+/* Two columns from 1024 px: at tablet width the sheet left the heading and buttons too narrow to read. */
+@media (min-width: 1024px) {
   .card {
     grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
     gap: 48px;

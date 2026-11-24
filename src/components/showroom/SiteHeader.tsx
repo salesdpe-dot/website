@@ -205,10 +205,14 @@ export function SiteHeader() {
                               quality={75}
                               style={focusPoint(c.image)}
                             />
-                            {c.render && <span className={s.thumbNote}>Artist’s impression</span>}
-                            {i === 0 && <span className={s.thumbTag}>{c.eyebrow}</span>}
+                            {/* Hidden from screen readers so the link's name starts with the community, not the badges. */}
+                            {c.render && <span className={s.thumbNote} aria-hidden="true">Artist’s impression</span>}
+                            {i === 0 && <span className={s.thumbTag} aria-hidden="true">{c.eyebrow}</span>}
                           </span>
-                          <span className={s.tileName}>{c.name}</span>
+                          <span className={s.tileName}>
+                            {c.name}
+                            {i === 0 && <span className="sr-only">, {c.eyebrow}</span>}
+                          </span>
                           <span className={s.tileMeta}>{i === 0 ? c.line : `${c.line} · ${c.eyebrow.replace("Handed over ", "")}`}</span>
                         </NavLink>
                         {c.ctas.some((cta) => cta.href === links.bookVisit) && (

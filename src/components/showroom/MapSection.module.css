@@ -160,6 +160,7 @@
 
   .item {
     align-items: center;
+    justify-content: center;
     width: auto;
     min-height: 44px;
     padding: 0 18px;

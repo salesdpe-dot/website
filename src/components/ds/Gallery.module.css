@@ -110,12 +110,13 @@
       transform 0.33s var(--ease);
   }
 
+  /* Out into the gutter, but never past it (a narrow window would scroll sideways). */
   .nudge[data-dir="back"] {
-    left: -22px;
+    left: clamp(-22px, calc(4px - var(--edge)), 0px);
   }
 
   .nudge[data-dir="on"] {
-    right: -22px;
+    right: clamp(-22px, calc(4px - var(--edge)), 0px);
   }
 
   .nudge[hidden] {
@@ -302,7 +303,11 @@
   top: 10px;
   right: 10px;
   z-index: 1;
+  max-width: calc(100% - 20px);
+  overflow: hidden;
   padding: 2px 8px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   border-radius: var(--radius);
   background: rgb(0 0 0 / 0.6);
   color: #fff;

@@ -177,8 +177,11 @@
   width: 100%;
 }
 
+/* At least 220 px, and as wide as the words need: a long label ("Visit Pursuit of the Elements") never wraps. */
 .ctas > :global(.btn) {
-  flex: 0 1 220px;
+  flex: 0 0 auto;
+  min-width: 220px;
+  white-space: nowrap;
 }
 
 /* The SpecRow version of the figures: up to four, each as wide as its figure and centred under it, on one line. */
@@ -220,8 +223,8 @@
   }
 }
 
-/* The narrowest phones: the longest figure ("1,35,000+ sq ft") still fits its half of the screen. */
-@media (max-width: 379px) {
+/* Phones up to 419 px: the longest figure ("1,35,000+ sq ft") still fits its half of the screen. */
+@media (max-width: 419px) {
   .foot .figures dd {
     font-size: var(--fs-d6);
   }
